@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/chat")
+@RequestMapping(value = "/apiChat")
 @Log4j2
 public class ChatRoomControllerAPI {
     private final ChatService chatService;

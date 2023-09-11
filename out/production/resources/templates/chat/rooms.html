@@ -84,7 +84,7 @@
 
           $("#btnSave").on('click',function () {
               $.ajax({
-                  url: "/api/chat/room?productId=" + 1 +"&authorId="+[[${session.authorMember.memberId}]],
+                  url: "/apiChat/room?productId=" + 1 +"&authorId="+[[${session.authorMember.memberId}]],
                   type: "get",
                   success:function (data) {
                       console.log("전달 받는 데이터 : " + JSON.stringify(data));
