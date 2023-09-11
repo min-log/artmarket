@@ -1,7 +1,7 @@
 package llustmarket.artmarket.web.service.member;
 
 import llustmarket.artmarket.domain.member.Member;
-import llustmarket.artmarket.web.mapper.member.MemberMapper;
+import llustmarket.artmarket.web.repository.mapper.member.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

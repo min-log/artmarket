@@ -1,4 +1,4 @@
-package llustmarket.artmarket.web.mapper.member;
+package llustmarket.artmarket.web.repository.mapper.member;
 
 import llustmarket.artmarket.domain.member.Member;
 import org.apache.ibatis.annotations.Mapper;
