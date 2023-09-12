@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
+@Log4j2
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/apiChat")
-@Log4j2
-public class ChatRoomControllerAPI {
+public class APIChatRoomController {
     private final ChatService chatService;
 
 
@@ -32,17 +32,14 @@ public class ChatRoomControllerAPI {
         MemberDTO member = (MemberDTO) session.getAttribute("member");
         log.info(member);
 
-
         ChatRoomDTO dto = ChatRoomDTO.builder()
                 .productId(productId) //상품번호
                 .chatFromId(member.getMemberId()) // 보내는사람
                 .chatToId(authorId) // 작가
                 .chatFromId(member.getMemberId()).build();
 
-        // 채팅방 생성
+        // 채팅방 생성 - 챗룸 정보, 사용자 정보 전달
         ChatRoomDTO result = chatService.registerChat(member, dto);
-
-
         return result;
     }
 

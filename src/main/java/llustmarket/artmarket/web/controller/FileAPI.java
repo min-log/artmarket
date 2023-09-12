@@ -13,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RequestMapping(value = "/file")
 public class FileAPI {
-    @PostMapping("/save")
-    public void fileSave(MultipartFile file){
+    @PostMapping("/register")
+    public void fileRegister(MultipartFile file){
         log.info("파일 저장");
         log.info("file : {}",file);
     }

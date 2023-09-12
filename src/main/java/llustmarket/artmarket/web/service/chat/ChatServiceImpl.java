@@ -22,9 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ChatServiceImpl implements ChatService {
-
-
-
     private final ModelMapper modelMapper;
     private final ChatMapper chatMapper;
     private final ChatRoomService chatRoomService;

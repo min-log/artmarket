@@ -23,11 +23,10 @@ public class ChatRoomController {
 
     private final ChatService chatService;
 
-
-
-    //채팅방 목록 조회
+    
     @GetMapping(value = "/rooms")
     public String rooms(Model model, HttpSession session){
+        // 채팅방 생성
         //작가 회원
         MemberDTO authorMember = MemberDTO.builder().memberId(1).identity("AUTHOR").nickname("이지민").build();
         session.setAttribute("authorMember",authorMember);
@@ -40,6 +39,7 @@ public class ChatRoomController {
 
     @GetMapping(value = "/roomList")
     public String roomList(Model model,HttpSession session){
+        // 채팅내역 조회
         log.info("# All Chat roomList");
         log.info("# 해당페이지에서는 멤버가 작가로 로그인되게 임의로 변경");
         session.setAttribute("member", (MemberDTO)session.getAttribute("authorMember"));

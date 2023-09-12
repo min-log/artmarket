@@ -2,6 +2,7 @@ package llustmarket.artmarket.web.controller.chat;
 
 
 import llustmarket.artmarket.domain.chat.MessageType;
+import llustmarket.artmarket.web.dto.file.FileUploadDTO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageDTO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageRequestDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
@@ -24,7 +25,7 @@ public class ChatMessageController {
     //private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
 
     //Client가 SEND할 수 있는 경로
-    //stompConfig에서 설정한 applicationDestinationPrefixes와 @MessageMapping 경로가 병합됨
+    //stompConfig에서 설정한 applicationDestinationPrefixes와 @MessageMapping 경로가 병합
     //"/pub/chat/enter"
     @MessageMapping(value = "/chat/enter")
     public void enter(ChatMessageDTO message){
@@ -49,18 +50,41 @@ public class ChatMessageController {
     @MessageMapping(value = "/chat/message")
     public void message(ChatMessageDTO message){
         log.info("MESSAGE TALK");
+        log.info(message);
+        log.info(message.getFile());
+
+
         MemberDTO member = message.getMember();
         message.setWriter(member.getNickname());
         message.setMemberId(member.getMemberId());
 
-        // 메시지 타입 추가
-        message.setChatMessageType(String.valueOf(MessageType.TALK));
-        // 저장 및 반환
-        ChatMessageRequestDTO chatMessageRequestDTO = messageService.registerChatMessage(message);
-        // 추가 전달하는 내용
-        chatMessageRequestDTO.setWriter(member.getNickname());
-        chatMessageRequestDTO.setWriterIdentity(member.getIdentity());
+        FileUploadDTO file = message.getFile();
 
-        sendingOperations.convertAndSend("/sub/chat/room/" + message.getChatRoomId(), chatMessageRequestDTO);
+
+        if(file != null){
+            // 메시지 타입 추가
+            message.setChatMessageType(String.valueOf(MessageType.FILE));
+
+            // fileUploadDTO -> 바이트 배열 -> MultipartFile 변환 로직 FILE SERVICE
+            // 파일 변환 및 저장 conversion
+            ChatMessageRequestDTO chatMessageRequestDTO = messageService.registerChatFileMessage(message);
+
+
+        }else{
+            // 메시지 타입 추가
+            message.setChatMessageType(String.valueOf(MessageType.TALK));
+            // 저장 및 반환
+            ChatMessageRequestDTO chatMessageRequestDTO = messageService.registerChatMessage(message);
+            // 추가 전달하는 내용
+            chatMessageRequestDTO.setWriter(member.getNickname());
+            chatMessageRequestDTO.setWriterIdentity(member.getIdentity());
+        }
+
+
+
+        //sendingOperations.convertAndSend("/sub/chat/room/" + message.getChatRoomId(), chatMessageRequestDTO);
     }
+
+
+
 }

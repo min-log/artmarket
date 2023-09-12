@@ -1,6 +1,7 @@
 package llustmarket.artmarket.web.dto.chat;
 
 
+import llustmarket.artmarket.web.dto.file.FileUploadDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
 import lombok.*;
 
@@ -26,5 +27,6 @@ public class ChatMessageDTO {
     private String fileNameOrigin; //파일 원본 이름
     private String fileName; // 파일 수정된 이름
     private MemberDTO member;
+    private FileUploadDTO file;
 
 }

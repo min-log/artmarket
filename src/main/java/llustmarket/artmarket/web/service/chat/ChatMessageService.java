@@ -10,6 +10,8 @@ import java.util.List;
 public interface ChatMessageService {
     ChatMessageRequestDTO registerChatMessage(ChatMessageDTO dto);
 
+    ChatMessageRequestDTO registerChatFileMessage(ChatMessageDTO dto);
+
     // 하나의 메시지 가져오기
     ChatMessageRequestDTO searchChatMessageOne(long chatMessageId);
 
@@ -20,6 +22,7 @@ public interface ChatMessageService {
     // 더보기 클릭시 + 현제 리스트 뒤로 + 10
         // 현제 마지막 인덱스 + 10
     List<ChatMessageRequestDTO> searchChatMessageListMore(long chatRoomId, long lastNum);
+
 
 
 }
