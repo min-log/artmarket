@@ -1,0 +1,63 @@
+section{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10rem;
+}
+
+section > form > * {
+  width: 22.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+form > .user-author-check {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  font-size: 1.08rem;
+}
+form > .user-author-check > label > input[type="radio"] {
+  display: none;
+}
+
+form > .user-author-check > label{
+  background-color: rgba(142, 142, 142, 1);
+  color: rgba(245, 245, 245, 1);
+  padding: 0.7rem 4.3rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+form > .user-join-form > div {
+  margin-bottom: 0.65rem;
+}
+
+form > .user-join-form > input:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+form > .user-join-check > label > .join-check-all{
+  margin: 1.2rem 0;
+}
+
+form > .user-join-check > :not(:first-child) {
+  font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+}
+
+form > .user-join-check > * > div{
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+form > .info-input-button {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}

@@ -11,19 +11,7 @@ public class MemberService {
     @Autowired
     private MemberMapper memberMapper;
 
-    public void insertArtistMember(Member member) {
-        // identity가 비어있을 경우 기본값인 "artist"로 설정
-        if (member.getIdentity() == null || member.getIdentity().isEmpty()) {
-            member.setIdentity("artist");
-        }
-        memberMapper.insertMember(member);
-    }
-
-    public void insertNormalMember(Member member) {
-        // identity가 비어있을 경우 기본값인 "normal"로 설정
-        if (member.getIdentity() == null || member.getIdentity().isEmpty()) {
-            member.setIdentity("normal");
-        }
+    public void insertMember(Member member) {
         memberMapper.insertMember(member);
     }
 
@@ -45,5 +33,9 @@ public class MemberService {
 
     public boolean isPhoneDuplicate(String phone) {
         return memberMapper.isPhoneDuplicate(phone) > 0;
+    }
+
+    public Member getMemberByLoginId(String loginId) {
+        return memberMapper.selectMemberByLoginId(loginId);
     }
 }

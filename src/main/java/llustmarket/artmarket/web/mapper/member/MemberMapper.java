@@ -16,4 +16,6 @@ public interface MemberMapper {
     int isEmailDuplicate(String email);
 
     int isPhoneDuplicate(String phone);
+
+    Member selectMemberByLoginId(String loginId);
 }

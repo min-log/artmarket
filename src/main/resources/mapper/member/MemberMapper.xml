@@ -28,4 +28,8 @@
     <select id="isPhoneDuplicate" resultType="int">
         SELECT COUNT(*) FROM Member WHERE phone = #{phone}
     </select>
+
+    <select id="selectMemberByLoginId" resultType="llustmarket.artmarket.domain.member.Member">
+        SELECT * FROM Member WHERE login_id = #{loginId}
+    </select>
 </mapper>

@@ -29,6 +29,7 @@ public class Member {
     private String password;
 
     @NotBlank(message = "비밀번호 확인은 필수 항목입니다.")
+    @Size(max = 20, message = "비밀번호는 최대 20글자까지 입력 가능합니다.")
     private String confirmPassword;
 
     @NotBlank(message = "전화번호는 필수 항목입니다.")
