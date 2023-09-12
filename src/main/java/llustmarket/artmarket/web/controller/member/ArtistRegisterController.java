@@ -40,8 +40,7 @@ public class ArtistRegisterController {
             }
             return "member/artist_register";
         }
-
-        // Check for duplicate information
+        // 중복체크
         boolean isLoginIdDuplicate = memberService.isLoginIdDuplicate(member.getLoginId());
         boolean isNicknameDuplicate = memberService.isNicknameDuplicate(member.getNickname());
         boolean isEmailDuplicate = memberService.isEmailDuplicate(member.getEmail());

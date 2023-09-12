@@ -41,7 +41,14 @@ public class NormalRegisterController {
             return "member/normal_register";
         }
 
-        // Check for duplicate information
+        // 패스워드 체크
+        if (!member.getPassword().equals(model.getAttribute("confirmPassword"))) {
+            bindingResult.rejectValue("password", "password.mismatch", "비밀번호가 일치하지 않습니다.");
+            bindingResult.rejectValue("confirmPassword", "password.mismatch", "비밀번호가 일치하지 않습니다.");
+            return "member/artist_register";
+        }
+
+        // 중복체크
         boolean isLoginIdDuplicate = memberService.isLoginIdDuplicate(member.getLoginId());
         boolean isNicknameDuplicate = memberService.isNicknameDuplicate(member.getNickname());
         boolean isEmailDuplicate = memberService.isEmailDuplicate(member.getEmail());

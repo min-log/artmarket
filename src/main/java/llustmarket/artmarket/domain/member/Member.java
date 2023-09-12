@@ -28,6 +28,9 @@ public class Member {
     @Size(max = 20, message = "비밀번호는 최대 20글자까지 입력 가능합니다.")
     private String password;
 
+    @NotBlank(message = "비밀번호 확인은 필수 항목입니다.")
+    private String confirmPassword;
+
     @NotBlank(message = "전화번호는 필수 항목입니다.")
     @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "핸드폰 번호의 양식과 맞지 않습니다. 01x-xxx(x)-xxxx")
     @Size(max = 13, message = "전화번호는 최대 13글자까지 입력 가능합니다.")
