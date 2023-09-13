@@ -4,72 +4,84 @@ import llustmarket.artmarket.domain.member.Member;
 import llustmarket.artmarket.web.service.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping
 public class JoinController {
 
     @Autowired
     private MemberService memberService;
 
-    @GetMapping("/join")
-    public String showJoinForm(Model model) {
-        model.addAttribute("member", new Member());
-        return "html/member/join";
+    @PostMapping("/join")
+    public ResponseEntity<Object> processJoin(@RequestBody Map<String, String> joinData) {
+
+        List<Map<String, String>> joinDuplications = new ArrayList<>();
+
+        checkDuplication("JoinLoginId", joinData.get("JoinLoginId"), "아이디", joinDuplications);
+        checkDuplication("JoinNickname", joinData.get("JoinNickname"), "닉네임", joinDuplications);
+        checkDuplication("JoinEmail", joinData.get("JoinEmail"), "이메일", joinDuplications);
+        checkDuplication("JoinPhone", joinData.get("JoinPhone"), "전화번호", joinDuplications);
+
+        // 중복된 데이터가 있을 경우
+        if (!joinDuplications.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(joinDuplications);
+        }
+
+        try {
+            // Member 객체를 생성하여 DB에 추가
+            Member member = new Member(
+                    joinData.get("JoinName"),
+                    joinData.get("JoinNickname"),
+                    joinData.get("JoinLoginId"),
+                    joinData.get("JoinPassword"),
+                    joinData.get("JoinPhone"),
+                    joinData.get("JoinEmail"),
+                    joinData.get("JoinIdentity")
+            );
+            memberService.insertMember(member);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    @PostMapping("/join")
-    public String processJoin(@Validated @ModelAttribute Member member, BindingResult bindingResult, @RequestParam("user-author-check") String authorCheck, Model model) {
-        if (bindingResult.hasErrors()) {
-            log.info("errors={} ", bindingResult);
-            return "html/member/join";
-        }
-        // 중복 체크
-        if (memberService.isLoginIdDuplicate(member.getLoginId()) ||
-                memberService.isNicknameDuplicate(member.getNickname()) ||
-                memberService.isEmailDuplicate(member.getEmail()) ||
-                memberService.isPhoneDuplicate(member.getPhone()) ||
-                !member.getPassword().equals(member.getConfirmPassword())) {
-
-            if (memberService.isLoginIdDuplicate(member.getLoginId())) {
-                model.addAttribute("loginIdError", "이미 사용 중인 로그인 ID입니다.");
-            }
-
-            if (memberService.isNicknameDuplicate(member.getNickname())) {
-                model.addAttribute("nicknameError", "이미 사용 중인 닉네임입니다.");
-            }
-
-            if (memberService.isEmailDuplicate(member.getEmail())) {
-                model.addAttribute("emailError", "이미 사용 중인 이메일입니다.");
-            }
-
-            if (memberService.isPhoneDuplicate(member.getPhone())) {
-                model.addAttribute("phoneError", "이미 사용 중인 전화번호입니다.");
-            }
-
-            if (!member.getPassword().equals(member.getConfirmPassword())) {
-                model.addAttribute("confirmPasswordError", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-            }
-
-            return "html/member/join";
+    private void checkDuplication(String fieldName, String fieldValue, String fieldDisplayName, List<Map<String, String>> joinDuplications) {
+        if (fieldName.equals("JoinLoginId") && memberService.isLoginIdDuplicate(fieldValue)) {
+            Map<String, String> duplication = new HashMap<>();
+            duplication.put("duplicateParam", fieldDisplayName);
+            duplication.put("duplicateMsg", "이미 존재하는 " + fieldDisplayName + " 입니다.");
+            joinDuplications.add(duplication);
         }
 
-        // identity 설정
-        if (authorCheck.equals("user")) {
-            member.setIdentity("user");
-        } else if (authorCheck.equals("author")) {
-            member.setIdentity("author");
+        if (fieldName.equals("JoinNickname") && memberService.isNicknameDuplicate(fieldValue)) {
+            Map<String, String> duplication = new HashMap<>();
+            duplication.put("duplicateParam", fieldDisplayName);
+            duplication.put("duplicateMsg", "이미 존재하는 " + fieldDisplayName + " 입니다.");
+            joinDuplications.add(duplication);
         }
 
-        // 회원 가입 로직 수행
-        memberService.insertMember(member);
+        if (fieldName.equals("JoinEmail") && memberService.isEmailDuplicate(fieldValue)) {
+            Map<String, String> duplication = new HashMap<>();
+            duplication.put("duplicateParam", fieldDisplayName);
+            duplication.put("duplicateMsg", "이미 존재하는 " + fieldDisplayName + " 입니다.");
+            joinDuplications.add(duplication);
+        }
 
-        return "redirect:/index"; // 가입 후 홈 페이지로 리다이렉트
+        if (fieldName.equals("JoinPhone") && memberService.isPhoneDuplicate(fieldValue)) {
+            Map<String, String> duplication = new HashMap<>();
+            duplication.put("duplicateParam", fieldDisplayName);
+            duplication.put("duplicateMsg", "이미 존재하는 " + fieldDisplayName + " 입니다.");
+            joinDuplications.add(duplication);
+        }
     }
 }
