@@ -4,7 +4,7 @@ package llustmarket.artmarket.web.controller.chat;
 import llustmarket.artmarket.domain.chat.MessageType;
 import llustmarket.artmarket.web.dto.file.FileUploadDTO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageDTO;
-import llustmarket.artmarket.web.dto.chat.ChatMessageRequestDTO;
+import llustmarket.artmarket.web.dto.chat.ChatMessageResponseDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
 import llustmarket.artmarket.web.service.chat.ChatMessageService;
 import lombok.RequiredArgsConstructor;
@@ -39,12 +39,12 @@ public class ChatMessageController {
         // 메시지 타입 추가
         message.setChatMessageType(String.valueOf(MessageType.ENTER));
         // 저장 및 반환
-        ChatMessageRequestDTO chatMessageRequestDTO = messageService.registerChatMessage(message);
+        ChatMessageResponseDTO chatMessageResponseDTO = messageService.registerChatMessage(message);
         // 추가 전달하는 내용
-        chatMessageRequestDTO.setWriter(member.getNickname());
-        chatMessageRequestDTO.setWriterIdentity(member.getIdentity());
+        chatMessageResponseDTO.setWriter(member.getNickname());
+        chatMessageResponseDTO.setWriterIdentity(member.getIdentity());
 
-        sendingOperations.convertAndSend("/sub/chat/room/"  + message.getChatRoomId(), chatMessageRequestDTO);
+        sendingOperations.convertAndSend("/sub/chat/room/"  + message.getChatRoomId(), chatMessageResponseDTO);
     }
 
     @MessageMapping(value = "/chat/message")
@@ -64,22 +64,19 @@ public class ChatMessageController {
         if(file != null){
             // 메시지 타입 추가
             message.setChatMessageType(String.valueOf(MessageType.FILE));
-
-            // fileUploadDTO -> 바이트 배열 -> MultipartFile 변환 로직 FILE SERVICE
             // 파일 변환 및 저장 conversion
-            ChatMessageRequestDTO chatMessageRequestDTO = messageService.registerChatFileMessage(message);
+            ChatMessageResponseDTO chatMessageResponseDTO = messageService.registerChatFileMessage(message);
 
 
         }else{
             // 메시지 타입 추가
             message.setChatMessageType(String.valueOf(MessageType.TALK));
             // 저장 및 반환
-            ChatMessageRequestDTO chatMessageRequestDTO = messageService.registerChatMessage(message);
+            ChatMessageResponseDTO chatMessageResponseDTO = messageService.registerChatMessage(message);
             // 추가 전달하는 내용
-            chatMessageRequestDTO.setWriter(member.getNickname());
-            chatMessageRequestDTO.setWriterIdentity(member.getIdentity());
+            chatMessageResponseDTO.setWriter(member.getNickname());
+            chatMessageResponseDTO.setWriterIdentity(member.getIdentity());
         }
-
 
 
         //sendingOperations.convertAndSend("/sub/chat/room/" + message.getChatRoomId(), chatMessageRequestDTO);

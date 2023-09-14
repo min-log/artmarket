@@ -4,7 +4,7 @@ package llustmarket.artmarket.web.service.chat;
 import llustmarket.artmarket.domain.chat.Chat;
 import llustmarket.artmarket.domain.member.MemberType;
 import llustmarket.artmarket.web.dto.chat.ChatDTO;
-import llustmarket.artmarket.web.dto.chat.ChatMessageRequestDTO;
+import llustmarket.artmarket.web.dto.chat.ChatMessageResponseDTO;
 import llustmarket.artmarket.web.dto.chat.ChatRoomDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
 import llustmarket.artmarket.web.mapper.chat.ChatMapper;
@@ -78,7 +78,7 @@ public class ChatServiceImpl implements ChatService {
         chatRoomDTO.setWriter(memberNickname); // 작성자 이름 추가
 
         // 대화 내역 조회 및 전달
-        List<ChatMessageRequestDTO> chatMessageDTOS = messageService.searchChatMessageList(chatRoomDTO.getChatRoomId());
+        List<ChatMessageResponseDTO> chatMessageDTOS = messageService.searchChatMessageList(chatRoomDTO.getChatRoomId());
 
         chatRoomDTO.setMsglist(chatMessageDTOS);
 

@@ -11,6 +11,10 @@
         select chat_room_id, product_id, chat_from_id, chat_to_id, chat_room_date, chat_room_last_date, chat_room_msg
         from chatroom where product_id = #{productId} and chat_from_id = #{chatFromId}
     </select>
+    <select id="selectOneId" resultType="llustmarket.artmarket.domain.chat.ChatRoom" >
+        select chat_room_id, product_id, chat_from_id, chat_to_id, chat_room_date, chat_room_last_date, chat_room_msg
+        from chatroom where chat_room_id = #{chatRoomId};
+    </select>
 
 
 </mapper>
