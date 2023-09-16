@@ -1,16 +1,21 @@
 package llustmarket.artmarket.domain.member;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Member {
 
-    private String memberId;
+    private Long memberId;
 
     @NotBlank(message = "이름은 필수 입력 항목입니다.")
     @Pattern(regexp = "^[ㄱ-힣]{2,5}$", message = "한글로 2~5글자로 입력해주세요.")
@@ -37,11 +42,19 @@ public class Member {
     @Email(message = "올바른 이메일 형식이 아닙니다.")
     private String email;
 
+    private String accountBank;
+    private String account;
+
     @NotBlank(message = "신원 확인 정보는 필수 입력 항목입니다.")
     @Size(max = 20, message = "신원 확인 정보는 최대 20글자까지 가능합니다.")
     private String identity;
     private String memberIntro = "안녕하세요";
+    private Date memberDate;
     private Integer withdrawl = 0;
+    private boolean autoLogin;
+    private String sessionId = "none";
+    private Date limitDate;
+
 
     public Member(String name, String nickname, String loginId, String password, String phone, String email, String identity) {
         this.name = name;

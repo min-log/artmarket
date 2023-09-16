@@ -36,13 +36,12 @@ public class JoinController {
                 String errorMessage = error.getDefaultMessage();
 
                 Map<String, String> errorMap = new HashMap<>();
-                errorMap.put("joinErrorMsg", errorMessage);
                 errorMap.put("joinErrorParam", fieldName);
-
+                errorMap.put("joinErrorMsg", errorMessage);
                 joinErrors.add(errorMap);
             }
 
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(joinErrors);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(joinErrors);
         }
 
         List<Map<String, String>> duplications = new ArrayList<>();
@@ -69,7 +68,15 @@ public class JoinController {
             memberService.insertMember(member);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            List<Map<String, String>> joinErrors = new ArrayList<>();
+            String fieldName = String.valueOf(e.getCause());
+            String errorMessage = e.getMessage();
+
+            Map<String, String> errorMap = new HashMap<>();
+            errorMap.put("updateErrorParam", fieldName);
+            errorMap.put("updateErrorMsg", errorMessage);
+            joinErrors.add(errorMap);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(joinErrors);
         }
     }
 
