@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,6 +29,9 @@ public class UpdateController {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @PatchMapping("/update-password")
     public ResponseEntity<?> updatePassword(@Valid @RequestBody UpdatePassDTO updatePass, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -45,8 +49,9 @@ public class UpdateController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(updateErrors);
         }
         try {
+            String hashedPassword = passwordEncoder.encode(updatePass.getUpdatePassword());
             Member member = memberService.getMemberByMemberId(updatePass.getUpdatePassId());
-            memberService.updatePasswordByMemberId(member.getMemberId(), updatePass.getUpdatePassword());
+            memberService.updatePasswordByMemberId(member.getMemberId(), hashedPassword);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
             List<Map<String, String>> updateErrors = new ArrayList<>();
