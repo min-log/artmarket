@@ -4,14 +4,15 @@ import llustmarket.artmarket.domain.member.Member;
 import llustmarket.artmarket.web.dto.member.JoinRequestDTO;
 import llustmarket.artmarket.web.service.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -20,11 +21,17 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Controller
+@RequestMapping("/api")
+@RestController
 public class JoinController {
 
-    @Autowired
-    private MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
+    private final MemberService memberService;
+
+    public JoinController(PasswordEncoder passwordEncoder, MemberService memberService) {
+        this.passwordEncoder = passwordEncoder;
+        this.memberService = memberService;
+    }
 
     @PostMapping("/join")
     public ResponseEntity<Object> processJoin(@Valid @RequestBody JoinRequestDTO joinRequest, BindingResult bindingResult) {
@@ -56,11 +63,12 @@ public class JoinController {
         }
 
         try {
+            String hashedPassword = passwordEncoder.encode(joinRequest.getJoinPassword());
             Member member = new Member(
                     joinRequest.getJoinName(),
                     joinRequest.getJoinNickname(),
                     joinRequest.getJoinLoginId(),
-                    joinRequest.getJoinPassword(),
+                    hashedPassword,
                     joinRequest.getJoinPhone(),
                     joinRequest.getJoinEmail(),
                     joinRequest.getJoinIdentity()
