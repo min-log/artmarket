@@ -7,13 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
@@ -26,9 +24,9 @@ import java.util.*;
 
 @Slf4j
 @RestController
-@RequestMapping("api")
 public class LoginController {
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     MemberService memberService;
 
@@ -52,7 +50,7 @@ public class LoginController {
         }
         Member member = memberService.getMemberByLoginId(loginUser.getLoginId());
         if (member != null) {
-            if (member.getPassword().equals(loginUser.getLoginPassword())) {
+            if (passwordEncoder.matches(loginUser.getLoginPassword(), member.getPassword())) {
                 session.setAttribute("login", member);
 
                 if (loginUser.isAutoLogin()) {
@@ -75,11 +73,13 @@ public class LoginController {
                     loginSuccess.put("loginTrueId", String.valueOf(member.getMemberId()));
                     return ResponseEntity.status(HttpStatus.OK).body(loginSuccess);
                 } catch (Exception e) {
+                    List<Map<String, String>> loginErrors = new ArrayList<>();
                     String fieldName = String.valueOf(e.getCause());
                     String errorMessage = e.getMessage();
-                    List<Map<String, String>> loginErrors = new ArrayList<>();
+
                     Map<String, String> errorMap = new HashMap<>();
-                    errorMap.put("loginError", fieldName + " : " + errorMessage);
+                    errorMap.put("updateErrorParam", fieldName);
+                    errorMap.put("updateErrorMsg", errorMessage);
                     loginErrors.add(errorMap);
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(loginErrors);
                 }
@@ -99,30 +99,43 @@ public class LoginController {
     @PostMapping("/logout")
     public ResponseEntity<Object> logout(HttpSession session, HttpServletRequest request,
             HttpServletResponse response) {
-        Member member = (Member) session.getAttribute("login");
-        if (member != null) {
-            session.removeAttribute("login");
-            session.invalidate();
-            Cookie cookie = WebUtils.getCookie(request, "loginCookie");
+        try {
+            Member member = (Member) session.getAttribute("login");
+            if (member != null) {
+                session.removeAttribute("login");
+                session.invalidate();
+                Cookie cookie = WebUtils.getCookie(request, "loginCookie");
 
-            if (cookie != null) {
-                cookie.setMaxAge(0);
-                response.addCookie(cookie);
-                memberService.autoLogin("none", new Date(), member.getLoginId());
+                if (cookie != null) {
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                    memberService.autoLogin("none", new Date(), member.getLoginId());
+                }
+
+                Map<String, String> logoutSuccess = new HashMap<>();
+                logoutSuccess.put("logoutMsg", "로그아웃되었습니다.");
+                return ResponseEntity.status(HttpStatus.OK).body(logoutSuccess);
+            } else {
+                List<Map<String, String>> logoutErrors = new ArrayList<>();
+                String fieldName = "로그아웃";
+                String errorMessage = "이미 로그아웃 되어있습니다.";
+
+                Map<String, String> errorMap = new HashMap<>();
+                errorMap.put("updateErrorParam", fieldName);
+                errorMap.put("updateErrorMsg", errorMessage);
+                logoutErrors.add(errorMap);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(logoutErrors);
             }
-
-            Map<String, String> logoutSuccess = new HashMap<>();
-            logoutSuccess.put("logoutMsg", "로그아웃되었습니다.");
-            return ResponseEntity.status(HttpStatus.OK).body(logoutSuccess);
-        } else {
-            List<Map<String, String>> loginErrors = new ArrayList<>();
-            String fieldName = "로그아웃";
-            String errorMessage = "이미 로그아웃 되어있습니다.";
+        } catch (Exception e) {
+            List<Map<String, String>> joinErrors = new ArrayList<>();
+            String fieldName = String.valueOf(e.getCause());
+            String errorMessage = e.getMessage();
 
             Map<String, String> errorMap = new HashMap<>();
-            errorMap.put("logoutError", fieldName + " : " + errorMessage);
-            loginErrors.add(errorMap);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(loginErrors);
+            errorMap.put("updateErrorParam", fieldName);
+            errorMap.put("updateErrorMsg", errorMessage);
+            joinErrors.add(errorMap);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(joinErrors);
         }
     }
 }

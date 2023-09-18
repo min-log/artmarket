@@ -49,7 +49,7 @@ public class Member {
     @Size(max = 20, message = "신원 확인 정보는 최대 20글자까지 가능합니다.")
     private String identity;
     private String memberIntro = "안녕하세요";
-    private Date memberDate;
+    private Date memberDate = new Date();
     private Integer withdrawl = 0;
     private boolean autoLogin;
     private String sessionId = "none";
