@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberMapper memberMapper;
-    private final ModelMapper mapper;
+    private final ModelMapper modelMapper;
 
     public void insertArtistMember(Member member) {
         // identity가 비어있을 경우 기본값인 "artist"로 설정
@@ -55,6 +55,6 @@ public class MemberService {
 
     public MemberDTO selectOne(long memberId){
         Member member = memberMapper.selectOneByMemberId(memberId);
-        return mapper.map(member, MemberDTO.class);
+        return modelMapper.map(member, MemberDTO.class);
     }
 }

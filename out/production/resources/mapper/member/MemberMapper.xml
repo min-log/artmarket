@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="llustmarket.artmarket.web.repository.mapper.member.MemberMapper">
+<mapper namespace="llustmarket.artmarket.web.mapper.member.MemberMapper">
     <insert id="insertMember" useGeneratedKeys="true" keyProperty="memberId">
         INSERT INTO Member (name, nickname, login_id, password, phone, email, identity)
         VALUES (#{name}, #{nickname}, #{loginId}, #{password}, #{phone}, #{email}, #{identity})

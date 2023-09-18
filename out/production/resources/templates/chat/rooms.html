@@ -179,7 +179,7 @@
                       // 바이너리 배열을 서버로 전송
                       stomp.send('/pub/chat-room/send', {}, JSON.stringify({
                           sendChatRoomId: chatRoomId,
-                          sendChatMsg: document.getElementById("msg").value,
+                          sendChatMsg: msg.value,
                           sendChatSender: [[${session.memberId}]],
                           sendChatFile: fileDto // 바이트 배열로 변환하여 전송
 
