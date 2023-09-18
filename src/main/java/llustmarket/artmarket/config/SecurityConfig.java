@@ -21,8 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http
-                .csrf().disable()
+        http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
@@ -32,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/home"))  // 이 부분이 중요합니다
+                .logoutRequestMatcher(new AntPathRequestMatcher("/home")) // 이 부분이 중요합니다
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
     }

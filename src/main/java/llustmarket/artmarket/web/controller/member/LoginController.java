@@ -10,8 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.Cookie;
@@ -22,14 +25,16 @@ import javax.validation.Valid;
 import java.util.*;
 
 @Slf4j
-@Controller
+@RestController
+@RequestMapping("api")
 public class LoginController {
 
     @Autowired
     MemberService memberService;
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@Valid @RequestBody LoginUserDTO loginUser, BindingResult bindingResult, HttpSession session, HttpServletResponse response) {
+    public ResponseEntity<Object> login(@Valid @RequestBody LoginUserDTO loginUser, BindingResult bindingResult,
+            HttpSession session, HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             List<Map<String, String>> loginErrors = new ArrayList<>();
 
@@ -92,7 +97,8 @@ public class LoginController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Object> logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Object> logout(HttpSession session, HttpServletRequest request,
+            HttpServletResponse response) {
         Member member = (Member) session.getAttribute("login");
         if (member != null) {
             session.removeAttribute("login");

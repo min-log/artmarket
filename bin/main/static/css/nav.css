@@ -1,0 +1,62 @@
+.swal-text {
+  background-color: #fefae3;
+  padding: 17px;
+  border: 1px solid #f0e1a1;
+  display: block;
+  margin: 22px;
+  text-align: center;
+  color: #61534e;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 1rem;
+  margin: 1rem 0;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+.nav-menu > * {
+  margin-left: 1.3rem;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.nav-menu > *:hover {
+  font-weight: bold;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transform: translateY(-0.1rem);
+}
+
+.nav-logo > * {
+  width: 10rem;
+}
+
+.nav-category {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 0.1rem;
+}
+
+.nav-category > * {
+  margin-left: 4rem;
+  font-size: 0.8rem;
+  color: rgba(49, 49, 49, 0.9);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nav-category > *:hover {
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
