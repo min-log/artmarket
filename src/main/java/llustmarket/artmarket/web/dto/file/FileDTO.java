@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Builder
 public class FileDTO {
     private long fileId; // 파일아이디
@@ -16,6 +17,9 @@ public class FileDTO {
     private String fileOriginName; // 실제이름
     private String fileName; // 변경된 이름
     private LocalDateTime fileDate; // 생성일
+
+
+
 
 
 }

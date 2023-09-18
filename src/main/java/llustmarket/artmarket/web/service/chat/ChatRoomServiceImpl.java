@@ -6,10 +6,7 @@ import llustmarket.artmarket.domain.chat.ChatRoom;
 import llustmarket.artmarket.domain.file.File;
 import llustmarket.artmarket.domain.file.FileType;
 import llustmarket.artmarket.domain.member.Member;
-import llustmarket.artmarket.web.dto.chat.ChatDTO;
-import llustmarket.artmarket.web.dto.chat.ChatRoomDTO;
-import llustmarket.artmarket.web.dto.chat.ChatRoomListDTO;
-import llustmarket.artmarket.web.dto.chat.ChatRoomMyPageDTO;
+import llustmarket.artmarket.web.dto.chat.*;
 import llustmarket.artmarket.web.mapper.chat.ChatRoomMapper;
 import llustmarket.artmarket.web.mapper.file.FileMapper;
 import llustmarket.artmarket.web.mapper.member.MemberMapper;
@@ -21,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Log4j2
@@ -36,36 +32,29 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
 
     @Override
-    public ChatRoomDTO registerChatRoom(ChatRoomDTO chatRoomDTO) {
-        log.info("register ChatRoom ------------------------------");
-        chatRoomMapper.insertOne(modelMapper.map(chatRoomDTO, ChatRoom.class));
+    public ChatRoomDTO registerChatRoom(ChatRoomDTO dto) {
+        log.info("# 채팅룸 생성 ------------------------------");
+        ChatRoom vo = modelMapper.map(dto, ChatRoom.class);
+        chatRoomMapper.insertOne(vo);
         // 생성한 값 전달
-        ChatRoomDTO result = searchOneExist(chatRoomDTO);
-        return result;
+        dto.setChatRoomId(vo.getChatRoomId());
+        return dto;
     }
 
 
     @Override
-    public ChatRoomDTO searchOneExist(ChatRoomDTO dto) {
-        log.info("selectOne ------------------------------");
-        log.info("dto : {}",dto);
-        ChatRoom chatRoom =null;
-        try {
-            chatRoom = chatRoomMapper.selectOneExist(modelMapper.map(dto, ChatRoom.class));
-            if(chatRoom == null) return null;
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        log.info("vo : {}",chatRoom);
+    public ChatRoomDTO searchOneChatRoomId(long chatRoomId) {
+        log.info("# 채팅 룸 전달 ------------------------------");
+        log.info("chatRoomId : {}",chatRoomId);
+        ChatRoom chatRoom = chatRoomMapper.selectOneId(chatRoomId);
+        log.info("chatRoom : {}",chatRoomId);
         return modelMapper.map(chatRoom, ChatRoomDTO.class);
     }
 
     @Transactional
     @Override
-    public ChatRoomMyPageDTO searchUserList(long memberId, List<ChatDTO> chatDTOS) {
-        log.info("# 전체 채팅 룸 리스트 정보 전달");
-
+    public ChatRoomListResponseDTO searchUserList(long memberId, List<ChatDTO> chatDTOS) {
+        log.info("# 특정 회원의 채팅 룸 리스트 정보 전달");
 
         // 1. 전달될 룸 리스트
         List<ChatRoomListDTO> roomListDTO = new ArrayList<>();
@@ -80,36 +69,37 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     .lastMsg(chatRoom.getChatRoomMsg())
                     .lastMsgDate(chatRoom.getChatRoomLastDate())
                     .build();
-            //  1-5. 전달될 객체에 회원정보 추가
+            //  1-5. 전달될 객체에 상대방의 회원정보 추가
             Member memberYou;
+            // 1) 상대 회원 정보 찾기
             if(chatRoom.getChatToId() == memberId){
-                // chatFromId 회원 아이디 값으로 파일 맵퍼로부터 찾아서 프로필이미지 경로 전송하기
                 memberYou = memberMapper.selectOneByMemberId(chatRoom.getChatFromId());
             }else{
-                // chatToId 회원 아이디 값으로 파일 맵퍼로부터 찾아서 프로필이미지 경로 전송하기
                 memberYou = memberMapper.selectOneByMemberId(chatRoom.getChatToId());
             }
-            // 프로필 이미지 : 파일 객체가 존재할 시 추가
+            // 2) 프로필 이미지 : 파일 객체가 존재할 시 추가
                 // 파일의 경로, 경로 아이디
-            File  memberProfile = fileMapper.selectOnePathAndId(File.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberYou.getMemberId()).build());
+            File FileProfile = File.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberYou.getMemberId()).build();
+
+            File  memberProfile = fileMapper.selectOnePathAndId(FileProfile);
             if(memberProfile != null) chatRoomDTO.setSendProfileImg(memberProfile.getFilePath() + "/" + memberProfile.getFileName());
             chatRoomDTO.setWhoSend(memberYou.getNickname());
             chatRoomDTO.setIdentity(memberYou.getIdentity());
-            //  1-6. 전달될 객체 리스트에 객체 추가
+            //  1-6. 전달될 룸 리스트 객체에 추가
             roomListDTO.add(chatRoomDTO);
         });
 
 
         // 2. 마이페이지 보유 회원 정보 추가
         Member memberMe = memberMapper.selectOneByMemberId(memberId);
-        ChatRoomMyPageDTO myPageDTO = ChatRoomMyPageDTO.builder()
+        ChatRoomListResponseDTO myPageDTO = ChatRoomListResponseDTO.builder()
                 .intro(memberMe.getMemberIntro())
                 .nickname(memberMe.getNickname())
                 .build();
 
         // 2-1. 회원 프로필
-        File  memberProfile = fileMapper.selectOnePathAndId(File.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberMe.getMemberId()).build());
-        if(memberProfile != null) myPageDTO.setProfileImg(memberProfile.getFilePath()+"/"+memberProfile.getFileTypeId());
+//        File  memberProfile = fileMapper.selectOnePathAndId(File.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberMe.getMemberId()).build());
+//        if(memberProfile != null) myPageDTO.setProfileImg(memberProfile.getFilePath()+"/"+memberProfile.getFileTypeId());
         myPageDTO.setMyChatRooms(roomListDTO); // 룸 리스트 추가
 
 

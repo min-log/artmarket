@@ -2,9 +2,7 @@ package llustmarket.artmarket.web.controller.chat;
 
 
 import llustmarket.artmarket.web.dto.chat.ChatDTO;
-import llustmarket.artmarket.web.dto.chat.ChatRoomDTO;
-import llustmarket.artmarket.web.dto.chat.ChatRoomListDTO;
-import llustmarket.artmarket.web.dto.chat.ChatRoomMyPageDTO;
+import llustmarket.artmarket.web.dto.chat.ChatRoomListResponseDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
 import llustmarket.artmarket.web.service.chat.ChatRoomService;
 import llustmarket.artmarket.web.service.chat.ChatService;
@@ -34,10 +32,9 @@ public class ChatTestController {
         log.info("#마이페이지 회원 채팅방 리스트 전송");
         // 채팅방 생성
         //작가 회원
+        session.setAttribute("member", MemberDTO.builder().build());
         MemberDTO authorMember = MemberDTO.builder().memberId(1).identity("AUTHOR").nickname("이지민").build();
         session.setAttribute("authorMember",authorMember);
-
-
 
         return "chat/rooms";
     }
@@ -47,13 +44,13 @@ public class ChatTestController {
     public String roomList(Model model,HttpSession session){
         // 채팅내역 조회
         log.info("# All Chat roomList");
-        session.setAttribute("member", (MemberDTO)session.getAttribute("authorMember"));
-        MemberDTO authorMember = (MemberDTO) session.getAttribute("member");
-
-        List<ChatDTO> list = chatService.findChatRoomById(authorMember.getMemberId());
-        ChatRoomMyPageDTO chatRoomMyPageDTO = chatRoomService.searchUserList(authorMember.getMemberId(), list);
-
-        model.addAttribute("list",chatRoomMyPageDTO.getMyChatRooms());
+//        session.setAttribute("member", (MemberDTO)session.getAttribute("authorMember"));
+//        MemberDTO authorMember = (MemberDTO) session.getAttribute("member");
+//
+//        List<ChatDTO> list = chatService.findChatRoomById(authorMember.getMemberId());
+//        ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchUserList(authorMember.getMemberId(), list);
+//
+//        model.addAttribute("list", chatRoomListResponseDTO.getMyChatRooms());
 
         return "chat/rooms_author";
     }
@@ -62,9 +59,11 @@ public class ChatTestController {
     public String user(MemberDTO memberDTO, HttpSession session){
 
         log.info("# session :{}",memberDTO);
-        session.setAttribute("userName",memberDTO.getNickname());
-        memberDTO.setIdentity("GENERAL");
         session.setAttribute("member", memberDTO);
+        session.setAttribute("userName",memberDTO.getNickname());
+        session.setAttribute("memberId",memberDTO.getMemberId());
+
+
 
 
         return "redirect:/chat/rooms";

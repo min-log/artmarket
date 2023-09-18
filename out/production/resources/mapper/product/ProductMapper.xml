@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="llustmarket.artmarket.web.mapper.product.ProductMapper">
+    <select id="selectOneByProductId" resultType="llustmarket.artmarket.domain.product.Product" >
+        select product_id, member_id, category, product_title, product_detail, product_date
+        from product where product_id = #{productId}
+    </select>
+</mapper>

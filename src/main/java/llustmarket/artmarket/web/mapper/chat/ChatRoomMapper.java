@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ChatRoomMapper {
    void insertOne(ChatRoom vo);
-   ChatRoom selectOneExist(ChatRoom vo);
    ChatRoom selectOneId(Long chatRoomId);
 
 

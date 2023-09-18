@@ -6,9 +6,12 @@ import llustmarket.artmarket.domain.member.MemberType;
 import llustmarket.artmarket.web.dto.chat.ChatDTO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageResponseDTO;
 import llustmarket.artmarket.web.dto.chat.ChatRoomDTO;
+import llustmarket.artmarket.web.dto.chat.ChatRoomResponseDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
+import llustmarket.artmarket.web.dto.product.ProductDTO;
 import llustmarket.artmarket.web.mapper.chat.ChatMapper;
 import llustmarket.artmarket.web.service.member.MemberService;
+import llustmarket.artmarket.web.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -27,61 +30,79 @@ public class ChatServiceImpl implements ChatService {
     private final ChatRoomService chatRoomService;
     private final ChatMessageService messageService;
     private final MemberService memberService;
+    private final ProductService productService;
 
     @Transactional
     @Override
-    public ChatRoomDTO registerChat(MemberDTO member, ChatRoomDTO roomDTO) {
-
-        log.info("register Chat ---------------------");
+    public ChatRoomResponseDTO registerChat(long askMemberId, ChatRoomDTO roomDTO) {
+        log.info("# 채팅 참여 정보생성");
         // 1. 참여정보 생성 - 저장 필수 정보 룸 아이디, 상품아이디, 현재 사용자 아이디, 사용자 권한
+        // 문의 회원
+        MemberDTO askMember = memberService.selectOne(askMemberId);
+
+        // room - DB 저장
+        roomDTO.setChatToId(askMember.getMemberId()); // 보내는 사람
+        // room - 프론트 전달
+        ChatRoomResponseDTO chatRoomDTO;
+
+        // 문의 회원 참여 정보
         ChatDTO chatDTO = ChatDTO.builder()
                 .productId(roomDTO.getProductId()) // 상품 아이디
-                .memberId(member.getMemberId()) // 사용자 아이디
-                .chatIdentity(member.getIdentity()) // 사용자 권한
+                .memberId(askMemberId) // 사용자 아이디
+                .chatIdentity(askMember.getIdentity()) // 사용자 권한
                 .build();
 
-        ChatRoomDTO chatRoomDTO; // 전달할 room
-
-        // 방이름 (상대방 닉네임) 전달 -- 작가 아이디를 통해 가져오기
-        MemberDTO memberDTO = memberService.selectOne(roomDTO.getChatToId());
-        String roomName = memberDTO.getNickname();
-        String memberNickname = member.getNickname(); // 사용자 닉네임
+        // 작가 정보
+        ProductDTO productDTO = productService.selectOne(roomDTO.getProductId());
+        MemberDTO authorMember = memberService.selectOne(productDTO.getMemberId());
+        roomDTO.setChatFromId(authorMember.getMemberId()); // 받는사람
 
 
         // 2. 기존 대화 참여 내역이 있는지 확인
+        log.info("chatDTO : {}",chatDTO);
         ChatDTO dtoValue = searchOneExist(chatDTO);
-        if(dtoValue == null){ // 3. 내역이 존재 하지 않을 시
-            // 1. 룸생성
-            chatRoomDTO = chatRoomService.registerChatRoom(roomDTO);
-            chatRoomDTO.setChatRoomName(roomName); // 방이름 추가
-            chatRoomDTO.setWriter(memberNickname); // 작성자 이름 추가
-
+        if(dtoValue == null){// 3. 내역이 존재 하지 않을 시
+            log.info("내역 존재 하지 않을 시 ");
+            // 1. 룸생성 - DB
+            // 방이름 (상대방 닉네임) 전달 -- 작가 아이디를 통해 가져오기
+            ChatRoomDTO chatRoom = chatRoomService.registerChatRoom(roomDTO);
             // 1-1. 대화참여하는 곳에 룸 아이디 추가
-            chatDTO.setChatRoomId(chatRoomDTO.getChatRoomId());
+            chatDTO.setChatRoomId(chatRoom.getChatRoomId());
             // 2. 대화 참여 생성 - 문의자 / 작가
             // 2-1 . 보내는 사람 참여 생성
             chatMapper.insertOne(modelMapper.map(chatDTO,Chat.class));
             // 2-2. 작가 참여 생성
             Chat authorChatDto = Chat.builder()
-                    .chatRoomId(chatRoomDTO.getChatRoomId())
-                    .chatIdentity(String.valueOf(MemberType.AUTHOR))
-                    .memberId(roomDTO.getChatToId())
+                    .chatRoomId(chatRoom.getChatRoomId())
+                    .chatIdentity(authorMember.getIdentity())
+                    .memberId(authorMember.getMemberId())
                     .productId(roomDTO.getProductId())
                     .build();
             chatMapper.insertOne(authorChatDto);
 
+            chatRoomDTO = ChatRoomResponseDTO.builder()
+                    .chatRoomId(chatRoom.getChatRoomId())
+                    .productId(chatRoom.getProductId())
+                    .build();
+
             return chatRoomDTO;
         }
         log.info("내역 존재 시");
-        chatRoomDTO = chatRoomService.searchOneExist(roomDTO);
-        chatRoomDTO.setChatRoomName(roomName); // 방이름 추가
-        chatRoomDTO.setWriter(memberNickname); // 작성자 이름 추가
+        log.info("dtoValue:{}",dtoValue);
+        //chat_from_id
 
+        ChatRoomDTO chatRoom = chatRoomService.searchOneChatRoomId(dtoValue.getChatId());
+
+
+        log.info("chatRoom : {}",chatRoom);
         // 대화 내역 조회 및 전달
-        List<ChatMessageResponseDTO> chatMessageDTOS = messageService.searchChatMessageList(chatRoomDTO.getChatRoomId());
+        List<ChatMessageResponseDTO> chatMessageDTOS = messageService.searchChatMessageList(chatRoom.getChatRoomId());
 
-        chatRoomDTO.setMsglist(chatMessageDTOS);
-
+        chatRoomDTO = ChatRoomResponseDTO.builder()
+                .chatRoomId(chatRoom.getChatRoomId())
+                .productId(chatRoom.getProductId())
+                .chatList(chatMessageDTOS)
+                .build();
 
         return chatRoomDTO;
     }
@@ -89,7 +110,8 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public ChatDTO searchOneExist(ChatDTO chatDTO) {
-        log.info("chat search exist--------------------");
+        log.info("# 대화 내역 존재 확인");
+        log.info("chatDTO : {}",chatDTO);
         Chat vo = modelMapper.map(chatDTO, Chat.class);
         try{
             vo = chatMapper.selectOneExist(vo);
@@ -97,12 +119,12 @@ public class ChatServiceImpl implements ChatService {
         }catch (Exception e){
             e.printStackTrace();
         }
-
         return modelMapper.map(vo, ChatDTO.class);
     }
 
     @Override
     public List<ChatDTO> findChatRoomById(long memberId) {
+        log.info("# 사용자의 대화참여 리스트 찾기");
         List<Chat> chats = chatMapper.selectByMemberId(Chat.builder().memberId(memberId).build());
         List<ChatDTO> dtoList = chats.stream().map(item -> modelMapper.map(item, ChatDTO.class)).collect(Collectors.toList());
         return dtoList;

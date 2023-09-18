@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="container">
-      [[${session.member}]]
+      member : [[${session.member}]]
       <div>
         임시 작가 회원 : 1 이지민 <br />
         임시 일반회원 - 번호 닉네임 <br />
@@ -51,7 +51,12 @@
       </div>
 
     </div>
-    <script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js" integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
+    <script th:inline="javascript" >
         var file = document.querySelector('#fileMsg');
 
         file.onchange = function () {
@@ -74,44 +79,30 @@
                 //document.querySelector("#msg").innerHTML = "<img src='" + reader.result + "' >";
             };
         };
-    </script>
 
-
-    <script th:inline="javascript" >
-      $(document).ready(function(){
-          // 채팅방 생성
-            // 필요한거 상품번호, 작가 번호
-
-          $("#btnSave").on('click',function () {
-              $.ajax({
-                  url: "/apiChat/room?productId=" + 1 +"&authorId="+[[${session.authorMember.memberId}]],
-                  type: "get",
-                  success:function (data) {
-                      console.log("전달 받는 데이터 : " + JSON.stringify(data));
-                      ChatRoom(data);
-                  }
-              });
+      $("#btnSave").on('click',function () {
+          $.ajax({
+              url: "/product",
+              type: "post",
+              //accept: "application/json",
+              contentType: "application/json; charset=utf-8",
+              //dataType: "json",
+              data: JSON.stringify({'askProduct': 1,'askMember': 3}),
+              success:function (data) {
+                  console.log("전달 받는 데이터 : " + JSON.stringify(data));
+                  ChatRoom(data);
+              }
           });
-
-
       });
-    </script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js" integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<!--    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
-    <script th:inline="javascript" >
       function ChatRoom(data){
           let sockJs = new SockJS("/stomp/chat");
           //1. SockJS를 내부에 들고있는 stomp를 내어줌
           let stomp = Stomp.over(sockJs);
           let charRoom = data;
-          let username = [[${session.userName}]];
-          let chatRoomId = charRoom.chatRoomId;
-          let chatRoomName = charRoom.chatRoomName;
+          let username = data.memberId;
+          let chatRoomId = data.chatRoomId;
           // 채팅방 이름 넣기
-          $(".chat_title").html(chatRoomName);
           // 채팅방 레이어 팝업 보여주기
           $("#modal").show();
 
@@ -120,28 +111,19 @@
           //2. connection이 맺어지면 실행
           stomp.connect({}, function (frame){
               console.log("STOMP Connection")
-              console.log("member : " + [[${session.member}]])
-
-              stomp.send('/pub/chat/enter', {}, JSON.stringify({chatRoomId: chatRoomId,member: [[${session.member}]] }));
 
               //4. subscribe(path, callback)으로 메세지를 받을 수 있음
-              stomp.subscribe("/sub/chat/room/" + chatRoomId, function (chat) {
-                  var content = JSON.parse(chat.body);
+              stomp.subscribe("/sub/chat-room/get/" + chatRoomId, function (chat) {
+                  const content = JSON.parse(chat.body);
 
-                  var writer = content.writer;
-                  var message = content.message;
-                  var type = content.chatMessageType;
+                  console.log("content : "+ content);
 
-                  var str = '';
+                  let writer = content.chatRoomId;
+                  let message = content.chatMsg;
+                  let type = content.chatType;
 
-                  if(type === "ENTER"){ // 처음 들어왔을경우
-                      str = "<div class='enter'>";
-                      str += "<div class='alert alert-secondary'>";
-                      str += "<b>" + writer + " : " + message + "</b>";
-                      str += "</div></div>";
-                      $("#msgArea").append(str);
-                      return false;
-                  }
+                  let str = '';
+
 
                   if(type === "FILE"){ // 파일일 경우
 
@@ -174,38 +156,47 @@
           // 메시지 전송
           $("#button-send").on("click", function(e){
               let msg = document.getElementById("msg");
-              var fileForm = document.querySelector('#fileMsg');
-              console.log(fileForm)
-              var fileList = fileForm.files[0] ;
+              let fileForm = document.querySelector('#fileMsg');
+              console.log(msg.value);
+
+              let fileList = fileForm.files[0] ;
 
               //파일이 있을경우
               if (fileList != null) {
-                  console.log("파일 있을 경우");
+                  console.log("파일 있을 때");
                   console.log("파일 전송 : " + fileList.name);
 
                   // 웹소켓에서 파일객체는 직렬화 해서 전달 받아야한다.
-                  var reader = new FileReader();
+                  let reader = new FileReader();
                   reader.onload = function (event) {
-                      var fileContent = event.target.result; // 파일 내용
-                      var fileDto = {
-                          fileName: fileList.name,
-                          fileData: Array.from(new Uint8Array(fileContent)),
-                          fileContentType : fileList.type
+                      let fileContent = event.target.result; // 파일 내용
+                      let fileDto = {
+                          chatFileName: fileList.name,
+                          chatFileData:  Array.from(new Uint8Array(fileContent)),
+                          chatFileType: fileList.type
                       };
-                      console.log("file : "+fileDto);
 
                       // 바이너리 배열을 서버로 전송
-                      stomp.send('/pub/chat/message', {}, JSON.stringify({
-                          chatRoomId: chatRoomId,
-                          message: msg.value,
-                          file: fileDto, // 바이트 배열로 변환하여 전송
-                          member: [[${session.member}]]
+                      stomp.send('/pub/chat-room/send', {}, JSON.stringify({
+                          sendChatRoomId: chatRoomId,
+                          sendChatMsg: document.getElementById("msg").value,
+                          sendChatSender: [[${session.memberId}]],
+                          sendChatFile: fileDto // 바이트 배열로 변환하여 전송
+
                       }));
                   };
                   reader.readAsArrayBuffer(fileList); // 파일을 바이너리로 읽기
-              }//file
+              } else {
+                  console.log("파일 없을때");
+                  stomp.send('/pub/chat-room/send', {}, JSON.stringify({
+                      sendChatRoomId: chatRoomId,
+                      sendChatMsg: msg.value,
+                      sendChatSender: [[${session.memberId}]],
+                      sendChatFile: null // 바이트 배열로 변환하여 전송
+                  }));
+              }
 
-              stomp.send('/pub/chat/message', {}, JSON.stringify({chatRoomId: chatRoomId, message: msg.value,member: [[${session.member}]]}));
+
               msg.value = '';
           });
 

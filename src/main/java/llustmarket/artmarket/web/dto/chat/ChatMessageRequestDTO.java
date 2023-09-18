@@ -1,11 +1,8 @@
 package llustmarket.artmarket.web.dto.chat;
 
 
-import llustmarket.artmarket.web.dto.file.FileUploadDTO;
-import llustmarket.artmarket.web.dto.member.MemberDTO;
+import llustmarket.artmarket.web.dto.file.ChatFileUploadDTO;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @ToString
 @NoArgsConstructor
@@ -14,10 +11,11 @@ import java.time.LocalDateTime;
 @Builder
 @Setter
 public class ChatMessageRequestDTO {
-
-    private long chatRoomId;//방 아이디
-    private long chatSender; //보내는 아이디
-    private String chatMsg; //메시지
-    private FileUploadDTO chatFile;
+    // 받아오는 메시지 데이터
+    private long sendChatRoomId;//방 아이디
+    private long sendChatSender; //보내는 아이디
+    private String sendChatMsg; //메시지
+    private ChatFileUploadDTO sendChatFile;
+    private String chatType; // 메시지 타입
 
 }

@@ -4,7 +4,7 @@ package llustmarket.artmarket.web.service.file;
 import llustmarket.artmarket.domain.file.FileType;
 import llustmarket.artmarket.web.dto.file.FileDTO;
 import llustmarket.artmarket.web.dto.file.FileMultipart;
-import llustmarket.artmarket.web.dto.file.FileUploadDTO;
+import llustmarket.artmarket.web.dto.file.ChatFileUploadDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.log4j.Log4j2;
@@ -73,12 +73,12 @@ public class FileService {
     }
 
     // 웹소켓 바이트 파일 객체 --> multipartFile로 변환
-    public MultipartFile fileConversionMultipartFile(FileUploadDTO fileUploadDTO){
+    public MultipartFile fileConversionMultipartFile(ChatFileUploadDTO chatFileUploadDTO){
 
         // DTO에서 파일 데이터 추출
-        byte[] fileData = fileUploadDTO.getFileData();
-        String fileName = fileUploadDTO.getFileName();
-        String fileContentType = fileUploadDTO.getFileContentType();
+        byte[] fileData = chatFileUploadDTO.getChatFileData();
+        String fileName = chatFileUploadDTO.getChatFileName();
+        String fileContentType = chatFileUploadDTO.getChatFileType();
 
         return new FileMultipart(fileData, fileName,fileContentType,fileData.length);
 

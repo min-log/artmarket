@@ -31,7 +31,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests()
                 .antMatchers("/","/chat/*","/apiChat","/sub","/topic","/pub") //웹소켓 관련 시큐리티 제거
                 .permitAll();
-
+        http.csrf().disable();
 
         return http.build();
     }
