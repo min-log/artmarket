@@ -47,10 +47,22 @@ public class UpdateController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(updateErrors);
         }
         try {
-            String hashedPassword = passwordEncoder.encode(updatePass.getUpdatePassword());
             Member member = memberService.getMemberByMemberId(updatePass.getUpdatePassId());
-            memberService.updatePasswordByMemberId(member.getMemberId(), hashedPassword);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            if (member != null) {
+                String hashedPassword = passwordEncoder.encode(updatePass.getUpdatePassword());
+                memberService.updatePasswordByMemberId(member.getMemberId(), hashedPassword);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            } else {
+                List<Map<String, String>> updateErrors = new ArrayList<>();
+                String fieldName = "멤버 조회 오류";
+                String errorMessage = "member_id에 해당하는 멤버가 없습니다.";
+
+                Map<String, String> errorMap = new HashMap<>();
+                errorMap.put("updateErrorParam", fieldName);
+                errorMap.put("updateErrorMsg", errorMessage);
+                updateErrors.add(errorMap);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(updateErrors);
+            }
         } catch (Exception e) {
             List<Map<String, String>> updateErrors = new ArrayList<>();
             String fieldName = String.valueOf(e.getCause());

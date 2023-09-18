@@ -10,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -134,5 +131,47 @@ public class ProductController {
         errorMap.put("productErrorMsg", errorMessage);
         productErrors.add(errorMap);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(productErrors);
+    }
+
+    @DeleteMapping("/mypage-articles/{product_id}")
+    public ResponseEntity<?> deleteProductById(@PathVariable("product_id") String productIdString) {
+        try {
+            Long productId = Long.parseLong(productIdString);
+
+            if (productService.findProductByProductId(productId) != null) {
+                productService.deleteProductById(productId);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            } else {
+                List<Map<String, String>> productDeleteErrors = new ArrayList<>();
+                String fieldName = "product_id 오류";
+                String errorMessage = "product_id에 해당하는 product가 없습니다";
+
+                Map<String, String> errorMap = new HashMap<>();
+                errorMap.put("productDeleteErrorParam", fieldName);
+                errorMap.put("productDeleteErrorMsg", errorMessage);
+                productDeleteErrors.add(errorMap);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(productDeleteErrors);
+            }
+        } catch (NumberFormatException e) {
+            List<Map<String, String>> productDeleteErrors = new ArrayList<>();
+            String fieldName = "product_id 오류";
+            String errorMessage = "유효한 숫자 형식이 아닙니다";
+
+            Map<String, String> errorMap = new HashMap<>();
+            errorMap.put("productDeleteErrorParam", fieldName);
+            errorMap.put("productDeleteErrorMsg", errorMessage);
+            productDeleteErrors.add(errorMap);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(productDeleteErrors);
+        } catch (Exception e) {
+            List<Map<String, String>> productDeleteErrors = new ArrayList<>();
+            String fieldName = String.valueOf(e.getCause());
+            String errorMessage = e.getMessage();
+
+            Map<String, String> errorMap = new HashMap<>();
+            errorMap.put("productDeleteErrorParam", fieldName);
+            errorMap.put("productDeleteErrorMsg", errorMessage);
+            productDeleteErrors.add(errorMap);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(productDeleteErrors);
+        }
     }
 }
