@@ -79,8 +79,8 @@ public class JoinController {
             String errorMessage = e.getMessage();
 
             Map<String, String> errorMap = new HashMap<>();
-            errorMap.put("updateErrorParam", fieldName);
-            errorMap.put("updateErrorMsg", errorMessage);
+            errorMap.put("joinErrorParam", fieldName);
+            errorMap.put("joinErrorMsg", errorMessage);
             joinErrors.add(errorMap);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(joinErrors);
         }

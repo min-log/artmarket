@@ -95,13 +95,17 @@ loginPassword.addEventListener('focusout', function () {
     btnModCheck()
 })
 
+
 loginBtn.addEventListener("click", function () {
+
+    console.log(typeof loginId.value)
+    console.log(typeof loginPassword.value)
+    console.log(typeof loginAutoResult)
     if (btnModCheckList[0] && btnModCheckList[1]) {
         fetch("/login", {
             method: 'POST',
-            mode: "no-cors",
-            header: {
-                'Content-Type': 'application/json; charset=utf-8'
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
             },
             body: JSON.stringify({
                 loginId: `${loginId.value}`,
@@ -109,6 +113,6 @@ loginBtn.addEventListener("click", function () {
                 autoLogin: `${loginAutoResult}`,
             }),
         }).then(res => console.log(res))
-            .then((data) => console.log(data))
+            .catch(error => console.log(error))
     }
 })
