@@ -12,6 +12,11 @@
         SET identity = #{identity}
         WHERE member_id = #{memberId}
     </update>
+    <update id="updatePasswordByMemberId">
+        UPDATE Member
+        SET password = #{password}
+        WHERE member_id = #{memberId}
+    </update>
 
     <select id="isLoginIdDuplicate" resultType="int">
         SELECT COUNT(*) FROM Member WHERE login_id = #{loginId}
@@ -28,4 +33,23 @@
     <select id="isPhoneDuplicate" resultType="int">
         SELECT COUNT(*) FROM Member WHERE phone = #{phone}
     </select>
+
+    <select id="selectMemberByLoginId" resultType="llustmarket.artmarket.domain.member.Member">
+        SELECT * FROM Member WHERE login_id = #{loginId}
+    </select>
+
+    <select id="selectMemberByPhone" resultType="llustmarket.artmarket.domain.member.Member">
+        SELECT * FROM Member WHERE phone = #{phone}
+    </select>
+    <select id="selectMemberByMemberId" resultType="llustmarket.artmarket.domain.member.Member">
+        SELECT * FROM Member WHERE member_id = #{memberId}
+    </select>
+
+    <update id="autoLogin">
+        update member
+        set
+        session_id=#{sessionId},
+        limit_date=#{limitDate}
+        where login_id= #{loginId};
+    </update>
 </mapper>

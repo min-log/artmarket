@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Gothic+A1&family=Noto+Sans+KR&display=swap");
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: "Noto Sans KR", sans-serif;
+  letter-spacing: 0.1rem;
+  line-height: 1.6rem;
+  width: 1890px;
+}
