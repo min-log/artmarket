@@ -43,13 +43,14 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
 
     @Override
-    public ChatRoomDTO searchOneChatRoomId(long chatRoomId) {
+    public ChatRoomDTO searchChatRoomId(long chatRoomId) {
         log.info("# 채팅 룸 전달 ------------------------------");
         log.info("chatRoomId : {}",chatRoomId);
         ChatRoom chatRoom = chatRoomMapper.selectOneId(chatRoomId);
         log.info("chatRoom : {}",chatRoomId);
         return modelMapper.map(chatRoom, ChatRoomDTO.class);
     }
+
 
     @Transactional
     @Override
@@ -89,7 +90,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             roomListDTO.add(chatRoomDTO);
         });
 
-
         // 2. 마이페이지 보유 회원 정보 추가
         Member memberMe = memberMapper.selectOneByMemberId(memberId);
         ChatRoomListResponseDTO myPageDTO = ChatRoomListResponseDTO.builder()
@@ -98,8 +98,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .build();
 
         // 2-1. 회원 프로필
-//        File  memberProfile = fileMapper.selectOnePathAndId(File.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberMe.getMemberId()).build());
-//        if(memberProfile != null) myPageDTO.setProfileImg(memberProfile.getFilePath()+"/"+memberProfile.getFileTypeId());
+        File  memberProfile = fileMapper.selectOnePathAndId(File.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberMe.getMemberId()).build());
+        if(memberProfile != null) myPageDTO.setProfileImg(memberProfile.getFilePath()+"/"+memberProfile.getFileTypeId());
         myPageDTO.setMyChatRooms(roomListDTO); // 룸 리스트 추가
 
 

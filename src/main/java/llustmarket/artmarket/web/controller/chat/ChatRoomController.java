@@ -3,6 +3,8 @@ package llustmarket.artmarket.web.controller.chat;
 
 import llustmarket.artmarket.web.dto.chat.ChatDTO;
 import llustmarket.artmarket.web.dto.chat.ChatRoomListResponseDTO;
+import llustmarket.artmarket.web.dto.chat.ChatRoomRequestDTO;
+import llustmarket.artmarket.web.dto.chat.ChatRoomResponseDTO;
 import llustmarket.artmarket.web.service.chat.ChatRoomService;
 import llustmarket.artmarket.web.service.chat.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ public class ChatRoomController {
     @GetMapping(value = "/myfage")
     public ResponseEntity<Object> roomList(@RequestParam(value = "myfageId") long memberId) {
         log.info("# 마이페이지 채팅 내역 조회");
-        List<ChatDTO> list = chatService.findChatRoomById(memberId);
+        List<ChatDTO> list = chatService.searchChatAllByMemberId(memberId);
         try {
             ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchUserList(memberId, list);
             return ResponseEntity.status(HttpStatus.OK).body(chatRoomListResponseDTO);
@@ -41,18 +43,20 @@ public class ChatRoomController {
 
 
     // 하나의 채팅 룸 안에 대화 내용 출력
-//    @GetMapping(value = "/myfage")
-//    public ResponseEntity<Object> roomList(@RequestParam(value = "clickChatId") long roomId,
-//                                           @RequestParam(value = "clickMember") long memberId) {
-//        // 존재하는 채팅방 룸 정보와 대화 내역 전송
-//
-//
-//
-//
-//
-//        return null;
-//
-//    }
+    @PostMapping(value = "/myfage")
+    public ResponseEntity<Object> roomList(@RequestBody ChatRoomRequestDTO roomRequestDTO) {
+        log.info("# 마이페이지 채팅 상세페이지");
+        long clickChatId = roomRequestDTO.getClickChatId();
+        long clickMember = roomRequestDTO.getClickMember();
+        ChatRoomResponseDTO chatRoomResponseDTO = chatService.searchOneRoomId(clickChatId);
+
+
+        // 존재하는 채팅방 룸 정보와 대화 내역 전송
+        log.info("roomRequestDTO : {}",chatRoomResponseDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(chatRoomResponseDTO);
+
+    }
 
 
 

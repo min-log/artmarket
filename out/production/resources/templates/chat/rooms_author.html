@@ -7,12 +7,15 @@
 </head>
 <body>
     <div class="container">
-      <div>
-        임시 작가 회원 : 1 이지민
+      <div>[[${session.memberId}]]
+        <br />
+        임시 작가 회원 : 이지민
       </div>
       <div>
         <ul th:each="room : ${list}">
-<!--          <li><button th:onclick="chatRoom([[${room.getChatRoomId}]])" type="button">dfd</button></li>-->
+          <li><button th:onclick="mypageChatRoom([[${room.getChatRoomId}]])" type="button">
+            [[${room.getWhoSend}]] 님
+          </button></li>
         </ul>
       </div>
     </div>
@@ -39,7 +42,11 @@
       </div>
 
     </div>
-    <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js" integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
+    <script th:inline="javascript" >
         var file = document.querySelector('#fileMsg');
 
         file.onchange = function () {
@@ -62,152 +69,163 @@
                 //document.querySelector("#msg").innerHTML = "<img src='" + reader.result + "' >";
             };
         };
-    </script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js" integrity="sha512-1QvjE7BtotQjkq8PxLeF6P46gEpBRXuskzIVgjFpekzFVF4yjRgrQvTG1MTOJ3yQgvTteKAcO7DSZI92+u/yZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<!--    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
-    <script th:inline="javascript" >
-        function chatRoom(id){
-            ChatRoom(id);
-            // 대화 리스트 불러오기
-            // $.ajax({
-            //     url: "/apiChat/roomGet?id="+ id,
-            //     type: "get",
-            //     success:function (data) {
-            //         console.log("전달 받는 데이터 : " + data);
-            //
-            //     }
-            // });
+
+
+        function mypageChatRoom(id){
+            console.log("방 번호 : " + id);
+
+            $.ajax({
+                url: "/myfage",
+                type: "post",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({'clickChatId': id,'clickMember': [[${session.memberId}]]}),
+                success:function (data) {
+                    console.log("전달 받는 데이터 : " + JSON.stringify(data));
+                    ChatRoom(data);
+                }
+            });
+        }
+
+
+        function ChatRoom(data){
+            let sockJs = new SockJS("/stomp/chat");
+            //1. SockJS를 내부에 들고있는 stomp를 내어줌
+            let stomp = Stomp.over(sockJs);
+            let charRoom = data;
+            let username = data.memberId;
+            let chatRoomId = data.chatRoomId;
+            // 채팅방 이름 넣기
+            // 채팅방 레이어 팝업 보여주기
+            $("#modal").show();
+
+
+            //2. connection이 맺어지면 실행
+            stomp.connect({}, function (frame){
+                console.log("STOMP Connection")
+
+                //4. subscribe(path, callback)으로 메세지를 받을 수 있음
+                stomp.subscribe("/sub/chat-room/get/" + chatRoomId, function (chat) {
+                    const content = JSON.parse(chat.body);
+
+                    let writer = content.chatSender;
+                    let message = content.chatMsg;
+                    let type = content.chatType;
+                    let date = content.chatDate;
+                    let fileName = content.chatFileName;
+                    let fileUrl = content.chatFile;
+
+
+                    let str = '';
+                    console.log("content : "+ content);
+                    console.log("writer : "+ writer);
+                    console.log("message : "+ message);
+                    console.log("type : "+ type);
+
+
+                    // 현재사용 회원의 ID 와 작가 회원의 ID 비교
+                    if(writer === username){ // memberId로 변경 추후 현제 사용자 아이디와 전달 받은 회원아이디 비교하여
+                        // 내가 보낸거
+                        str = "<div class='take_send'>";
+                        str += "<div class='alert alert-secondary'>";
+                        str += "<span>" + date + "</span> <br />";
+                        str += "<b>" + writer + " : " + message + "</b>";
+                        if(type === "FILE"){ // 파일일 경우
+                            str += "<br />";
+                            str += "<a href='"+fileUrl+"'>" + fileName + "</a>";
+                        }
+                        str += "</div></div>";
+                        $("#msgArea").append(str);
+                    }
+                    else{
+                        // 받은거
+                        str = "<div class='take_get'>";
+                        str += "<div class='alert alert-warning'>";
+                        str += "<span>" + date + "</span><br />";
+                        str += "<b>" + writer + " : " + message + "</b>";
+                        if(type === "FILE"){ // 파일일 경우
+                            str += "<br />";
+                            str += "<a href='"+fileUrl+"'>" + fileName + "</a>";
+                        }
+                        str += "</div></div>";
+                        $("#msgArea").append(str);
+                    }
+
+                });
+
+            });
+
+
+            // 메시지 전송
+            $("#button-send").on("click", function(e){
+                let msg = document.getElementById("msg");
+                let fileForm = document.querySelector('#fileMsg');
+                console.log(msg.value);
+
+                let fileList = fileForm.files[0] ;
+
+                //파일이 있을경우
+                if (fileList != null) {
+                    console.log("파일 있을 때");
+                    console.log("파일 전송 : " + fileList.name);
+
+                    // 웹소켓에서 파일객체는 직렬화 해서 전달 받아야한다.
+                    let reader = new FileReader();
+                    reader.onload = function (event) {
+                        let fileContent = event.target.result; // 파일 내용
+                        let fileDto = {
+                            chatFileName: fileList.name,
+                            chatFileData:  Array.from(new Uint8Array(fileContent)),
+                            chatFileType: fileList.type
+                        };
+
+                        // 바이너리 배열을 서버로 전송
+                        stomp.send('/pub/chat-room/send', {}, JSON.stringify({
+                            sendChatRoomId: chatRoomId,
+                            sendChatMsg: msg.value,
+                            sendChatSender:  [[${session.memberId}]],
+                            sendChatFile: fileDto // 바이트 배열로 변환하여 전송
+
+                        }));
+                    };
+                    reader.readAsArrayBuffer(fileList); // 파일을 바이너리로 읽기
+                } else {
+                    console.log("파일 없을때");
+                    stomp.send('/pub/chat-room/send', {}, JSON.stringify({
+                        sendChatRoomId: chatRoomId,
+                        sendChatMsg: msg.value,
+                        sendChatSender: [[${session.memberId}]],
+                        sendChatFile: null // 바이트 배열로 변환하여 전송
+                    }));
+                }
+
+
+                msg.value = '';
+            });
+
+
+
+
+
+            $("#modalClose").on("click",function(){
+                console.log("닫기")
+                socketClose(data);
+            });
+
+
+
 
         }
 
 
+        function socketClose(data){
 
+            data.unsubscribe();
+            data.disconnect();
+        }
 
-      function ChatRoom(data){
-          let sockJs = new SockJS("/stomp/chat");
-          //1. SockJS를 내부에 들고있는 stomp를 내어줌
-          let stomp = Stomp.over(sockJs);
-
-          //let charRoom = data;
-          let username = [[${session.userName}]];
-          let chatRoomId = data;
-          let chatRoomName = "이지민"; // 다른이의 이름 필요  .
-          // 채팅방 이름 넣기
-          $(".chat_title").html(chatRoomName);
-          // 채팅방 레이어 팝업 보여주기
-          $("#modal").show();
-
-
-
-          //2. connection이 맺어지면 실행
-          stomp.connect({}, function (frame){
-              console.log("STOMP Connection")
-              console.log("member : " + [[${session.member}]])
-
-              //4. subscribe(path, callback)으로 메세지를 받을 수 있음
-              stomp.subscribe("/sub/chat/room/" + chatRoomId, function (chat) {
-                  var content = JSON.parse(chat.body);
-
-                  var writer = content.writer;
-                  var message = content.message;
-                  var type = content.chatMessageType;
-
-                  var str = '';
-
-                  if(type === "ENTER"){ // 처음 들어왔을경우
-                      str = "<div class='enter'>";
-                      str += "<div class='alert alert-secondary'>";
-                      str += "<b>" + writer + " : " + message + "</b>";
-                      str += "</div></div>";
-                      $("#msgArea").append(str);
-                      return false;
-                  }
-
-                  if(type === "FILE"){ // 파일일 경우
-
-                  }
-
-                  if(writer === username){ // memberId로 변경 추후 현제 사용자 아이디와 전달 받은 회원아이디 비교하여
-                      // 내가 보낸거
-                      str = "<div class='take_send'>";
-                      str += "<div class='alert alert-secondary'>";
-                      str += "<b>" + writer + " : " + message + "</b>";
-                      str += "</div></div>";
-                      $("#msgArea").append(str);
-                  }
-                  else{
-                      // 받은거
-                      str = "<div class='take_get'>";
-                      str += "<div class='alert alert-warning'>";
-                      str += "<b>" + writer + " : " + message + "</b>";
-                      str += "</div></div>";
-                      $("#msgArea").append(str);
-                  }
-
-              });
-
-
-
-
-          });
-
-
-
-          // 메시지 전송
-          $("#button-send").on("click", function(e){
-              let msg = document.getElementById("msg");
-              var fileForm = document.querySelector('#fileMsg');
-              console.log(fileForm)
-              var fileList = fileForm.files ;
-              //파일이 있을경우
-              if(fileList[0] != null) {
-                  console.log("파일 있을경우")
-                  console.log("file 전송 : " + fileList[0].name);
-
-                  let formData = new FormData();
-                  formData.append('file', fileList[0])
-                  $.ajax({
-                      type: 'post',
-                      data: formData,
-                      url : '/file/save',
-                      dataType: 'json',
-                      contentType: false,
-                      enctype: 'multipart/form-data',
-                      processData: false,
-                      async: true, //동기, 비동기 여부
-                      cache :false, // 캐시 여부
-                      success:function (data) {
-                          JSON.parse(data);
-                          stomp.send('/pub/chat/message', {}, JSON.stringify({chatRoomId: chatRoomId, message: msg.value, file: fileValue.name}));
-                      }
-                  });
-              }
-
-              stomp.send('/pub/chat/message', {}, JSON.stringify({chatRoomId: chatRoomId, message: msg.value,member: [[${session.member}]]}));
-              msg.value = '';
-          });
-          $("#modalClose").on("click",function(){
-              socketClose(data);
-          });
-
-
-
-
-      }
-
-
-      function socketClose(data){
-
-          data.unsubscribe();
-          data.disconnect();
-      }
-
-
-  </script>
+    </script>
   <style>
     .enter * {font-size:12px;color: #dcdada}
   </style>

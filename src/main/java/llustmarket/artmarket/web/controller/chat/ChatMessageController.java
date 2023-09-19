@@ -46,8 +46,9 @@ public class ChatMessageController {
             // 저장 및 반환
             chatMessageResponseDTO = messageService.registerChatMessage(message);
         }
+        log.info("chatMessageResponseDTO : {}", chatMessageResponseDTO);
         // 4. 대화내용 채팅방 내 사용자에게 전달
-        sendingOperations.convertAndSend("/sub/chat-room/get" + message.getSendChatRoomId(), chatMessageResponseDTO);
+        sendingOperations.convertAndSend("/sub/chat-room/get/" + message.getSendChatRoomId(), chatMessageResponseDTO);
 
 
 

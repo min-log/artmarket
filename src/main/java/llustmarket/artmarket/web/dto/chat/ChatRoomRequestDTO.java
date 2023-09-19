@@ -12,6 +12,14 @@ import java.util.List;
 @Builder
 @Setter
 public class ChatRoomRequestDTO {
+    // 상품 페이지
     private long askProduct;
     private long askMember;
+
+
+    // 마이 페이지
+    private long clickChatId;
+    private long clickMember;
+
+
 }

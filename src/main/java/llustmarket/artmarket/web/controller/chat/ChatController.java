@@ -22,24 +22,26 @@ import java.nio.charset.Charset;
 @RestController
 @RequiredArgsConstructor
 public class ChatController {
-    // 채팅방 생성 및 삭제 관련
+    // 상품페이지 채팅방 생성
+
     private final ChatService chatService;
-    private final HttpHeaders header = new HttpHeaders();
 
     //채팅방 개설 및 채팅방 전달 -- 버튼 클릭시로 변경 필요
     @PostMapping(value = "/product")
     public ResponseEntity<Object> create(@RequestBody ChatRoomRequestDTO roomRequestDTO){
         log.info("# 상품페이지 채팅방 생성");
         // 403 에러시 --- 시큐리티 http.csrf().disable(); 설정 필요 또는 post 전달시 프론트에서 헤더에 시큐리티 토큰 추가 필요.
+        long askProductId = roomRequestDTO.getAskProduct();
+        long askMember = roomRequestDTO.getAskMember();
 
         // 생성되는 DB: 채팅방 / 채팅참여자
         ChatRoomDTO dto = ChatRoomDTO.builder()
-        .productId(roomRequestDTO.getAskProduct()) //상품번호
+        .productId(askProductId) //상품번호
         .build();
 
         // 채팅방 생성 - 챗룸 정보, 사용자 정보 전달
         try {
-            ChatRoomResponseDTO result = chatService.registerChat(roomRequestDTO.getAskMember(), dto);
+            ChatRoomResponseDTO result = chatService.registerChat(askMember, dto);
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }catch (Exception e){
             e.printStackTrace();

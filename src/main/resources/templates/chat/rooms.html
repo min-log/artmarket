@@ -87,7 +87,7 @@
               //accept: "application/json",
               contentType: "application/json; charset=utf-8",
               //dataType: "json",
-              data: JSON.stringify({'askProduct': 1,'askMember': 3}),
+              data: JSON.stringify({'askProduct': 1,'askMember': [[${session.memberId}]]}),
               success:function (data) {
                   console.log("전달 받는 데이터 : " + JSON.stringify(data));
                   ChatRoom(data);
@@ -116,24 +116,32 @@
               stomp.subscribe("/sub/chat-room/get/" + chatRoomId, function (chat) {
                   const content = JSON.parse(chat.body);
 
-                  console.log("content : "+ content);
-
-                  let writer = content.chatRoomId;
+                  let writer = content.chatSender;
                   let message = content.chatMsg;
                   let type = content.chatType;
+                  let date = content.chatDate;
+                  let fileName = content.chatFileName;
+                  let fileUrl = content.chatFile;
+
 
                   let str = '';
+                  console.log("content : "+ content);
+                  console.log("writer : "+ writer);
+                  console.log("message : "+ message);
+                  console.log("type : "+ type);
 
 
-                  if(type === "FILE"){ // 파일일 경우
-
-                  }
                   // 현재사용 회원의 ID 와 작가 회원의 ID 비교
                   if(writer === username){ // memberId로 변경 추후 현제 사용자 아이디와 전달 받은 회원아이디 비교하여
                       // 내가 보낸거
                       str = "<div class='take_send'>";
                       str += "<div class='alert alert-secondary'>";
+                      str += "<span>" + date + "</span> <br />";
                       str += "<b>" + writer + " : " + message + "</b>";
+                      if(type === "FILE"){ // 파일일 경우
+                          str += "<br />";
+                          str += "<a href='"+fileUrl+"'>" + fileName + "</a>";
+                      }
                       str += "</div></div>";
                       $("#msgArea").append(str);
                   }
@@ -141,12 +149,15 @@
                       // 받은거
                       str = "<div class='take_get'>";
                       str += "<div class='alert alert-warning'>";
+                      str += "<span>" + date + "</span><br />";
                       str += "<b>" + writer + " : " + message + "</b>";
+                      if(type === "FILE"){ // 파일일 경우
+                          str += "<br />";
+                          str += "<a href='"+fileUrl+"'>" + fileName + "</a>";
+                      }
                       str += "</div></div>";
                       $("#msgArea").append(str);
                   }
-
-
 
               });
 

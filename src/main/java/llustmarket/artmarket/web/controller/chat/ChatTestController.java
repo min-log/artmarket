@@ -44,13 +44,17 @@ public class ChatTestController {
     public String roomList(Model model,HttpSession session){
         // 채팅내역 조회
         log.info("# All Chat roomList");
-//        session.setAttribute("member", (MemberDTO)session.getAttribute("authorMember"));
-//        MemberDTO authorMember = (MemberDTO) session.getAttribute("member");
-//
-//        List<ChatDTO> list = chatService.findChatRoomById(authorMember.getMemberId());
-//        ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchUserList(authorMember.getMemberId(), list);
-//
-//        model.addAttribute("list", chatRoomListResponseDTO.getMyChatRooms());
+        session.setAttribute("member", (MemberDTO)session.getAttribute("authorMember"));
+        MemberDTO member = (MemberDTO) session.getAttribute("member");
+
+        log.info("member : {}",member);
+        session.setAttribute("userName",member.getNickname());
+        session.setAttribute("memberId",member.getMemberId());
+
+        List<ChatDTO> list = chatService.searchChatAllByMemberId(member.getMemberId());
+        ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchUserList(member.getMemberId(), list);
+
+        model.addAttribute("list", chatRoomListResponseDTO.getMyChatRooms());
 
         return "chat/rooms_author";
     }
