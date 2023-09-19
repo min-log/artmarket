@@ -80,7 +80,7 @@
                 url: "/myfage",
                 type: "post",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({'clickChatId': id,'clickMember': [[${session.memberId}]]}),
+                data: JSON.stringify({'clickChatId': id}),
                 success:function (data) {
                     console.log("전달 받는 데이터 : " + JSON.stringify(data));
                     ChatRoom(data);

@@ -1,10 +1,7 @@
 package llustmarket.artmarket.web.controller.chat;
 
 
-import llustmarket.artmarket.web.dto.chat.ChatDTO;
-import llustmarket.artmarket.web.dto.chat.ChatRoomListResponseDTO;
-import llustmarket.artmarket.web.dto.chat.ChatRoomRequestDTO;
-import llustmarket.artmarket.web.dto.chat.ChatRoomResponseDTO;
+import llustmarket.artmarket.web.dto.chat.*;
 import llustmarket.artmarket.web.service.chat.ChatRoomService;
 import llustmarket.artmarket.web.service.chat.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +17,13 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class ChatRoomController {
-    // 채팅방 조회 관련
+    // 마이페이지
+
     private final ChatService chatService;
     private final ChatRoomService chatRoomService;
 
-
     @GetMapping(value = "/myfage")
-    public ResponseEntity<Object> roomList(@RequestParam(value = "myfageId") long memberId) {
+    public ResponseEntity<Object> roomList(@RequestParam(value = "member_id") long memberId) {
         log.info("# 마이페이지 채팅 내역 조회");
         List<ChatDTO> list = chatService.searchChatAllByMemberId(memberId);
         try {
@@ -48,14 +45,18 @@ public class ChatRoomController {
         log.info("# 마이페이지 채팅 상세페이지");
         long clickChatId = roomRequestDTO.getClickChatId();
         long clickMember = roomRequestDTO.getClickMember();
+
+        ChatRoomDTO chatRoomDTO = chatRoomService.searchChatRoomId(clickChatId);
+        if(clickMember != chatRoomDTO.getChatFromId() && clickMember != chatRoomDTO.getChatToId()){
+            // 속하는 회원이 아닐 경우
+            String errorMessage = "{\"errorMessage\": \"참여할 수 없는 방입니다.\"}";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
+        }
+
         ChatRoomResponseDTO chatRoomResponseDTO = chatService.searchOneRoomId(clickChatId);
-
-
         // 존재하는 채팅방 룸 정보와 대화 내역 전송
         log.info("roomRequestDTO : {}",chatRoomResponseDTO);
-
         return ResponseEntity.status(HttpStatus.OK).body(chatRoomResponseDTO);
-
     }
 
 

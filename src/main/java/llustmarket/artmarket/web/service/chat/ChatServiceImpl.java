@@ -77,7 +77,7 @@ public class ChatServiceImpl implements ChatService {
 
             chatRoomDTO = ChatRoomResponseDTO.builder()
                     .chatRoomId(chatRoom.getChatRoomId())
-                    .productId(chatRoom.getProductId())
+                    .chatProudct(chatRoom.getProductId())
                     .build();
 
             return chatRoomDTO;
@@ -114,7 +114,7 @@ public class ChatServiceImpl implements ChatService {
         List<ChatMessageResponseDTO> chatMessageDTOS = messageService.searchChatMessageList(chatRoom.getChatRoomId());
         ChatRoomResponseDTO chatRoomDTO = ChatRoomResponseDTO.builder()
                 .chatRoomId(chatRoom.getChatRoomId())
-                .productId(chatRoom.getProductId())
+                .chatProudct(chatRoom.getProductId())
                 .chatList(chatMessageDTOS)
                 .build();
 

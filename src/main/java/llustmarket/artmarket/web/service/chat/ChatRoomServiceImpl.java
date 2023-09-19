@@ -67,8 +67,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             //  1-4. 전달될 객체
             ChatRoomListDTO chatRoomDTO = ChatRoomListDTO.builder()
                     .chatRoomId(chatRoom.getChatRoomId())
-                    .lastMsg(chatRoom.getChatRoomMsg())
-                    .lastMsgDate(chatRoom.getChatRoomLastDate())
+                    .chatMsg(chatRoom.getChatRoomMsg())
+                    .chatDate(chatRoom.getChatRoomLastDate())
                     .build();
             //  1-5. 전달될 객체에 상대방의 회원정보 추가
             Member memberYou;
@@ -83,9 +83,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             File FileProfile = File.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberYou.getMemberId()).build();
 
             File  memberProfile = fileMapper.selectOnePathAndId(FileProfile);
-            if(memberProfile != null) chatRoomDTO.setSendProfileImg(memberProfile.getFilePath() + "/" + memberProfile.getFileName());
-            chatRoomDTO.setWhoSend(memberYou.getNickname());
-            chatRoomDTO.setIdentity(memberYou.getIdentity());
+            if(memberProfile != null) chatRoomDTO.setChatSenderProfile(memberProfile.getFilePath() + "/" + memberProfile.getFileName());
+            chatRoomDTO.setChatSender(memberYou.getNickname());
+            chatRoomDTO.setChatSenderIdtity(memberYou.getIdentity());
             //  1-6. 전달될 룸 리스트 객체에 추가
             roomListDTO.add(chatRoomDTO);
         });
