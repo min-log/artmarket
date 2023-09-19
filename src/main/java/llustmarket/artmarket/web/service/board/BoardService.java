@@ -1,4 +1,4 @@
 package llustmarket.artmarket.web.service.board;
 
-public class boarddummy {
+public class BoardService {
 }
