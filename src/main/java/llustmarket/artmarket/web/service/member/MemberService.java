@@ -26,8 +26,19 @@ public class MemberService {
         memberMapper.updateIdentity(memberId, identity);
     }
 
+    @Transactional
     public void updatePasswordByMemberId(Long memberId, String password) {
         memberMapper.updatePasswordByMemberId(password, memberId);
+    }
+
+    @Transactional
+    public void updatePhoneByMemberId(Long memberId, String newPhone) {
+        memberMapper.updatePhoneByMemberId(memberId, newPhone);
+    }
+
+    @Transactional
+    public void updateEmailByMemberId(Long memberId, String newEmail) {
+        memberMapper.updateEmailByMemberId(memberId, newEmail);
     }
 
     public boolean isLoginIdDuplicate(String loginId) {

@@ -31,7 +31,7 @@ public class UpdateController {
     PasswordEncoder passwordEncoder;
 
     @PatchMapping("/update-password")
-    public ResponseEntity<?> updatePassword(@Valid @RequestBody UpdatePassDTO updatePass, BindingResult bindingResult) {
+    public ResponseEntity<Object> updatePassword(@Valid @RequestBody UpdatePassDTO updatePass, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<Map<String, String>> updateErrors = new ArrayList<>();
 

@@ -14,6 +14,10 @@ public interface MemberMapper {
 
     void updatePasswordByMemberId(@Param("password") String password, @Param("memberId") Long memberId);
 
+    void updatePhoneByMemberId(@Param("memberId") Long memberId, @Param("newPhone") String newPhone);
+
+    void updateEmailByMemberId(@Param("memberId") Long memberId, @Param("newEmail") String newEmail);
+
     int isLoginIdDuplicate(String loginId);
 
     int isNicknameDuplicate(String nickname);
