@@ -3,8 +3,8 @@ package llustmarket.artmarket.web.service.chat;
 
 
 import llustmarket.artmarket.domain.chat.ChatRoom;
-import llustmarket.artmarket.domain.file.File;
 import llustmarket.artmarket.domain.file.FileType;
+import llustmarket.artmarket.domain.file.FileVO;
 import llustmarket.artmarket.domain.member.Member;
 import llustmarket.artmarket.web.dto.chat.*;
 import llustmarket.artmarket.web.mapper.chat.ChatRoomMapper;
@@ -16,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         // 생성한 값 전달
         dto.setChatRoomId(vo.getChatRoomId());
         return dto;
+    }
+
+    @Override
+    public void updateChatRoom(long roomId, String message, LocalDateTime date) {
+        ChatRoom roomVO = ChatRoom.builder().chatRoomId(roomId).chatRoomMsg(message).chatRoomLastDate(date).build();
+        int result = chatRoomMapper.updateOne(roomVO);
     }
 
 
@@ -80,9 +87,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             }
             // 2) 프로필 이미지 : 파일 객체가 존재할 시 추가
                 // 파일의 경로, 경로 아이디
-            File FileProfile = File.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberYou.getMemberId()).build();
+            FileVO FileProfile = FileVO.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberYou.getMemberId()).build();
 
-            File  memberProfile = fileMapper.selectOnePathAndId(FileProfile);
+            FileVO memberProfile = fileMapper.selectOnePathAndId(FileProfile);
             if(memberProfile != null) chatRoomDTO.setChatSenderProfile(memberProfile.getFilePath() + "/" + memberProfile.getFileName());
             chatRoomDTO.setChatSender(memberYou.getNickname());
             chatRoomDTO.setChatSenderIdtity(memberYou.getIdentity());
@@ -98,7 +105,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .build();
 
         // 2-1. 회원 프로필
-        File  memberProfile = fileMapper.selectOnePathAndId(File.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberMe.getMemberId()).build());
+        FileVO memberProfile = fileMapper.selectOnePathAndId(FileVO.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberMe.getMemberId()).build());
         if(memberProfile != null) myPageDTO.setProfileImg(memberProfile.getFilePath()+"/"+memberProfile.getFileTypeId());
         myPageDTO.setMyChatRooms(roomListDTO); // 룸 리스트 추가
 

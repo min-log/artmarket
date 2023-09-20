@@ -2,9 +2,6 @@ package llustmarket.artmarket.web.service.chat;
 
 
 import llustmarket.artmarket.domain.chat.ChatMessage;
-import llustmarket.artmarket.domain.chat.MessageType;
-import llustmarket.artmarket.domain.file.File;
-import llustmarket.artmarket.domain.file.FileType;
 import llustmarket.artmarket.web.dto.chat.ChatMessageRequestDTO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageResponseDTO;
 

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Builder
-public class File {
+public class FileVO {
     private long fileId; // 파일아이디
     private String filePath; // 파일 경로 
     private long fileTypeId; // 파일 경로에 따른 아이디

@@ -49,15 +49,19 @@ public class ChatServiceImpl implements ChatService {
                 .memberId(askMemberId) // 사용자 아이디
                 .chatIdentity(askMember.getIdentity()) // 사용자 권한
                 .build();
-        // 작가 정보
-        ProductDTO productDTO = productService.selectOne(roomDTO.getProductId());
-        MemberDTO authorMember = memberService.selectOne(productDTO.getMemberId());
-        roomDTO.setChatFromId(authorMember.getMemberId()); // 받는사람
+
 
         // 2. 기존 대화 참여 내역이 있는지 확인
         ChatDTO dtoValue = searchOneExist(chatDTO);
         if(dtoValue == null){// 3. 내역이 존재 하지 않을 시
             log.info("내역 존재 x");
+
+            // 작가 정보
+            ProductDTO productDTO = productService.selectOne(roomDTO.getProductId());
+            MemberDTO authorMember = memberService.selectOne(productDTO.getMemberId());
+            roomDTO.setChatFromId(authorMember.getMemberId()); // 받는사람
+
+
             // 1. 룸생성 - DB
             // 방이름 (상대방 닉네임) 전달 -- 작가 아이디를 통해 가져오기
             ChatRoomDTO chatRoom = chatRoomService.registerChatRoom(roomDTO);
@@ -82,6 +86,7 @@ public class ChatServiceImpl implements ChatService {
 
             return chatRoomDTO;
         }
+
         log.info("내역 존재 o");
         //chat_from_id
         ChatRoomDTO chatRoom = chatRoomService.searchChatRoomId(dtoValue.getChatRoomId());

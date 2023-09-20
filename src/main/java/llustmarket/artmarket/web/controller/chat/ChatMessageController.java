@@ -5,6 +5,7 @@ import llustmarket.artmarket.domain.chat.MessageType;
 import llustmarket.artmarket.web.dto.chat.ChatMessageRequestDTO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageResponseDTO;
 import llustmarket.artmarket.web.service.chat.ChatMessageService;
+import llustmarket.artmarket.web.service.chat.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -20,6 +21,9 @@ public class ChatMessageController {
     // 메시지 전송 컨트롤러
     private final SimpMessageSendingOperations sendingOperations;
     private final ChatMessageService messageService;
+    private final ChatRoomService chatRoomService;
+
+
 
 
     @Transactional
@@ -46,6 +50,11 @@ public class ChatMessageController {
             // 저장 및 반환
             chatMessageResponseDTO = messageService.registerChatMessage(message);
         }
+        if(chatMessageResponseDTO != null){
+            // 룸 정보 변경
+            chatRoomService.updateChatRoom(message.getSendChatRoomId(), chatMessageResponseDTO.getChatMsg(), chatMessageResponseDTO.getChatDate());
+        }
+
         log.info("chatMessageResponseDTO : {}", chatMessageResponseDTO);
         // 4. 대화내용 채팅방 내 사용자에게 전달
         sendingOperations.convertAndSend("/sub/chat-room/get/" + message.getSendChatRoomId(), chatMessageResponseDTO);

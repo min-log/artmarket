@@ -2,10 +2,13 @@ package llustmarket.artmarket.web.service.file;
 
 
 import llustmarket.artmarket.domain.file.FileType;
+import llustmarket.artmarket.domain.file.FileVO;
 import llustmarket.artmarket.web.dto.file.FileDTO;
 import llustmarket.artmarket.web.dto.file.FileMultipart;
 import llustmarket.artmarket.web.dto.file.ChatFileUploadDTO;
+import llustmarket.artmarket.web.mapper.file.FileMapper;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -28,7 +31,8 @@ import java.util.UUID;
 @Service
 public class FileService {
     // 파일관련 서비스
-
+    private final FileMapper fileMapper;
+    private final ModelMapper modelMapper;
     // 파일 저장 경로
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
@@ -71,6 +75,15 @@ public class FileService {
         }
 
     }
+
+    public FileDTO fileFindOne(String filePath, long fileTypeId){
+        FileVO fileVO = fileMapper.selectOnePathAndId(FileVO.builder().filePath(filePath).fileTypeId(fileTypeId).build());
+        return modelMapper.map(fileVO,FileDTO.class);
+    }
+
+
+
+
 
     // 웹소켓 바이트 파일 객체 --> multipartFile로 변환
     public MultipartFile fileConversionMultipartFile(ChatFileUploadDTO chatFileUploadDTO){

@@ -13,13 +13,15 @@
       </div>
       <div>
         <ul th:each="room : ${list}">
-          <li><button th:onclick="mypageChatRoom([[${room.getChatRoomId}]])" type="button">
-            [[${room.getWhoSend}]] 님
+          <li>
+            <button th:onclick="mypageChatRoom([[${room.getChatRoomId}]])" type="button">
+            <b>[[${room.getChatSender}]]  ( [[${room.getChatSenderIdtity}]] ) </b>
+            <p class="last_msg">[[${room.getChatMsg}]]</p>
+            <p class="last_msg_date">[[${room.getChatDate}]]</p>
           </button></li>
         </ul>
       </div>
     </div>
-    <button type="button" id="btnSave"> 문의하기</button>
     <div id="modal" style="display: none">
       <button id="modalClose"> 닫기 </button>
       <h1>채팅방이름 : <span class="chat_title"></span></h1>
@@ -33,7 +35,7 @@
             </div>
             <div class="input-group-append">
               <label for="fileMsg" class="btn btn-dark btn-sm ">파일 선택 하기</label>
-              <input type="file" name="" id="fileMsg" accept="image/*" multiple="multiple" style="display:none;">
+              <input type="File" name="" id="fileMsg" accept="image/*" multiple="multiple" style="display:none;">
               <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
             </div>
         </form>
@@ -47,10 +49,10 @@
     <!--    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
     <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
     <script th:inline="javascript" >
-        var file = document.querySelector('#fileMsg');
+        var File = document.querySelector('#fileMsg');
 
-        file.onchange = function () {
-            var fileList = file.files ;
+        File.onchange = function () {
+            var fileList = File.files ;
 
             // 읽기
             var reader = new FileReader();
@@ -80,7 +82,7 @@
                 url: "/myfage",
                 type: "post",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({'clickChatId': id}),
+                data: JSON.stringify({'clickChatId': id,"clickMember":[[${session.memberId}]]}),
                 success:function (data) {
                     console.log("전달 받는 데이터 : " + JSON.stringify(data));
                     ChatRoom(data);
@@ -115,7 +117,8 @@
                     let date = content.chatDate;
                     let fileName = content.chatFileName;
                     let fileUrl = content.chatFile;
-
+                    document.querySelector(".last_msg").textContent = message;
+                    document.querySelector(".last_msg_date").textContent = date;
 
                     let str = '';
                     console.log("content : "+ content);
@@ -133,7 +136,8 @@
                         str += "<b>" + writer + " : " + message + "</b>";
                         if(type === "FILE"){ // 파일일 경우
                             str += "<br />";
-                            str += "<a href='"+fileUrl+"'>" + fileName + "</a>";
+                            str += "<p>" +  fileName +"</p>";
+                            str += "<img href='" + fileUrl + "' />";
                         }
                         str += "</div></div>";
                         $("#msgArea").append(str);
@@ -146,11 +150,13 @@
                         str += "<b>" + writer + " : " + message + "</b>";
                         if(type === "FILE"){ // 파일일 경우
                             str += "<br />";
-                            str += "<a href='"+fileUrl+"'>" + fileName + "</a>";
+                            str += "<p>" +  fileName +"</p>";
+                            str += "<img href='" + fileUrl + "' />";
                         }
                         str += "</div></div>";
                         $("#msgArea").append(str);
                     }
+
 
                 });
 

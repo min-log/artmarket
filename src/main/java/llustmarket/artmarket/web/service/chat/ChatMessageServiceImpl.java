@@ -3,8 +3,8 @@ package llustmarket.artmarket.web.service.chat;
 
 import llustmarket.artmarket.domain.chat.ChatMessage;
 import llustmarket.artmarket.domain.chat.MessageType;
-import llustmarket.artmarket.domain.file.File;
 import llustmarket.artmarket.domain.file.FileType;
+import llustmarket.artmarket.domain.file.FileVO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageRequestDTO;
 import llustmarket.artmarket.web.dto.file.ChatFileUploadDTO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageResponseDTO;
@@ -62,13 +62,14 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         // 4. 일반 메시지 저장
         log.info("메시지 저장 dto: {}",dto);
+        log.info("메시지 내용: {}",dto.getSendChatMsg());
         ChatMessage chatMessage = messageDTOToVO(dto);
         chatMessageMapper.insertOne(chatMessage);
 
         // 5. FILE DB 저장
         // chatMessage Id 경로 추가
         fileDTO.setFileTypeId(chatMessage.getChatMessageId());
-        fileMapper.insertOne(modelMapper.map(fileDTO, File.class));
+        fileMapper.insertOne(modelMapper.map(fileDTO, FileVO.class));
 
         // 7. 저장된 메시지 내용
         ChatMessageResponseDTO requestDTO = searchChatMessageOne(chatMessage.getChatMessageId());
@@ -109,12 +110,12 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public ChatMessageResponseDTO messageFileSet(long chatMessageId,ChatMessageResponseDTO chatMessageResponseDTO ){
         //# 파일이 존재할 경우
         String chatPath = String.valueOf(FileType.CHAT);
-        File fileVO = File.builder()
+        FileVO fileVO = FileVO.builder()
                 .filePath(chatPath)
                 .fileTypeId(chatMessageId)
                 .build();
-        File file = fileMapper.selectOnePathAndId(fileVO);
-        chatMessageResponseDTO.setChatFile(chatPath+ "/" +file.getFileName());
+        FileVO file = fileMapper.selectOnePathAndId(fileVO);
+        chatMessageResponseDTO.setChatFile("/file/find?filePath=" + file.getFilePath() + "&fileTypeId=" +file.getFileTypeId());
         chatMessageResponseDTO.setChatFileName(file.getFileOriginName());
         return chatMessageResponseDTO;
     }

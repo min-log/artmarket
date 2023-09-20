@@ -8,6 +8,11 @@
         insert into chatroom (product_id, chat_from_id, chat_to_id)
         values (#{productId},#{chatFromId},#{chatToId})
     </insert>
+    <update id="updateOne" parameterType="llustmarket.artmarket.domain.chat.ChatRoom">
+        update chatroom set chat_room_msg = #{chatRoomMsg}
+                          ,chat_room_last_date = #{chatRoomLastDate}
+                        where chat_room_id =  #{chatRoomId}
+    </update>
     <select id="selectOneId" resultType="llustmarket.artmarket.domain.chat.ChatRoom" >
         select chat_room_id, product_id, chat_to_id, chat_from_id, chat_room_date, chat_room_last_date, chat_room_msg
         from chatroom where chat_room_id = #{chatRoomId};
