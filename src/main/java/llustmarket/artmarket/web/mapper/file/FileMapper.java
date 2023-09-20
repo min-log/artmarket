@@ -7,5 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface FileMapper {
     void insertOne(FileVO vo);
     FileVO selectOnePathAndId(FileVO vo);
-
+    FileVO selectOnefileName(String fileName);
 }

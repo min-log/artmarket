@@ -12,4 +12,8 @@
         select file_id, file_path, file_type_id, file_origin_name, file_name, file_date
         from file where file_path = #{filePath} and file_type_id = #{fileTypeId}
     </select>
+    <select id="selectOnefileName" resultType="llustmarket.artmarket.domain.file.FileVO" >
+        select file_id, file_path, file_type_id, file_origin_name, file_name, file_date
+        from file where file_name = #{fileName}
+    </select>
 </mapper>

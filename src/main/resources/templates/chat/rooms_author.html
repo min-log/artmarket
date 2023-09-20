@@ -116,7 +116,9 @@
                     let type = content.chatType;
                     let date = content.chatDate;
                     let fileName = content.chatFileName;
+                    let fileDown = content.chatFileDownload;
                     let fileUrl = content.chatFile;
+
                     document.querySelector(".last_msg").textContent = message;
                     document.querySelector(".last_msg_date").textContent = date;
 
@@ -136,8 +138,8 @@
                         str += "<b>" + writer + " : " + message + "</b>";
                         if(type === "FILE"){ // 파일일 경우
                             str += "<br />";
-                            str += "<p>" +  fileName +"</p>";
-                            str += "<img href='" + fileUrl + "' />";
+                            str += "<a href='/file/download?fileUpName="+ fileDown+ "' target='_blank'>" +  fileName +"</a>";
+                            str += "<img src='" + fileUrl + "' />";
                         }
                         str += "</div></div>";
                         $("#msgArea").append(str);
@@ -150,8 +152,8 @@
                         str += "<b>" + writer + " : " + message + "</b>";
                         if(type === "FILE"){ // 파일일 경우
                             str += "<br />";
-                            str += "<p>" +  fileName +"</p>";
-                            str += "<img href='" + fileUrl + "' />";
+                            str += "<a href='/file/download?fileUpName="+ fileDown+ "' target='_blank'>" +  fileName +"</a>";
+                            str += "<img src='" + fileUrl + "' />";
                         }
                         str += "</div></div>";
                         $("#msgArea").append(str);

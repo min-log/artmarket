@@ -51,10 +51,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Override
     public ChatRoomDTO searchChatRoomId(long chatRoomId) {
-        log.info("# 채팅 룸 전달 ------------------------------");
-        log.info("chatRoomId : {}",chatRoomId);
+        log.info("# 채팅 룸 전달 ");
         ChatRoom chatRoom = chatRoomMapper.selectOneId(chatRoomId);
-        log.info("chatRoom : {}",chatRoomId);
         return modelMapper.map(chatRoom, ChatRoomDTO.class);
     }
 
@@ -88,9 +86,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             // 2) 프로필 이미지 : 파일 객체가 존재할 시 추가
                 // 파일의 경로, 경로 아이디
             FileVO FileProfile = FileVO.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberYou.getMemberId()).build();
-
             FileVO memberProfile = fileMapper.selectOnePathAndId(FileProfile);
             if(memberProfile != null) chatRoomDTO.setChatSenderProfile(memberProfile.getFilePath() + "/" + memberProfile.getFileName());
+
             chatRoomDTO.setChatSender(memberYou.getNickname());
             chatRoomDTO.setChatSenderIdtity(memberYou.getIdentity());
             //  1-6. 전달될 룸 리스트 객체에 추가

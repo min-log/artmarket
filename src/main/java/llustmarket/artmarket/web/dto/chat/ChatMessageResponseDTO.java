@@ -19,4 +19,5 @@ public class ChatMessageResponseDTO {
     private String chatType; // 메시지 타입
     private String chatFile; //파일 url
     private String chatFileName; // 파일 이름
+    private String chatFileDownload; // 실제 파일 이름
 }

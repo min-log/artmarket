@@ -35,12 +35,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     @Override
     public ChatMessageResponseDTO registerChatMessage(ChatMessageRequestDTO dto) {
         log.info("# 일반 메시지 저장");
-        log.info("dto : {}",dto);
         ChatMessage chatMessage = messageDTOToVO(dto);
-        log.info("chatMessage : {}",chatMessage);
         chatMessageMapper.insertOne(chatMessage);
-        log.info(chatMessage.getChatMessageId());
-
         ChatMessageResponseDTO requestDTO = searchChatMessageOne(chatMessage.getChatMessageId());
         return requestDTO;
     }
@@ -58,14 +54,9 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         // 3. MultipartFile 을 실제 경로에 저장 - 저장된 파일이름 필요.
         FileDTO fileDTO = fileService.fileRegister(FileType.CHAT, multipartFile);
-
-
         // 4. 일반 메시지 저장
-        log.info("메시지 저장 dto: {}",dto);
-        log.info("메시지 내용: {}",dto.getSendChatMsg());
         ChatMessage chatMessage = messageDTOToVO(dto);
         chatMessageMapper.insertOne(chatMessage);
-
         // 5. FILE DB 저장
         // chatMessage Id 경로 추가
         fileDTO.setFileTypeId(chatMessage.getChatMessageId());
@@ -73,8 +64,6 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         // 7. 저장된 메시지 내용
         ChatMessageResponseDTO requestDTO = searchChatMessageOne(chatMessage.getChatMessageId());
-        log.info("requestDTO 저장된 최종 내용 확인 :{}",requestDTO);
-
         return requestDTO;
     }
 
@@ -117,6 +106,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         FileVO file = fileMapper.selectOnePathAndId(fileVO);
         chatMessageResponseDTO.setChatFile("/file/find?filePath=" + file.getFilePath() + "&fileTypeId=" +file.getFileTypeId());
         chatMessageResponseDTO.setChatFileName(file.getFileOriginName());
+        chatMessageResponseDTO.setChatFileDownload(file.getFileName());
         return chatMessageResponseDTO;
     }
 

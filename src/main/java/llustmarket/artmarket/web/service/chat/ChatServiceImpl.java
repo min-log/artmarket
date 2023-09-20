@@ -114,7 +114,6 @@ public class ChatServiceImpl implements ChatService {
         log.info("# 채팅방 상세 내역");
         //chat_from_id
         ChatRoomDTO chatRoom = chatRoomService.searchChatRoomId(roomId);
-        log.info("chatRoom : {}",chatRoom);
         // 대화 내역 조회 및 전달
         List<ChatMessageResponseDTO> chatMessageDTOS = messageService.searchChatMessageList(chatRoom.getChatRoomId());
         ChatRoomResponseDTO chatRoomDTO = ChatRoomResponseDTO.builder()

@@ -11,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -40,33 +45,27 @@ public class FileService {
 
     //파일 저장로직
     public FileDTO fileRegister(FileType filePath, MultipartFile uploadFile){
-        // filePath 파일 저장 경로 ( product, profile, chat)
-
+        // filePath 파일 저장 경로 (FileType CHAT,REVIEW,PROFILE,PRODUCT)
         String filePathName = String.valueOf(filePath);
-        //1. 파일 경로 폴더를 생성
+        //1. 파일 경로 폴더 생성 -- 폴더가 존재하지 않을 시 생성됨
         String folderPathMake = makeFolder(filePathName);
-
         //2. 경로와 이름을 나눠야함.
         //실제 파일 이름 ie 나 edge는 전체 경로가 전달된다.
         String originFilename = uploadFile.getOriginalFilename();
         String originFilenamePath = originFilename.substring(originFilename.lastIndexOf("\\") + 1 );
 
-        log.info("originFilename : " + originFilename);
-        log.info("originFilenamePath : " + originFilenamePath);
-
-
         //저장되는 파일명  --- UUID
         String uuid = UUID.randomUUID().toString();
         String fileName = uuid + "_"+ originFilenamePath;
 
-        //저장할 파일 이름 중간에 _ 를 이용하여 구분
+        //저장되는 실제 파일 생성
         String saveUrl = uploadPath + File.separator + folderPathMake + File.separator + fileName;
         Path savePath=  Paths.get(saveUrl);
 
         try {
             //실제 파일저장
             uploadFile.transferTo(savePath);
-
+            // 저장 된 파일 객체 전달
             return FileDTO.builder().filePath(filePathName).fileName(fileName).fileOriginName(originFilename).build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,7 +80,10 @@ public class FileService {
         return modelMapper.map(fileVO,FileDTO.class);
     }
 
-
+    public FileDTO fileDownload(String fileName) {
+        FileVO fileVO = fileMapper.selectOnefileName(fileName);
+        return modelMapper.map(fileVO,FileDTO.class);
+    }
 
 
 
@@ -124,6 +126,7 @@ public class FileService {
     }
 
 
+    //폴더 생성
     protected String makeFolder(String folder) {
         String folderPath = folder.replace("/", File.separator);
         File uploadPathFolder = new File(uploadPath,folderPath);
@@ -144,9 +147,6 @@ public class FileService {
             File file = new File(uploadPath+File.separator+srcFileName);
             log.info(file);
             boolean result = file.delete();
-            File thumbnail = new File(file.getParent(),"s_"+file.getName());
-            result = thumbnail.delete();
-
             return new ResponseEntity<>(result, HttpStatus.OK);
 
         } catch (UnsupportedEncodingException e) {
