@@ -22,4 +22,9 @@ public class ChatRoomRequestDTO {
     private long clickMember;
 
 
+    // 마이 페이지 삭제
+    private long remChatMember;
+    private long remChatRoomId;
+
+
 }

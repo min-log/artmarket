@@ -15,16 +15,18 @@
       <div>
         <ul th:each="room : ${chatRoomDTO.getMyChatRooms}">
           <li>
-            <button th:onclick="mypageChatRoom([[${room.getChatRoomId}]])" type="button">
-            <b>[[${room.getChatSender}]]  ( [[${room.getChatSenderIdtity}]] ) </b>
-            <p class="last_msg">[[${room.getChatMsg}]]</p>
-            <p class="last_msg_date">[[${room.getChatDate}]]</p>
-          </button></li>
+            <button th:onclick="chatRoomDelete([[${room.getChatRoomId}]])">삭제</button>
+            <a href="javascript:void(0)" th:onclick="mypageChatRoom([[${room.getChatRoomId}]])" type="button">
+              <b>[[${room.getChatSender}]]  ( [[${room.getChatSenderIdtity}]] ) </b>
+              <p class="last_msg">[[${room.getChatMsg}]]</p>
+              <p class="last_msg_date">[[${room.getChatDate}]]</p>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
     <div id="modal" style="display: none">
-      <button id="modalClose"> 닫기 </button>
+      <button id="chatClose"> 닫기 </button>
       <h1>채팅방이름 : <span class="chat_title"></span></h1>
       <div id="msgArea" class="col"></div>
       <div class="col-6">
@@ -54,7 +56,6 @@
 
         File.onchange = function () {
             var fileList = File.files ;
-
             // 읽기
             var reader = new FileReader();
             reader.readAsDataURL(fileList [0]);
@@ -209,17 +210,22 @@
                     }));
                 }
 
-
-                msg.value = '';
             });
 
 
 
 
 
-            $("#modalClose").on("click",function(){
-                console.log("닫기")
-                socketClose(data);
+            // 연결 닫기
+            $("#chatClose").on('click',function () {
+                stomp.send('/pub/chat-room/send', {}, JSON.stringify({
+                    closeChatMember : chatRoomId,
+                    closeChatRoomId : [[${session.memberId}]]
+                }));
+
+                $("#modal").hide();
+                stomp.unsubscribe();
+                stomp.disconnect();
             });
 
 
@@ -228,11 +234,20 @@
         }
 
 
-        function socketClose(data){
+        function chatRoomDelete(roomId){
+            $.ajax({
+                url: "/myfage",
+                type: "delete",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({'remChatRoomId': roomId,"remChatMember":[[${session.memberId}]]}),
+                success:function (data) {
+                    console.log("전달 받는 데이터 : " + JSON.stringify(data));
+                    ChatRoom(data);
+                }
+            });
 
-            data.unsubscribe();
-            data.disconnect();
         }
+
 
     </script>
   <style>

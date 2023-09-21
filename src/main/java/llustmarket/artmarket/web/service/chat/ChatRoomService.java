@@ -12,6 +12,7 @@ import java.util.List;
 public interface ChatRoomService {
     ChatRoomDTO registerChatRoom(ChatRoomDTO dto);
     void updateChatRoom(long roomId, String message, LocalDateTime date);
+    int deleteChat(long chatRoomId);
     ChatRoomDTO searchChatRoomId(long chatRoomId);
     ChatRoomListResponseDTO searchUserList(long memberId, List<ChatDTO> chatDTOS);
 

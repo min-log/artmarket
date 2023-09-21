@@ -30,7 +30,7 @@
 
 
     <div id="modal" style="display: none">
-      <button id="modalClose"> 닫기 </button>
+      <button id="chatClose"> 닫기 </button>
       <h1>채팅방이름 : <span class="chat_title"></span></h1>
       <div id="msgArea" class="col"></div>
       <div class="col-6">
@@ -95,6 +95,8 @@
           });
       });
 
+
+
       function ChatRoom(data){
           let sockJs = new SockJS("/stomp/chat");
           //1. SockJS를 내부에 들고있는 stomp를 내어줌
@@ -102,6 +104,7 @@
           let charRoom = data;
           let username = data.memberId;
           let chatRoomId = data.chatRoomId;
+          console.log("chatRoomId : "+chatRoomId);
           // 채팅방 이름 넣기
           // 채팅방 레이어 팝업 보여주기
           $("#modal").show();
@@ -210,10 +213,20 @@
                   }));
               }
 
-          })
+          });
 
 
+          // 연결 닫기
+          $("#chatClose").on('click',function () {
+              stomp.send('/pub/chat-room/send', {}, JSON.stringify({
+                  closeChatRoomId : chatRoomId,
+                  closeChatMember : [[${session.memberId}]]
+              }));
 
+              $("#modal").hide();
+              stomp.unsubscribe();
+              stomp.disconnect();
+          });
 
 
 

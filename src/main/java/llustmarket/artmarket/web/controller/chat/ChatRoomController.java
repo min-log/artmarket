@@ -31,7 +31,6 @@ public class ChatRoomController {
             return ResponseEntity.status(HttpStatus.OK).body(chatRoomListResponseDTO);
         }catch (Exception e){
             e.printStackTrace();
-            log.info("err msg : {}",e.getMessage());
             // 에러 메시지를 JSON 형식으로 바디에 담아서 반환
             String errorMessage = "{\"myfageErrorMsg\" :\"memberId is null, 일치하는 회원을 찾을 수 없습니다.\"}";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
@@ -52,13 +51,21 @@ public class ChatRoomController {
             String errorMessage = "{\"errorMessage\": \"참여할 수 없는 방입니다.\"}";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
         }
-
         ChatRoomResponseDTO chatRoomResponseDTO = chatService.searchOneRoomId(clickChatId);
         // 존재하는 채팅방 룸 정보와 대화 내역 전송
-        log.info("roomRequestDTO : {}",chatRoomResponseDTO);
         return ResponseEntity.status(HttpStatus.OK).body(chatRoomResponseDTO);
     }
 
+
+    @DeleteMapping(value = "/myfage")
+    public void chatRoomDelete(@RequestBody ChatRoomRequestDTO roomRequestDTO){
+        log.info("# 채팅룸 삭제");
+        chatService.removeStateChat(roomRequestDTO.getRemChatRoomId(),roomRequestDTO.getRemChatMember());
+
+
+
+
+    }
 
 
 

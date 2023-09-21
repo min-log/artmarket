@@ -7,9 +7,11 @@ import llustmarket.artmarket.web.dto.chat.ChatMessageResponseDTO;
 import llustmarket.artmarket.web.dto.chat.ChatRoomDTO;
 import llustmarket.artmarket.web.dto.chat.ChatRoomResponseDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
+import llustmarket.artmarket.web.dto.order.OrderDTO;
 import llustmarket.artmarket.web.dto.product.ProductDTO;
 import llustmarket.artmarket.web.mapper.chat.ChatMapper;
 import llustmarket.artmarket.web.service.member.MemberService;
+import llustmarket.artmarket.web.service.order.OrderService;
 import llustmarket.artmarket.web.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +33,7 @@ public class ChatServiceImpl implements ChatService {
     private final ChatMessageService messageService;
     private final MemberService memberService;
     private final ProductService productService;
+    private final OrderService orderService;
 
     @Transactional
     @Override
@@ -48,6 +52,7 @@ public class ChatServiceImpl implements ChatService {
                 .productId(roomDTO.getProductId()) // 상품 아이디
                 .memberId(askMemberId) // 사용자 아이디
                 .chatIdentity(askMember.getIdentity()) // 사용자 권한
+                .chatLeaveDate(LocalDateTime.now())
                 .build();
 
 
@@ -76,6 +81,7 @@ public class ChatServiceImpl implements ChatService {
                     .chatIdentity(authorMember.getIdentity())
                     .memberId(authorMember.getMemberId())
                     .productId(roomDTO.getProductId())
+                    .chatLeaveDate(LocalDateTime.now())
                     .build();
             chatMapper.insertOne(authorChatDto);
 
@@ -94,11 +100,22 @@ public class ChatServiceImpl implements ChatService {
         return chatRoomResponseDTO;
     }
 
+    @Override
+    public void updateChatLastDate(long roomId, long memberId) {
+        LocalDateTime lastDate = LocalDateTime.now();
+        int i = chatMapper.updateChatLastDate(Chat.builder().chatRoomId(roomId).memberId(memberId).chatLeaveDate(lastDate).build());
+    }
+
+    @Override
+    public int updateChatStatus(long roomId, long memberId) {
+        int i = chatMapper.updateChatStatus(Chat.builder().chatRoomId(roomId).memberId(memberId).chatStatus(true).build());
+        return i;
+    }
+
 
     @Override
     public ChatDTO searchOneExist(ChatDTO chatDTO) {
         log.info("# 대화 내역 존재 확인");
-        log.info("chatDTO : {}",chatDTO);
         Chat vo = modelMapper.map(chatDTO, Chat.class);
         try{
             vo = chatMapper.selectOneExist(vo);
@@ -131,6 +148,71 @@ public class ChatServiceImpl implements ChatService {
         List<Chat> chats = chatMapper.selectByMemberId(Chat.builder().memberId(memberId).build());
         List<ChatDTO> dtoList = chats.stream().map(item -> modelMapper.map(item, ChatDTO.class)).collect(Collectors.toList());
         return dtoList;
+    }
+
+    @Override
+    public boolean removeStateChat(long roomId, long memberId) {
+        log.info("# 사용자 대화참여 상태값 변경");
+        // 주문내역의 마감기간과 현제 날짜 비교하여 마감 후 일시 내 목록에서 숨김처리 가능
+
+        // 1. 주문내역 확인
+        ChatRoomDTO chatRoomDTO = chatRoomService.searchChatRoomId(roomId);
+        long productId = chatRoomDTO.getProductId(); // 상품id
+        // 1-1. 내가 주문한 내역이 있는지 확인
+        OrderDTO order;
+        OrderDTO orderDTO = orderService.selectOne(productId, memberId);
+
+        long otherMember = chatRoomDTO.getChatToId(); // 상대방ID
+        if(memberId == chatRoomDTO.getChatToId()) otherMember = chatRoomDTO.getChatFromId();
+
+        if(orderDTO == null){
+            // 1-2. 내가 주문한 내역이 아닐경우, 상대방이 주문한 내역 확인
+            OrderDTO orderOtherDTO = orderService.selectOne(productId, otherMember);
+            order = orderOtherDTO;
+        }
+        order = orderDTO;
+
+        if(order == null){
+            //1-3. 모두 주문한 내역이 아직 없을 경우 (문의만 한상태) -> 내역 바로 제거 가능
+
+        }
+
+        //2. 주문한 내역이 존재, 마감기한과 현제 날짜 비교
+        // 마감기간 보다 현제 날짜가 이후 이면 chat_status true로 변경 -> 리스트에서 숨김처리
+        LocalDateTime deadline = order.getDeadline();
+        // deadline 이 현제보다 과거일 경우 true
+        boolean dateBefore = deadline.isBefore(LocalDateTime.now());
+        if(dateBefore == false) return false; // 삭제 불가능
+        // 2-1. 나의 목록 상태 변경
+        int st = updateChatStatus(roomId, memberId);
+        log.info(" st: {}",st);
+        // 3. 해당 룸에 포함되는 사람들의 chat 상태 비교 모두다 true 일경우 실제 삭제 작업
+        //3-1. 상대방의 상태 값 가져오기
+        ChatDTO otherChatDTO = searchOneExist(ChatDTO.builder().productId(productId).memberId(otherMember).build());
+        boolean chatStatus = otherChatDTO.isChatStatus();
+        log.info("chatStatus:{}",chatStatus);
+
+        if(st == 1 && chatStatus == true){
+            // 모두다 삭제 일 경우 실제 삭제 로직
+            ChatDTO chatDTO = searchOneExist(ChatDTO.builder().productId(productId).memberId(memberId).build());
+            boolean result = removeChat(roomId, chatDTO.getChatId(), otherChatDTO.getChatId());
+            return result;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean removeChat(long roomId, long chatId, long otherChatId) {
+        log.info("# 실제 채팅 참여내역 삭제 로직");
+        int result = 0;
+        int deleteChat = chatMapper.deleteChat(chatId);
+        int deleteChatOther = chatMapper.deleteChat(otherChatId);
+        if(deleteChat == 1 && deleteChatOther == 1){
+            result = chatRoomService.deleteChat(roomId);
+        }
+
+        if(result == 1) return true;
+        return false;
     }
 
 

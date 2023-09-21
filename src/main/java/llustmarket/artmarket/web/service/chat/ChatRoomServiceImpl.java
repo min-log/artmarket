@@ -48,6 +48,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         int result = chatRoomMapper.updateOne(roomVO);
     }
 
+    @Override
+    public int deleteChat(long chatRoomId) {
+        int i = chatRoomMapper.deleteChatRoom(chatRoomId);
+        return i;
+    }
+
 
     @Override
     public ChatRoomDTO searchChatRoomId(long chatRoomId) {

@@ -18,4 +18,8 @@ public class ChatMessageRequestDTO {
     private ChatFileUploadDTO sendChatFile;
     private String chatType; // 메시지 타입
 
+    // 채팅 방 닫기
+    private long closeChatMember;
+    private long closeChatRoomId;
+
 }
