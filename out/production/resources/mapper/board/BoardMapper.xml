@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="llustmarket.artmarket.web.mapper.board.BoardMapper">
+    <select id="getCharacter" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT product_id, product_title FROM art_market_db.product WHERE category = 'character'
+    </select>
+</mapper>

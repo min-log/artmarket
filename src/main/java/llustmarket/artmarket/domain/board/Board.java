@@ -1,26 +1,38 @@
 package llustmarket.artmarket.domain.board;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor
+@Table(name = "art_market_db.product")
 public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id", updatable = false)
-    private Long product_id;
+    private Long productId;
 
-    @Column(name = "product_title", nullable = false)
-    private String product_title;
+    @Column(nullable = false)
+    private Long memberId;
+
+    @Column(length = 10, nullable = false)
+    private String category;
+    @Column(length = 30, nullable = false)
+    private String productTitle;
+
+    @Column(nullable = false)
+    private LocalDateTime productDate;
 
 
-    @Builder
-    public Board(String product_title){
-        this.product_title = product_title;
+    public Board(Long memberId, String category, String productTitle, LocalDateTime productDate) {
+        this.memberId = memberId;
+        this.category = category;
+        this.productTitle = productTitle;
+        this.productDate = productDate;
     }
 
 }
