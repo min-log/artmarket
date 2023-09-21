@@ -22,18 +22,19 @@ import java.util.*;
 @RestController
 public class FindInfoController {
 
-    final MemberService memberService;
-    final TokenService tokenService;
+    private final MemberService memberService;
+    private final TokenService tokenService;
 
     private final EmailService emailService;
 
-    private static final int EXPIRATION_TIME_MINUTES = 60;
+    private static final int EXPIRATION_TIME_MINUTES = 5;
 
     public FindInfoController(MemberService memberService, TokenService tokenService, EmailService emailService) {
         this.memberService = memberService;
         this.tokenService = tokenService;
         this.emailService = emailService;
     }
+
 
     @PostMapping("/find-info")
     public ResponseEntity<Object> findInfo(@Valid @RequestBody FindInfoDTO findInfo, BindingResult bindingResult) {

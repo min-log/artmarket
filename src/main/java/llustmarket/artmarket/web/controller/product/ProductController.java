@@ -134,10 +134,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/mypage-articles/{product_id}")
-    public ResponseEntity<?> deleteProductById(@PathVariable("product_id") String productIdString) {
+    public ResponseEntity<?> deleteProductById(@PathVariable("product_id") Long productId) {
         try {
-            Long productId = Long.parseLong(productIdString);
-
             if (productService.findProductByProductId(productId) != null) {
                 productService.deleteProductById(productId);
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

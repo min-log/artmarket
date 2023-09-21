@@ -36,7 +36,6 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.33'
     //소셜 로그인 관련
     implementation 'com.google.code.gson:gson:2.8.7'
     compileOnly 'org.projectlombok:lombok'
@@ -58,6 +57,8 @@ dependencies {
     // mybatis
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.0'
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.1'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 
 
 }
