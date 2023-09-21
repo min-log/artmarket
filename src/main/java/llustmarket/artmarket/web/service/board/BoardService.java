@@ -41,5 +41,13 @@ public class BoardService {
         return boardMapper.getVideo();
     }
 
+    public List<BoardDTO> getPopular() {
+        return boardMapper.getPopular();
+    }
+
+    public List<BoardDTO> getCurrent() {
+        return boardMapper.getCurrent();
+    }
+
 
 }

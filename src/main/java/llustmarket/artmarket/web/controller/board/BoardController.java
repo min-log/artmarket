@@ -50,5 +50,16 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.OK).body(boards);
     }
 
+    @GetMapping("/array/popular")
+    public ResponseEntity<List<BoardDTO>> getPopular() {
+        List<BoardDTO> boards = boardService.getPopular();
+        return ResponseEntity.status(HttpStatus.OK).body(boards);
+    }
+
+    @GetMapping("/array/current")
+    public ResponseEntity<List<BoardDTO>> getCurrent() {
+        List<BoardDTO> boards = boardService.getCurrent();
+        return ResponseEntity.status(HttpStatus.OK).body(boards);
+    }
 
 }

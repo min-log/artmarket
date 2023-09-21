@@ -18,4 +18,8 @@ public interface BoardMapper {
 
     List<BoardDTO> getVideo();
 
+    List<BoardDTO> getPopular();
+
+    List<BoardDTO> getCurrent();
+
 }

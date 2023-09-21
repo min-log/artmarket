@@ -31,4 +31,19 @@
         FROM art_market_db.product p , art_market_db.member m
         WHERE category = 'video' AND p.member_id = m.member_id;
     </select>
+
+    <select id="getPopular" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m, art_market_db.order o
+        WHERE p.member_id = m.member_id AND p.product_id = o.product_id
+        GROUP BY product_id
+        ORDER BY count(o.product_id) DESC;
+    </select>
+
+    <select id="getCurrent" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE p.member_id = m.member_id
+        ORDER BY p.product_date DESC;
+    </select>
 </mapper>
