@@ -87,7 +87,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 // 파일의 경로, 경로 아이디
             FileVO fileProfile = FileVO.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberYou.getMemberId()).build();
             FileVO memberProfile = fileMapper.selectOnePathAndId(fileProfile);
-            if(memberProfile != null) chatRoomDTO.setChatSenderProfile("/file/find?filePath=" + memberProfile.getFilePath() + "&fileTypeId=" + memberProfile.getFileTypeId());
+            if(memberProfile != null) chatRoomDTO.setChatSenderProfile("/file/find/" + memberProfile.getFilePath() + "/" + memberProfile.getFileTypeId());
 
             chatRoomDTO.setChatSender(memberYou.getNickname());
             chatRoomDTO.setChatSenderIdtity(memberYou.getIdentity());
@@ -105,7 +105,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         // 2-1. 회원 프로필
         FileVO memberProfile = fileMapper.selectOnePathAndId(FileVO.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberMe.getMemberId()).build());
-        if(memberProfile != null) myPageDTO.setProfileImg("/file/find?filePath=" + memberProfile.getFilePath() + "&fileTypeId=" + memberProfile.getFileTypeId());
+        if(memberProfile != null) myPageDTO.setProfileImg("/file/find/" + memberProfile.getFilePath() + "/" + memberProfile.getFileTypeId());
         myPageDTO.setMyChatRooms(roomListDTO); // 룸 리스트 추가
         return myPageDTO;
     }

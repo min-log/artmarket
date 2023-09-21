@@ -104,7 +104,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
                 .fileTypeId(chatMessageId)
                 .build();
         FileVO file = fileMapper.selectOnePathAndId(fileVO);
-        chatMessageResponseDTO.setChatFile("/file/find?filePath=" + file.getFilePath() + "&fileTypeId=" +file.getFileTypeId());
+        chatMessageResponseDTO.setChatFile("/file/find/" + file.getFilePath() + "/" +file.getFileTypeId());
         chatMessageResponseDTO.setChatFileName(file.getFileOriginName());
         chatMessageResponseDTO.setChatFileDownload(file.getFileName());
         return chatMessageResponseDTO;

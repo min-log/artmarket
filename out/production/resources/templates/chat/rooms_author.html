@@ -139,7 +139,7 @@
                         str += "<b>" + writer + " : " + message + "</b>";
                         if(type === "FILE"){ // 파일일 경우
                             str += "<br />";
-                            str += "<a href='/file/download?fileUpName="+ fileDown+ "' target='_blank'>" +  fileName +"</a>";
+                            str += "<a href='/file/download/"+ fileDown+ "' target='_blank'>" +  fileName +"</a>";
                             str += "<img src='" + fileUrl + "' />";
                         }
                         str += "</div></div>";
@@ -153,7 +153,7 @@
                         str += "<b>" + writer + " : " + message + "</b>";
                         if(type === "FILE"){ // 파일일 경우
                             str += "<br />";
-                            str += "<a href='/file/download?fileUpName="+ fileDown+ "' target='_blank'>" +  fileName +"</a>";
+                            str += "<a href='/file/download/"+ fileDown+ "' target='_blank'>" +  fileName +"</a>";
                             str += "<img src='" + fileUrl + "' />";
                         }
                         str += "</div></div>";

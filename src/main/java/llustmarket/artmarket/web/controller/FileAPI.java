@@ -41,9 +41,9 @@ public class FileAPI {
     }
 
 
-    @GetMapping("/find")
-    public ResponseEntity<?> fileImgGet(@RequestParam(value = "filePath") String filePath,
-                                             @RequestParam(value = "fileTypeId") long fileTypeId) throws IOException, IOException {
+    @GetMapping("/find/{filePath}/{fileTypeId}")
+    public ResponseEntity<?> fileImgGet(@PathVariable(value = "filePath") String filePath,
+                                             @PathVariable(value = "fileTypeId") long fileTypeId) throws IOException, IOException {
         log.info("# 이미지 파일 불러오기");
         ResponseEntity<byte[]> result = null;
 
@@ -62,8 +62,8 @@ public class FileAPI {
     }
 
 
-    @GetMapping("/download")
-    public ResponseEntity<?> fileDownload(@RequestParam("fileUpName") String fileUpName,
+    @GetMapping("/download/{fileUpName}")
+    public ResponseEntity<?> fileDownload(@PathVariable("fileUpName") String fileUpName,
                              HttpServletRequest request, HttpServletResponse response) throws Exception {
         log.info("# 클라이언트 파일 저장");
 

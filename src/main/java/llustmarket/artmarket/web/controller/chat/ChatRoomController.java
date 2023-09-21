@@ -22,8 +22,8 @@ public class ChatRoomController {
     private final ChatService chatService;
     private final ChatRoomService chatRoomService;
 
-    @GetMapping(value = "/myfage")
-    public ResponseEntity<Object> roomList(@RequestParam(value = "member_id") long memberId) {
+    @GetMapping(value = "/myfage/{member_id}")
+    public ResponseEntity<Object> roomList(@PathVariable(value = "member_id") long memberId) {
         log.info("# 마이페이지 채팅 내역 조회");
         List<ChatDTO> list = chatService.searchChatAllByMemberId(memberId);
         try {
