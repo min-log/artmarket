@@ -76,13 +76,23 @@ public class FileService {
     }
 
     public FileDTO fileFindOne(String filePath, long fileTypeId){
-        FileVO fileVO = fileMapper.selectOnePathAndId(FileVO.builder().filePath(filePath).fileTypeId(fileTypeId).build());
-        return modelMapper.map(fileVO,FileDTO.class);
+        try{
+            FileVO fileVO = fileMapper.selectOnePathAndId(FileVO.builder().filePath(filePath).fileTypeId(fileTypeId).build());
+            return modelMapper.map(fileVO,FileDTO.class);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public FileDTO fileDownload(String fileName) {
-        FileVO fileVO = fileMapper.selectOnefileName(fileName);
-        return modelMapper.map(fileVO,FileDTO.class);
+        try{
+            FileVO fileVO = fileMapper.selectOnefileName(fileName);
+            return modelMapper.map(fileVO,FileDTO.class);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

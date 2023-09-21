@@ -7,12 +7,13 @@
 </head>
 <body>
     <div class="container">
+      <img th:src="${chatRoomDTO.getProfileImg}">
       <div>[[${session.memberId}]]
         <br />
         임시 작가 회원 : 이지민
       </div>
       <div>
-        <ul th:each="room : ${list}">
+        <ul th:each="room : ${chatRoomDTO.getMyChatRooms}">
           <li>
             <button th:onclick="mypageChatRoom([[${room.getChatRoomId}]])" type="button">
             <b>[[${room.getChatSender}]]  ( [[${room.getChatSenderIdtity}]] ) </b>

@@ -1,6 +1,7 @@
 package llustmarket.artmarket.web.controller;
 
 
+import llustmarket.artmarket.web.dto.chat.ChatRoomResponseDTO;
 import llustmarket.artmarket.web.dto.file.FileDTO;
 import llustmarket.artmarket.web.service.file.FileService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
@@ -40,11 +42,16 @@ public class FileAPI {
 
 
     @GetMapping("/find")
-    public ResponseEntity<byte[]> fileImgGet(@RequestParam(value = "filePath") String filePath,
+    public ResponseEntity<?> fileImgGet(@RequestParam(value = "filePath") String filePath,
                                              @RequestParam(value = "fileTypeId") long fileTypeId) throws IOException, IOException {
         log.info("# 이미지 파일 불러오기");
         ResponseEntity<byte[]> result = null;
+
         FileDTO fileDTO = fileService.fileFindOne(filePath, fileTypeId);
+        if(fileDTO == null) {
+            String errorMessage = "{\"errorMessage\": \"파일이 존재하지 않거나, 올바른 파일 경로가 아닙니다.\"}";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
+        }
         String fileName = fileDTO.getFileName();
         File file = new File(uploadPath + File.separator  + filePath + File.separator + fileName);
         HttpHeaders headers = new HttpHeaders();
@@ -56,10 +63,16 @@ public class FileAPI {
 
 
     @GetMapping("/download")
-    public void fileDownload(@RequestParam("fileUpName") String fileUpName,
+    public ResponseEntity<?> fileDownload(@RequestParam("fileUpName") String fileUpName,
                              HttpServletRequest request, HttpServletResponse response) throws Exception {
         log.info("# 클라이언트 파일 저장");
+
         FileDTO fileDTO = fileService.fileDownload(fileUpName);
+        if(fileDTO == null) {
+            String errorMessage = "{\"errorMessage\": \"파일이 존재하지 않습니다.\"}";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
+        }
+
         File file = new File(uploadPath + File.separator  + fileDTO.getFilePath() + File.separator + fileUpName);
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
 
@@ -83,6 +96,8 @@ public class FileAPI {
         in.close();
         response.getOutputStream().flush();
         response.getOutputStream().close();
+        String result = "{\"successMessage\": \"파일 저장이 성공했습니다.\"}";
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 
