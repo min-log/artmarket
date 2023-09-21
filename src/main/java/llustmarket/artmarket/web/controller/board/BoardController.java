@@ -26,5 +26,29 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.OK).body(boards);
     }
 
+    @GetMapping("/list/illust")
+    public ResponseEntity<List<BoardDTO>> getIllust() {
+        List<BoardDTO> boards = boardService.getIllust();
+        return ResponseEntity.status(HttpStatus.OK).body(boards);
+    }
+
+    @GetMapping("/list/live")
+    public ResponseEntity<List<BoardDTO>> getLive() {
+        List<BoardDTO> boards = boardService.getLive();
+        return ResponseEntity.status(HttpStatus.OK).body(boards);
+    }
+
+    @GetMapping("/list/design")
+    public ResponseEntity<List<BoardDTO>> getDesign() {
+        List<BoardDTO> boards = boardService.getDesign();
+        return ResponseEntity.status(HttpStatus.OK).body(boards);
+    }
+
+    @GetMapping("/list/video")
+    public ResponseEntity<List<BoardDTO>> getVideo() {
+        List<BoardDTO> boards = boardService.getVideo();
+        return ResponseEntity.status(HttpStatus.OK).body(boards);
+    }
+
 
 }

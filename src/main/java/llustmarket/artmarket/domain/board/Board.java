@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "art_market_db.product")
+@Table(name = "product")
 public class Board {
 
     @Id

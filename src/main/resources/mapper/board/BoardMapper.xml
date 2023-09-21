@@ -3,6 +3,32 @@
 
 <mapper namespace="llustmarket.artmarket.web.mapper.board.BoardMapper">
     <select id="getCharacter" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
-        SELECT product_id, product_title FROM art_market_db.product WHERE category = 'character'
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE category = 'character' AND p.member_id = m.member_id;
+    </select>
+
+    <select id="getIllust" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE category = 'illust' AND p.member_id = m.member_id;
+    </select>
+
+    <select id="getLive" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE category = 'live' AND p.member_id = m.member_id;
+    </select>
+
+    <select id="getDesign" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE category = 'design' AND p.member_id = m.member_id;
+    </select>
+
+    <select id="getVideo" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE category = 'video' AND p.member_id = m.member_id;
     </select>
 </mapper>

@@ -9,4 +9,13 @@ import java.util.List;
 @Mapper
 public interface BoardMapper {
     List<BoardDTO> getCharacter();
+
+    List<BoardDTO> getIllust();
+
+    List<BoardDTO> getLive();
+
+    List<BoardDTO> getDesign();
+
+    List<BoardDTO> getVideo();
+
 }

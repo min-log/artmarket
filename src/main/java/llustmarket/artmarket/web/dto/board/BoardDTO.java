@@ -1,18 +1,21 @@
 package llustmarket.artmarket.web.dto.board;
 
-import llustmarket.artmarket.domain.board.Board;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class BoardDTO {
 
     private Long productId;
-    private String title;
 
-    public BoardDTO(Board board) {
-        this.productId = board.getProductId();
-        this.title = board.getProductTitle();
-    }
+    @JsonProperty(value = "title")
+    private String productTitle;
+
+    @JsonProperty(value = "proNickname")
+    private String nickname;
+
 }
