@@ -31,6 +31,7 @@ public class SecurityConfig {
         http
                 .logout()
                 .invalidateHttpSession(true)
+                .deleteCookies("loginCookie")
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK));
         http.csrf().disable();
         return http.build();
