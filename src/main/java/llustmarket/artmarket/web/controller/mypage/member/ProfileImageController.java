@@ -31,16 +31,21 @@ public class ProfileImageController {
         try {
             String profileFileType = profileImageDTO.getProfileFileType();
             Long profileFileTypeId = profileImageDTO.getProfileFileTypeId();
-
-            // 프로필 이미지가 이미 존재하면 삭제
-            FileVO fileToDelete = fileMapper.selectOnePathAndId(FileVO.builder()
+            log.info("profileFileType={}, profileFileTypeId={}", profileFileType, profileFileTypeId);
+            
+            FileVO file = FileVO.builder()
                     .filePath(profileFileType)
                     .fileTypeId(profileFileTypeId)
-                    .build());
+                    .build();
+            // 프로필 이미지가 이미 존재하면 삭제
+            FileVO fileToDelete = fileMapper.selectOnePathAndId(file);
+
+            log.info("fileToDelete={}", fileToDelete);
 
             if (fileToDelete != null) {
                 fileService.fileRemove(fileToDelete.getFilePath(), fileToDelete.getFileName());
             }
+
             MultipartFile profileImage = profileImageDTO.getProfileImage();
 
             // 파일 확장자 확인

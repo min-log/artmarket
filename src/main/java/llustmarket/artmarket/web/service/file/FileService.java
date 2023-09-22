@@ -135,7 +135,6 @@ public class FileService {
     }
 
 
-    //파일 제거
     public ResponseEntity<Boolean> fileRemove(String filePath, String fileName) {
         log.info("이미지 제거 로직");
         String srcFileName = null;
@@ -143,7 +142,6 @@ public class FileService {
             log.info(fileName);
             srcFileName = URLDecoder.decode(fileName, "utf-8");
             File file = new File(uploadPath + File.separator + filePath + File.separator + srcFileName);
-            log.info(file);
             log.info(file);
             boolean result = file.delete();
             return new ResponseEntity<>(result, HttpStatus.OK);
