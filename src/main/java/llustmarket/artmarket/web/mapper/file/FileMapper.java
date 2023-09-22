@@ -9,6 +9,7 @@ public interface FileMapper {
 
     FileVO selectOnePathAndId(FileVO vo);
 
-
     FileVO selectOnefileName(String fileName);
+
+    void deleteFile(FileVO vo);
 }

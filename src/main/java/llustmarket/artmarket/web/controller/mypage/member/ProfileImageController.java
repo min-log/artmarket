@@ -32,9 +32,9 @@ public class ProfileImageController {
             String profileFileType = profileImageDTO.getProfileFileType();
             Long profileFileTypeId = profileImageDTO.getProfileFileTypeId();
             log.info("profileFileType={}, profileFileTypeId={}", profileFileType, profileFileTypeId);
-            
+
             FileVO file = FileVO.builder()
-                    .filePath(profileFileType)
+                    .filePath("PROFILE")
                     .fileTypeId(profileFileTypeId)
                     .build();
             // 프로필 이미지가 이미 존재하면 삭제
@@ -44,6 +44,7 @@ public class ProfileImageController {
 
             if (fileToDelete != null) {
                 fileService.fileRemove(fileToDelete.getFilePath(), fileToDelete.getFileName());
+                fileMapper.deleteFile(fileToDelete);
             }
 
             MultipartFile profileImage = profileImageDTO.getProfileImage();
