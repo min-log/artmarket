@@ -1,8 +1,9 @@
 package llustmarket.artmarket.web.service.member;
 
 import llustmarket.artmarket.domain.member.Member;
+import llustmarket.artmarket.web.dto.member.MemberDTO;
 import llustmarket.artmarket.web.mapper.member.MemberMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,9 +13,14 @@ import java.util.Map;
 
 @Service
 public class MemberService {
+    
+    private final MemberMapper memberMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private MemberMapper memberMapper;
+    public MemberService(MemberMapper memberMapper, ModelMapper modelMapper) {
+        this.memberMapper = memberMapper;
+        this.modelMapper = modelMapper;
+    }
 
     @Transactional
     public void insertMember(Member member) {
@@ -82,4 +88,8 @@ public class MemberService {
 
     }
 
+    public MemberDTO selectOne(long memberId) {
+        Member member = memberMapper.selectOneByMemberId(memberId);
+        return modelMapper.map(member, MemberDTO.class);
+    }
 }

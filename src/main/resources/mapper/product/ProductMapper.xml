@@ -20,4 +20,8 @@
     <delete id="deleteProductById">
         DELETE FROM product WHERE product_id = #{productId}
     </delete>
+    <select id="selectOneByProductId" resultType="llustmarket.artmarket.domain.product.Product" >
+        select product_id, member_id, category, product_title, product_detail, product_date
+        from product where product_id = #{productId}
+    </select>
 </mapper>

@@ -35,4 +35,5 @@ public interface MemberMapper {
     //특정 회원의 세션아이디와 쿠키 유효기간을 저장
     void autoLogin(Map<String, Object> map);
 
+    Member selectOneByMemberId(long memberId);
 }

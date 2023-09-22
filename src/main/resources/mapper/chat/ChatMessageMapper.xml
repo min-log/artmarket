@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="llustmarket.artmarket.web.mapper.chat.ChatMessageMapper">
+    <insert id="insertOne" parameterType="llustmarket.artmarket.domain.chat.ChatMessage"
+            useGeneratedKeys="true" keyProperty="chatMessageId" keyColumn="chat_message_id">
+        insert into chatmessage (chat_room_id, member_id, chat_message_type, message)
+        values (#{chatRoomId},#{memberId},#{chatMessageType},#{message})
+    </insert>
+    <select id="selectOneByMessageId" resultType="llustmarket.artmarket.domain.chat.ChatMessage">
+        select chat_message_id, chat_room_id, member_id, chat_message_date, chat_message_type, message
+        from chatmessage where chat_message_id = #{chatMessageId};
+    </select>
+
+    <select id="selectByRoomId" resultType="llustmarket.artmarket.domain.chat.ChatMessage">
+        select chat_message_id, chat_room_id, member_id, chat_message_date, chat_message_type, message
+        from chatmessage where chat_room_id = #{chatRoomId};
+    </select>
+</mapper>
