@@ -11,16 +11,61 @@ let btnModCheckId = false;
 let btnModCheckPass = false;
 let loginAutoResult = false;
 
+// alert 생성 ----
+
+const notiboxBor = document.createElement('div')
+const notibox = document.createElement('div')
+const noticontent = document.createElement('div')
+const notibtn = document.createElement('div')
+
+// 로그인 정보 불일치 시 나오는 팝업창 생성 함수
+function noticeAlert(parentTag, notiMsg) {
+
+    notiboxBor.style.position = 'absolute'
+    notiboxBor.style.marginTop = '8.9rem'
+
+    notibox.style.display = 'flex'
+    notibox.style.flexDirection = 'column'
+    notibox.style.alignItems = 'center'
+    notibox.style.backgroundColor = 'white'
+    notibox.style.padding = '1.5rem 1rem'
+    notibox.style.borderRadius = '0.5rem'
+    notibox.style.boxShadow = '2px 2px 0.5rem rgba(94, 94, 235, 0.4)'
+
+    noticontent.style.marginBottom = '1.1rem'
+    noticontent.style.fontSize = '0.9rem'
+
+    notibtn.textContent = '닫기'
+    notibtn.style.fontSize = '0.8rem'
+    notibtn.style.padding = '0.1rem 0.8rem'
+    notibtn.style.borderRadius = '0.3rem'
+    notibtn.style.backgroundColor = 'rgba(94, 94, 235, 1)'
+    notibtn.style.color = 'white'
+    notibtn.style.cursor = 'pointer'
+
+    notiboxBor.appendChild(notibox)
+    notibox.appendChild(noticontent)
+    notibox.appendChild(notibtn)
+
+    noticontent.textContent = notiMsg
+
+    parentTag.prepend(notiboxBor)
+}
+
+notibtn.addEventListener('click', function () {
+    notiboxBor.remove()
+})
+
 loginToJoin.addEventListener('mouseover', function () {
     loginToJoin.textContent = "회원가입 하러가기"
 })
 
 loginToJoin.addEventListener('mouseout', function () {
-    loginToJoin.textContent = "아직 회원이 아니신가요?"
+    loginToJoin.textContent = "아직 아트마켓에 계정이 없으신가요?"
 })
 
 loginToJoin.addEventListener('click', function () {
-    location.href = "join.html"
+    location.href = "agree.html"
 })
 
 logoAuto.addEventListener('click', function () {
@@ -60,10 +105,10 @@ function loginErrorMsgOnOff(check, msg, tag) {
 
 function btnModCheck() {
     if (btnModCheckList[0] && btnModCheckList[1]) {
-        loginBtn.style.backgroundColor = 'rgb(94, 94, 235)'
+        loginBtn.style.backgroundColor = 'rgba(27, 27, 27, 1);'
         loginBtn.style.cursor = 'pointer'
     } else {
-        loginBtn.style.backgroundColor = 'rgba(94, 94, 235, 0.4)';
+        loginBtn.style.backgroundColor = 'rgba(27, 27, 27, 0.4);';
         loginBtn.style.cursor = 'not-allowed';
     }
 }
@@ -98,21 +143,37 @@ loginPassword.addEventListener('focusout', function () {
 
 loginBtn.addEventListener("click", function () {
 
-    console.log(typeof loginId.value)
-    console.log(typeof loginPassword.value)
-    console.log(typeof loginAutoResult)
+    let resStatus = 0
+
     if (btnModCheckList[0] && btnModCheckList[1]) {
-        fetch("/login", {
+
+        fetch(`${baseUrl}/login`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json; charset=UTF-8'
+                'content-type': 'application/json'
             },
             body: JSON.stringify({
                 loginId: `${loginId.value}`,
                 loginPassword: `${loginPassword.value}`,
                 autoLogin: `${loginAutoResult}`,
-            }),
-        }).then(res => console.log(res))
-            .catch(error => console.log(error))
+            })
+        }).then(response => {
+            resStatus = response.status
+            return response.json()
+        }).then(data => {
+            if (resStatus === 200) {
+                localStorage.setItem('id', data.loginTrueId)
+                localStorage.setItem('identity', data.loginTrueIdentity)
+                location.href = 'index.html'
+
+            } else if (resStatus === 401) {
+                const parentTag = document.querySelector('.login-content')
+                noticeAlert(parentTag, data.loginNoMatchMsg)
+            }
+        })
     }
+
+    loginId.value = null
+    loginPassword.value = null
+
 })
