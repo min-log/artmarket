@@ -25,14 +25,17 @@ public class Board {
     private String productTitle;
 
     @Column(nullable = false)
+    private String productDetail;
+    @Column(nullable = false)
     private LocalDateTime productDate;
 
 
-    public Board(Long memberId, String category, String productTitle, LocalDateTime productDate) {
+    public Board(Long memberId, String category, String productTitle, LocalDateTime productDate, String productDetail) {
         this.memberId = memberId;
         this.category = category;
         this.productTitle = productTitle;
         this.productDate = productDate;
+        this.productDetail = productDetail;
     }
 
 }

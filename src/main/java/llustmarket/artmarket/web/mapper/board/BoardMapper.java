@@ -22,4 +22,6 @@ public interface BoardMapper {
 
     List<BoardDTO> getCurrent();
 
+    List<BoardDTO> getSearch(String categoryKeyword);
+
 }

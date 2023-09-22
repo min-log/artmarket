@@ -46,4 +46,13 @@
         WHERE p.member_id = m.member_id
         ORDER BY p.product_date DESC;
     </select>
+
+    <select id="getSearch" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE p.member_id = m.member_id AND (p.product_title LIKE CONCAT('%', #{categoryKeyword}, '%')
+        OR m.nickname LIKE CONCAT('%', #{categoryKeyword}, '%')
+        OR p.product_detail LIKE CONCAT('%', #{categoryKeyword}, '%'))
+        ORDER BY p.product_date DESC;
+    </select>
 </mapper>

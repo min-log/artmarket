@@ -4,7 +4,6 @@ import llustmarket.artmarket.domain.board.BoardRepository;
 import llustmarket.artmarket.web.dto.board.BoardDTO;
 import llustmarket.artmarket.web.mapper.board.BoardMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +16,8 @@ public class BoardService {
     @Autowired
     private BoardMapper boardMapper;
 
-    @Autowired
-    ModelMapper modelMapper;
-    final BoardRepository repository;
+    final BoardRepository boardRepository;
+
 
     public List<BoardDTO> getCharacter() {
         return boardMapper.getCharacter();
@@ -47,6 +45,10 @@ public class BoardService {
 
     public List<BoardDTO> getCurrent() {
         return boardMapper.getCurrent();
+    }
+
+    public List<BoardDTO> getSearch(String categoryKeyword) {
+        return boardMapper.getSearch(categoryKeyword);
     }
 
 
