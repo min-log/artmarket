@@ -16,7 +16,7 @@
         where chat_room_id =  #{chatRoomId} and member_id = #{memberId}
     </update>
     <delete id="deleteChat">
-        delete from chat where chat_id = #{chatId}
+        delete from chat where chat_room_id = #{chatRoomId} and member_id = #{memberId}
     </delete>
     <select id="selectOneExist" resultType="llustmarket.artmarket.domain.chat.Chat" >
         select chat_id, chat_room_id, member_id, chat_date, chat_leave_date, chat_status, chat_identity, product_id

@@ -16,7 +16,8 @@ public interface ChatMessageService {
     ChatMessageResponseDTO registerChatFileMessage(ChatMessageRequestDTO dto);
     ChatMessageResponseDTO searchChatMessageOne(long chatMessageId);
     List<ChatMessageResponseDTO> searchChatMessageList(long chatRoomId);
-    int deleteMessage(long chatMessageId);
+
+    void deleteMessageList(long chatRoomId);
 
 
     default ChatMessage messageDTOToVO(ChatMessageRequestDTO dto){
@@ -32,7 +33,6 @@ public interface ChatMessageService {
 
     default ChatMessageResponseDTO messageVOToResultDTO(ChatMessage vo){
         ChatMessageResponseDTO result =  ChatMessageResponseDTO.builder()
-                .chatMsgId(vo.getChatRoomId())
                 .chatSender(vo.getMemberId())
                 .chatDate(vo.getChatMessageDate())
                 .chatMsg(vo.getMessage())

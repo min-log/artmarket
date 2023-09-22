@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Setter
 public class ChatMessageResponseDTO {
     // 전달하는 메시지 데이터
-    private long chatMsgId; // 메시지 ID 내역 삭제 시 필요.
     private long chatSender; //보내는 사람
     private LocalDateTime chatDate; //생성날짜
     private String  chatMsg; //메시지

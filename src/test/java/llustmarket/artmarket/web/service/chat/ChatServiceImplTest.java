@@ -28,7 +28,7 @@ class ChatServiceImplTest {
 
     @Test
     void removeStateChat() {
-        boolean result = chatService.removeStateChat(1, 3);
+        boolean result = chatService.removeStateChat(8, 3);
         System.out.println("result : "+ result);
     }
 }

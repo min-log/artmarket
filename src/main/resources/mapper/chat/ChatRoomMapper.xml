@@ -13,7 +13,7 @@
                           ,chat_room_last_date = #{chatRoomLastDate}
                         where chat_room_id =  #{chatRoomId}
     </update>
-    <delete id="deleteChatRoom">
+    <delete id="deleteChatRoom" parameterType="long">
         delete from chatroom where chat_room_id = #{chatRoomId}
     </delete>
     <select id="selectOneId" resultType="llustmarket.artmarket.domain.chat.ChatRoom" >

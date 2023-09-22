@@ -58,12 +58,22 @@ public class ChatRoomController {
 
 
     @DeleteMapping(value = "/myfage")
-    public void chatRoomDelete(@RequestBody ChatRoomRequestDTO roomRequestDTO){
+    public ResponseEntity<Object> chatRoomDelete(@RequestBody ChatRoomRequestDTO roomRequestDTO){
         log.info("# 채팅룸 삭제");
-        boolean b = chatService.removeStateChat(roomRequestDTO.getRemChatRoomId(), roomRequestDTO.getRemChatMember());
-        log.info("삭제 결과 : {}",b);
-
-
+        boolean result = false;
+        try{
+            result = chatService.removeStateChat(roomRequestDTO.getRemChatRoomId(), roomRequestDTO.getRemChatMember());
+            if(result == false){
+                String errorMessage = "{\"errorMessage\": \"상품 작업이 완료되지 않아 삭제가 불가능합니다.\"}";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
+            }
+            String successMessage = "{\"successMessage\": \"삭제가 성공했습니다.\"}";
+            return ResponseEntity.status(HttpStatus.OK).body(successMessage);
+        }catch (Exception e){
+            e.printStackTrace();
+            String errorMessage = "{\"errorMessage\": \"룸아이디 또는 고객아이디가 올바른 값이 아닙니다.\"}";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
+        }
     }
 
 
