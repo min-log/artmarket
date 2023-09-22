@@ -2,20 +2,25 @@ package llustmarket.artmarket.web.service.chat;
 
 
 import llustmarket.artmarket.domain.chat.Chat;
+import llustmarket.artmarket.domain.chat.MessageType;
+import llustmarket.artmarket.domain.file.FileType;
 import llustmarket.artmarket.web.dto.chat.ChatDTO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageResponseDTO;
 import llustmarket.artmarket.web.dto.chat.ChatRoomDTO;
 import llustmarket.artmarket.web.dto.chat.ChatRoomResponseDTO;
+import llustmarket.artmarket.web.dto.file.FileDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
 import llustmarket.artmarket.web.dto.order.OrderDTO;
 import llustmarket.artmarket.web.dto.product.ProductDTO;
 import llustmarket.artmarket.web.mapper.chat.ChatMapper;
+import llustmarket.artmarket.web.service.file.FileService;
 import llustmarket.artmarket.web.service.member.MemberService;
 import llustmarket.artmarket.web.service.order.OrderService;
 import llustmarket.artmarket.web.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +39,9 @@ public class ChatServiceImpl implements ChatService {
     private final MemberService memberService;
     private final ProductService productService;
     private final OrderService orderService;
+    private final FileService fileService;
+
+
 
     @Transactional
     @Override
@@ -126,6 +134,12 @@ public class ChatServiceImpl implements ChatService {
         return modelMapper.map(vo, ChatDTO.class);
     }
 
+    public Boolean searchOneChatStatus(long roomId,long memberId) {
+        Chat chat = chatMapper.selectByRoomIdAndMemberId(roomId, memberId);
+        return chat.isChatStatus();
+    }
+
+
     @Override
     public ChatRoomResponseDTO searchOneRoomId(long roomId) {
         log.info("# 채팅방 상세 내역");
@@ -150,6 +164,7 @@ public class ChatServiceImpl implements ChatService {
         return dtoList;
     }
 
+    @Transactional
     @Override
     public boolean removeStateChat(long roomId, long memberId) {
         log.info("# 사용자 대화참여 상태값 변경");
@@ -159,21 +174,19 @@ public class ChatServiceImpl implements ChatService {
         ChatRoomDTO chatRoomDTO = chatRoomService.searchChatRoomId(roomId);
         long productId = chatRoomDTO.getProductId(); // 상품id
         // 1-1. 내가 주문한 내역이 있는지 확인
-        OrderDTO order;
-        OrderDTO orderDTO = orderService.selectOne(productId, memberId);
+        OrderDTO order = orderService.selectOne(productId, memberId);
 
         long otherMember = chatRoomDTO.getChatToId(); // 상대방ID
         if(memberId == chatRoomDTO.getChatToId()) otherMember = chatRoomDTO.getChatFromId();
 
-        if(orderDTO == null){
+        if(order == null){
             // 1-2. 내가 주문한 내역이 아닐경우, 상대방이 주문한 내역 확인
+            log.info("다시 구하기");
             OrderDTO orderOtherDTO = orderService.selectOne(productId, otherMember);
             order = orderOtherDTO;
-        }
-        order = orderDTO;
-
-        if(order == null){
+        }else if(order == null){
             //1-3. 모두 주문한 내역이 아직 없을 경우 (문의만 한상태) -> 내역 바로 제거 가능
+            log.info("다 재거가능");
 
         }
 
@@ -182,7 +195,11 @@ public class ChatServiceImpl implements ChatService {
         LocalDateTime deadline = order.getDeadline();
         // deadline 이 현제보다 과거일 경우 true
         boolean dateBefore = deadline.isBefore(LocalDateTime.now());
-        if(dateBefore == false) return false; // 삭제 불가능
+        if(dateBefore == false) {
+            log.info("아직 삭제가 불가능한 상태");
+            return false;
+        } // 삭제 불가능
+
         // 2-1. 나의 목록 상태 변경
         int st = updateChatStatus(roomId, memberId);
         log.info(" st: {}",st);
@@ -191,9 +208,9 @@ public class ChatServiceImpl implements ChatService {
         ChatDTO otherChatDTO = searchOneExist(ChatDTO.builder().productId(productId).memberId(otherMember).build());
         boolean chatStatus = otherChatDTO.isChatStatus();
         log.info("chatStatus:{}",chatStatus);
-
         if(st == 1 && chatStatus == true){
             // 모두다 삭제 일 경우 실제 삭제 로직
+            log.info("모두 삭제 가능한 상태");
             ChatDTO chatDTO = searchOneExist(ChatDTO.builder().productId(productId).memberId(memberId).build());
             boolean result = removeChat(roomId, chatDTO.getChatId(), otherChatDTO.getChatId());
             return result;
@@ -205,8 +222,29 @@ public class ChatServiceImpl implements ChatService {
     public boolean removeChat(long roomId, long chatId, long otherChatId) {
         log.info("# 실제 채팅 참여내역 삭제 로직");
         int result = 0;
+
+        //1. 메시지 내역 삭제
+        //1-1. 룸에 해당하는 메시지 내역 모두 가져와서 삭제
+        List<ChatMessageResponseDTO> chatMessageResponseDTOS = messageService.searchChatMessageList(roomId);
+        chatMessageResponseDTOS.forEach(item->{
+            // 메시지 삭제
+            // 메시지 타입이 file 일경우 파일 삭제
+            String chatType = item.getChatType();
+            if(chatType == String.valueOf(MessageType.FILE)){
+                FileDTO fileDTO = fileService.fileFindOne(String.valueOf(FileType.CHAT), item.getChatMsgId());
+                ResponseEntity<Boolean> booleanResponseEntity = fileService.fileRemove(fileDTO.getFileName());
+                log.info(booleanResponseEntity.getBody());
+            }
+            messageService.deleteMessage(item.getChatMsgId());
+        });
+
+        log.info("참여 내역 삭제");
+
+        //2. 채팅 참여 내역 삭제
         int deleteChat = chatMapper.deleteChat(chatId);
         int deleteChatOther = chatMapper.deleteChat(otherChatId);
+
+        //3. 채팅 룸 삭제
         if(deleteChat == 1 && deleteChatOther == 1){
             result = chatRoomService.deleteChat(roomId);
         }
@@ -214,6 +252,8 @@ public class ChatServiceImpl implements ChatService {
         if(result == 1) return true;
         return false;
     }
+
+
 
 
 }

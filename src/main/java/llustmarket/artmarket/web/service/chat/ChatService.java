@@ -14,6 +14,7 @@ public interface ChatService {
     int updateChatStatus(long roomId, long memberId);
 
     ChatDTO searchOneExist(ChatDTO chatDTO);
+    Boolean searchOneChatStatus(long roomId,long memberId);
     ChatRoomResponseDTO searchOneRoomId(long roomId);
     List<ChatDTO> searchChatAllByMemberId(long memberId);
     boolean removeStateChat(long roomId, long memberId);

@@ -16,16 +16,10 @@ public class OrderService {
     private final ModelMapper modelMapper;
     private final OrderMapper orderMapper;
     public OrderDTO selectOne(long productId,long memberId){
-
-        Order order = null;
-        try {
-            Order vo = Order.builder().productId(productId).memberId(memberId).build();
-            order = orderMapper.searchProductIdAndMemberId(vo);
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-        log.info(order);
+        Order vo = Order.builder().productId(productId).memberId(memberId).build();
+        Order order = orderMapper.searchProductIdAndMemberId(vo);
+        log.info("order : {}",order);
+        if(order == null) return null;
         return modelMapper.map(order,OrderDTO.class);
     }
 }

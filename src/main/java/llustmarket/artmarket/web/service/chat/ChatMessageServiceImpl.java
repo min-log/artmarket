@@ -95,6 +95,13 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         return chatMessageDTOS;
     }
 
+    @Override
+    public int deleteMessage(long chatMessageId) {
+        log.info("# 메시지 삭제");
+        int result = chatMessageMapper.deleteChatMessage(chatMessageId);
+        return result;
+    }
+
 
     public ChatMessageResponseDTO messageFileSet(long chatMessageId,ChatMessageResponseDTO chatMessageResponseDTO ){
         //# 파일이 존재할 경우

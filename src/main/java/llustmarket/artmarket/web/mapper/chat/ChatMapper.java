@@ -14,4 +14,5 @@ public interface ChatMapper {
 
    Chat selectOneExist(Chat vo);
    List<Chat> selectByMemberId(Chat vo);
+   Chat selectByRoomIdAndMemberId(long chatRoomId, long memberId);
 }

@@ -26,4 +26,9 @@
         select chat_id, chat_room_id, member_id, chat_date, chat_leave_date, chat_status, chat_identity, product_id
         from chat where member_id = #{memberId} and chat_status = 0
     </select>
+
+    <select id="selectByRoomIdAndMemberId" resultType="llustmarket.artmarket.domain.chat.Chat" >
+        select chat_id, chat_room_id, member_id, product_id, chat_date, chat_leave_date, chat_status, chat_identity
+        from chat where member_id = #{memberId} and chat_room_id = #{chatRoomId}
+    </select>
 </mapper>

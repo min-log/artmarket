@@ -9,6 +9,7 @@ import java.util.List;
 @Mapper
 public interface ChatMessageMapper {
    void insertOne(ChatMessage vo);
+   int deleteChatMessage(long chatMessageId);
    ChatMessage selectOneByMessageId(long messageId);
    List<ChatMessage> selectByRoomId(long chatRoomId);
 

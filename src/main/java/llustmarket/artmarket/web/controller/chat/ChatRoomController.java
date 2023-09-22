@@ -60,9 +60,8 @@ public class ChatRoomController {
     @DeleteMapping(value = "/myfage")
     public void chatRoomDelete(@RequestBody ChatRoomRequestDTO roomRequestDTO){
         log.info("# 채팅룸 삭제");
-        chatService.removeStateChat(roomRequestDTO.getRemChatRoomId(),roomRequestDTO.getRemChatMember());
-
-
+        boolean b = chatService.removeStateChat(roomRequestDTO.getRemChatRoomId(), roomRequestDTO.getRemChatMember());
+        log.info("삭제 결과 : {}",b);
 
 
     }
