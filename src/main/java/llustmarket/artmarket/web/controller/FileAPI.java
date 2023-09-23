@@ -1,7 +1,6 @@
 package llustmarket.artmarket.web.controller;
 
 
-import llustmarket.artmarket.web.dto.chat.ChatRoomResponseDTO;
 import llustmarket.artmarket.web.dto.file.FileDTO;
 import llustmarket.artmarket.web.service.file.FileService;
 import lombok.RequiredArgsConstructor;
@@ -33,29 +32,30 @@ public class FileAPI {
     private String uploadPath;
 
     private final FileService fileService;
+
     @PostMapping("/register")
-    public void fileRegister(MultipartFile file){
+    public void fileRegister(MultipartFile file) {
         log.info("파일 저장");
         // 저는 파일 저장 부분
-        log.info("file : {}",file);
+        log.info("file : {}", file);
     }
 
 
     @GetMapping("/find/{filePath}/{fileTypeId}")
     public ResponseEntity<?> fileImgGet(@PathVariable(value = "filePath") String filePath,
-                                             @PathVariable(value = "fileTypeId") long fileTypeId) throws IOException, IOException {
+                                        @PathVariable(value = "fileTypeId") long fileTypeId) throws IOException, IOException {
         log.info("# 이미지 파일 불러오기");
         ResponseEntity<byte[]> result = null;
 
         FileDTO fileDTO = fileService.fileFindOne(filePath, fileTypeId);
-        if(fileDTO == null) {
+        if (fileDTO == null) {
             String errorMessage = "{\"errorMessage\": \"파일이 존재하지 않거나, 올바른 파일 경로가 아닙니다.\"}";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
         }
         String fileName = fileDTO.getFileName();
-        File file = new File(uploadPath + File.separator  + filePath + File.separator + fileName);
+        File file = new File(uploadPath + File.separator + filePath + File.separator + fileName);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type" , Files.probeContentType(file.toPath()));
+        headers.add("Content-Type", Files.probeContentType(file.toPath()));
         // 파일 데이터처리
         result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), headers, HttpStatus.OK);
         return result;
@@ -64,16 +64,16 @@ public class FileAPI {
 
     @GetMapping("/download/{fileUpName}")
     public ResponseEntity<?> fileDownload(@PathVariable("fileUpName") String fileUpName,
-                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+                                          HttpServletRequest request, HttpServletResponse response) throws Exception {
         log.info("# 클라이언트 파일 저장");
 
         FileDTO fileDTO = fileService.fileDownload(fileUpName);
-        if(fileDTO == null) {
+        if (fileDTO == null) {
             String errorMessage = "{\"errorMessage\": \"파일이 존재하지 않습니다.\"}";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
         }
 
-        File file = new File(uploadPath + File.separator  + fileDTO.getFilePath() + File.separator + fileUpName);
+        File file = new File(uploadPath + File.separator + fileDTO.getFilePath() + File.separator + fileUpName);
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
 
         //User-Agent : 어떤 운영체제로  어떤 브라우저를 서버( 홈페이지 )에 접근하는지 확인함
@@ -90,7 +90,7 @@ public class FileAPI {
         //형식을 모르는 파일첨부용 contentType
         response.setContentType("application/octet-stream");
         //다운로드와 다운로드될 파일이름
-        response.setHeader("Content-Disposition", "attachment; filename=\""+ fileName + "\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         //파일복사
         FileCopyUtils.copy(in, response.getOutputStream());
         in.close();
@@ -99,7 +99,6 @@ public class FileAPI {
         String result = "{\"successMessage\": \"파일 저장이 성공했습니다.\"}";
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-
 
 
 }

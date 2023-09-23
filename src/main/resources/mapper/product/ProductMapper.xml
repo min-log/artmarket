@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="llustmarket.artmarket.web.mapper.product.ProductMapper">
+    <insert id="insertProduct" useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO product (member_id, category, product_title, product_detail)
+        VALUES (#{memberId}, #{category}, #{productTitle}, #{productDetail})
+    </insert>
+    <update id="updateProduct">
+        UPDATE product
+        SET category = #{category},
+        product_title = #{productTitle},
+        product_detail = #{productDetail}
+        WHERE product_id = #{productId}
+    </update>
+    <select id="findProductByProductId" resultType="llustmarket.artmarket.domain.product.Product">
+        select * from product where product_id=#{productId}
+    </select>
+
+    <delete id="deleteProductById">
+        DELETE FROM product WHERE product_id = #{productId}
+    </delete>
     <select id="selectOneByProductId" resultType="llustmarket.artmarket.domain.product.Product" >
         select product_id, member_id, category, product_title, product_detail, product_date
         from product where product_id = #{productId}

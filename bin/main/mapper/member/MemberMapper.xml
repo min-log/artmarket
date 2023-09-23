@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="llustmarket.artmarket.web.mapper.member.MemberMapper">
+    <insert id="insertMember" useGeneratedKeys="true" keyProperty="memberId">
+        INSERT INTO Member (name, nickname, login_id, password, phone, email, identity)
+        VALUES (#{name}, #{nickname}, #{loginId}, #{password}, #{phone}, #{email}, #{identity})
+    </insert>
+
+    <update id="updateIdentity">
+        UPDATE Member
+        SET identity = #{identity}
+        WHERE member_id = #{memberId}
+    </update>
+
+    <select id="isLoginIdDuplicate" resultType="int">
+        SELECT COUNT(*) FROM Member WHERE login_id = #{loginId}
+    </select>
+
+    <select id="isNicknameDuplicate" resultType="int">
+        SELECT COUNT(*) FROM Member WHERE nickname = #{nickname}
+    </select>
+
+    <select id="isEmailDuplicate" resultType="int">
+        SELECT COUNT(*) FROM Member WHERE email = #{email}
+    </select>
+
+    <select id="isPhoneDuplicate" resultType="int">
+        SELECT COUNT(*) FROM Member WHERE phone = #{phone}
+    </select>
+    <select id="selectOneByMemberId" resultType="llustmarket.artmarket.domain.member.Member" >
+        select member_id, name, nickname, login_id, password, phone, email, account_bank, account, identity, member_intro, member_date, withdrawl
+        from member where member_id = #{memberId}
+    </select>
+</mapper>
