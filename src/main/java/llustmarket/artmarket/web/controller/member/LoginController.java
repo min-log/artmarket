@@ -69,6 +69,7 @@ public class LoginController {
                     Map<String, String> loginSuccess = new HashMap<>();
                     loginSuccess.put("loginTrueIdentity", member.getIdentity());
                     loginSuccess.put("loginTrueId", String.valueOf(member.getMemberId()));
+                    loginSuccess.put("loginTrueName", String.valueOf(member.getName()));
                     return ResponseEntity.status(HttpStatus.OK).body(loginSuccess);
                 } catch (Exception e) {
                     List<Map<String, String>> loginErrors = new ArrayList<>();
