@@ -13,7 +13,7 @@ public interface ChatMapper {
    int deleteChat(Chat vo);
 
    Chat selectOneExist(Chat vo);
-   List<Chat> selectByRoomId(long RoomId);
+   List<Chat> selectByRoomId(long chatRoomId);
    List<Chat> selectByMemberId(Chat vo);
    Chat selectByRoomIdAndMemberId(Chat vo);
 }

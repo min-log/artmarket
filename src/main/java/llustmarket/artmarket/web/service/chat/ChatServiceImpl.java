@@ -117,11 +117,13 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void chatListStatusChange(long roomId) {
+    public void updateChatListStatus(long roomId) {
         log.info("# 룸에 참여한 회원들 상태 변경 ");
-
-
-
+        // 룸에 참여한 회원 가져오기
+        List<Chat> chats = chatMapper.selectByRoomId(roomId);
+        chats.forEach(item->{
+            if(item.isChatStatus() == true) updateChatStatus(roomId,item.getMemberId(),false);
+        });
     }
 
 

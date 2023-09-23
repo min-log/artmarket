@@ -12,7 +12,7 @@ public interface ChatService {
     ChatRoomResponseDTO registerChat(long askMemberId, ChatRoomDTO roomDTO);
     void updateChatLastDate(long roomId, long memberId);
     int updateChatStatus(long roomId, long memberId,boolean status);
-    void chatListStatusChange(long roomId);
+    void updateChatListStatus(long roomId);
     ChatDTO searchOneExist(ChatDTO chatDTO);
     Boolean searchOneChatStatus(long roomId,long memberId);
     ChatRoomResponseDTO searchOneRoomId(long roomId);
