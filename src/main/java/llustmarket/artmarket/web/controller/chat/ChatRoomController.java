@@ -25,15 +25,13 @@ public class ChatRoomController {
     @GetMapping(value = "/myfage/{member_id}")
     public ResponseEntity<Object> roomList(@PathVariable(value = "member_id") long memberId) {
         log.info("# 마이페이지 채팅 내역 조회");
-        List<ChatDTO> list = chatService.searchChatAllByMemberId(memberId);
         try {
-            ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchUserList(memberId, list);
+            ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchChatRoomList(memberId);
             return ResponseEntity.status(HttpStatus.OK).body(chatRoomListResponseDTO);
         }catch (Exception e){
             e.printStackTrace();
-            // 에러 메시지를 JSON 형식으로 바디에 담아서 반환
-            String errorMessage = "{\"myfageErrorMsg\" :\"memberId is null, 일치하는 회원을 찾을 수 없습니다.\"}";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
+            // 일치하는 회원 없음
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(null);
         }
     }
 
@@ -48,8 +46,7 @@ public class ChatRoomController {
         ChatRoomDTO chatRoomDTO = chatRoomService.searchChatRoomId(clickChatId);
         if(clickMember != chatRoomDTO.getChatFromId() && clickMember != chatRoomDTO.getChatToId()){
             // 속하는 회원이 아닐 경우
-            String errorMessage = "{\"errorMessage\": \"참여할 수 없는 방입니다.\"}";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         ChatRoomResponseDTO chatRoomResponseDTO = chatService.searchOneRoomId(clickChatId);
         // 존재하는 채팅방 룸 정보와 대화 내역 전송
@@ -64,15 +61,12 @@ public class ChatRoomController {
         try{
             result = chatService.removeStateChat(roomRequestDTO.getRemChatRoomId(), roomRequestDTO.getRemChatMember());
             if(result == false){
-                String errorMessage = "{\"errorMessage\": \"상품 작업이 완료되지 않아 삭제가 불가능합니다.\"}";
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
-            String successMessage = "{\"successMessage\": \"삭제가 성공했습니다.\"}";
-            return ResponseEntity.status(HttpStatus.OK).body(successMessage);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         }catch (Exception e){
             e.printStackTrace();
-            String errorMessage = "{\"errorMessage\": \"룸아이디 또는 고객아이디가 올바른 값이 아닙니다.\"}";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 

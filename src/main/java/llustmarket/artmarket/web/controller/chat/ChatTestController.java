@@ -50,10 +50,7 @@ public class ChatTestController {
         log.info("member : {}",member);
         session.setAttribute("userName",member.getNickname());
         session.setAttribute("memberId",member.getMemberId());
-
-        List<ChatDTO> list = chatService.searchChatAllByMemberId(member.getMemberId());
-        ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchUserList(member.getMemberId(), list);
-
+        ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchChatRoomList(member.getMemberId());
         model.addAttribute("chatRoomDTO", chatRoomListResponseDTO);
 
         return "chat/rooms_author";

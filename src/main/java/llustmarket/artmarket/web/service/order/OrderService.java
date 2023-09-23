@@ -17,7 +17,7 @@ public class OrderService {
     private final OrderMapper orderMapper;
     public OrderDTO selectOne(long productId,long memberId){
         Order vo = Order.builder().productId(productId).memberId(memberId).build();
-        Order order = orderMapper.searchProductIdAndMemberId(vo);
+        Order order = orderMapper.searchOneDeadline(vo);
         log.info("order : {}",order);
         if(order == null) return null;
         return modelMapper.map(order,OrderDTO.class);

@@ -2,31 +2,25 @@ package llustmarket.artmarket.web.service.chat;
 
 
 import llustmarket.artmarket.domain.chat.Chat;
-import llustmarket.artmarket.domain.chat.MessageType;
-import llustmarket.artmarket.domain.file.FileType;
 import llustmarket.artmarket.web.dto.chat.ChatDTO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageResponseDTO;
 import llustmarket.artmarket.web.dto.chat.ChatRoomDTO;
 import llustmarket.artmarket.web.dto.chat.ChatRoomResponseDTO;
-import llustmarket.artmarket.web.dto.file.FileDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
 import llustmarket.artmarket.web.dto.order.OrderDTO;
 import llustmarket.artmarket.web.dto.product.ProductDTO;
 import llustmarket.artmarket.web.mapper.chat.ChatMapper;
-import llustmarket.artmarket.web.service.file.FileService;
 import llustmarket.artmarket.web.service.member.MemberService;
 import llustmarket.artmarket.web.service.order.OrderService;
 import llustmarket.artmarket.web.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -163,13 +157,6 @@ public class ChatServiceImpl implements ChatService {
         return chatRoomDTO;
     }
 
-    @Override
-    public List<ChatDTO> searchChatAllByMemberId(long memberId) {
-        log.info("# 사용자의 대화참여 리스트 찾기");
-        List<Chat> chats = chatMapper.selectByMemberId(Chat.builder().memberId(memberId).build());
-        List<ChatDTO> dtoList = chats.stream().map(item -> modelMapper.map(item, ChatDTO.class)).collect(Collectors.toList());
-        return dtoList;
-    }
 
 
 
@@ -190,13 +177,16 @@ public class ChatServiceImpl implements ChatService {
             // 1-2. 내가 주문한 내역이 아닐경우, 상대방이 주문한 내역 확인
             OrderDTO orderOtherDTO = orderService.selectOne(productId, otherMemberId);
             order = orderOtherDTO;
-        }else if(order != null){
+        }
+
+        if(order != null){
             //2. 주문한 내역이 존재, 마감기한과 현제 날짜 비교
             // 마감기간 보다 현제 날짜가 이후 이면 chat_status true로 변경 -> 리스트에서 숨김처리
             LocalDateTime deadline = order.getDeadline();
             // deadline 이 현제보다 과거일 경우 true
             boolean dateBefore = deadline.isBefore(LocalDateTime.now());
             if(dateBefore == false) { // 삭제 불가능
+                log.info("주문진행 중인 상품 존재 삭제 불가능");
                 return false;
             }
         }

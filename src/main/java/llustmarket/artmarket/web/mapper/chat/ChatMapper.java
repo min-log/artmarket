@@ -1,6 +1,7 @@
 package llustmarket.artmarket.web.mapper.chat;
 
 import llustmarket.artmarket.domain.chat.Chat;
+import llustmarket.artmarket.domain.chat.ChatRoomList;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,6 +15,5 @@ public interface ChatMapper {
 
    Chat selectOneExist(Chat vo);
    List<Chat> selectByRoomId(long chatRoomId);
-   List<Chat> selectByMemberId(Chat vo);
    Chat selectByRoomIdAndMemberId(Chat vo);
 }
