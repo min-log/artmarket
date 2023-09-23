@@ -18,8 +18,4 @@ public class FileDTO {
     private String fileName; // 변경된 이름
     private LocalDateTime fileDate; // 생성일
 
-
-
-
-
 }

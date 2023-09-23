@@ -13,10 +13,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -96,7 +94,7 @@ public class LoginController {
         }
     }
 
-    @PostMapping("/logout")
+/*    @PostMapping("/logout")
     public ResponseEntity<Object> logout(HttpSession session, HttpServletRequest request,
                                          HttpServletResponse response) {
         try {
@@ -137,5 +135,5 @@ public class LoginController {
             logoutErrors.add(errorMap);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(logoutErrors);
         }
-    }
+    }*/
 }

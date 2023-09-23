@@ -22,5 +22,15 @@ public interface MemberMapper {
     int isEmailDuplicate(String email);
 
     int isPhoneDuplicate(String phone);
+
+    Member selectMemberByLoginId(String loginId);
+
+    Member selectMemberByPhone(String phone);
+
+    Member selectMemberByMemberId(Long memberId);
+
+    //특정 회원의 세션아이디와 쿠키 유효기간을 저장
+    void autoLogin(Map<String, Object> map);
+
     Member selectOneByMemberId(long memberId);
 }

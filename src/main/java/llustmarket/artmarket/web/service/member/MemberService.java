@@ -3,25 +3,22 @@ package llustmarket.artmarket.web.service.member;
 import llustmarket.artmarket.domain.member.Member;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
 import llustmarket.artmarket.web.mapper.member.MemberMapper;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Log4j2
-@RequiredArgsConstructor
 @Service
 public class MemberService {
-
+    
     private final MemberMapper memberMapper;
     private final ModelMapper modelMapper;
 
-    public void insertArtistMember(Member member) {
-        // identity가 비어있을 경우 기본값인 "artist"로 설정
-        if (member.getIdentity() == null || member.getIdentity().isEmpty()) {
-            member.setIdentity("artist");
-        }
+    public MemberService(MemberMapper memberMapper, ModelMapper modelMapper) {
+        this.memberMapper = memberMapper;
+        this.modelMapper = modelMapper;
+    }
+
+    @Transactional
+    public void insertMember(Member member) {
         memberMapper.insertMember(member);
     }
 
@@ -64,7 +61,32 @@ public class MemberService {
         return memberMapper.isPhoneDuplicate(phone) > 0;
     }
 
-    public MemberDTO selectOne(long memberId){
+    public Member getMemberByLoginId(String loginId) {
+        return memberMapper.selectMemberByLoginId(loginId);
+    }
+
+    public Member getMemberByMemberId(Long memberId) {
+        return memberMapper.selectMemberByMemberId(memberId);
+    }
+
+    public Member getMemberByPhone(String phone) {
+        return memberMapper.selectMemberByPhone(phone);
+    }
+
+    @Transactional
+    public void autoLogin(String sessionId, Date limitDate, String loginId) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("sessionId", sessionId);
+        map.put("limitDate", limitDate);
+        map.put("loginId", loginId);
+        System.out.print(map);
+
+        memberMapper.autoLogin(map);
+
+    }
+
+    public MemberDTO selectOne(long memberId) {
         Member member = memberMapper.selectOneByMemberId(memberId);
         return modelMapper.map(member, MemberDTO.class);
     }
