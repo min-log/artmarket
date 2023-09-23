@@ -1,12 +1,13 @@
 package llustmarket.artmarket.web.dto.board;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class BoardSearchDTO {
 
     private String categoryKeyword;

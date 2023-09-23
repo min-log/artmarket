@@ -1,13 +1,14 @@
 package llustmarket.artmarket.web.dto.board;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class BoardDTO {
 
     private Long productId;
