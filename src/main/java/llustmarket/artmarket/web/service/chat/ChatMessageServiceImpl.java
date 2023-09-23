@@ -15,6 +15,7 @@ import llustmarket.artmarket.web.service.file.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,6 +94,29 @@ public class ChatMessageServiceImpl implements ChatMessageService {
             return chatMessageResponseDTO;
         }).collect(Collectors.toList());
         return chatMessageDTOS;
+    }
+
+
+
+
+
+    @Transactional
+    @Override
+    public void deleteMessageList(long chatRoomId) {
+        log.info("# 채팅방 모든 메시지 내역 삭제");
+        List<ChatMessage> chatMessages = chatMessageMapper.selectByRoomId(chatRoomId);
+        chatMessages.forEach(item -> {
+            // 메시지 삭제
+            String chatType = item.getChatMessageType();
+            if(chatType.equals(String.valueOf(MessageType.FILE))){
+                // 메시지 타입이 file 일경우 파일 삭제
+                String filePath = String.valueOf(FileType.CHAT);
+                FileDTO fileDTO = fileService.fileFindOne(filePath, item.getChatMessageId());
+                ResponseEntity<Boolean> booleanResponseEntity = fileService.fileRemove(filePath,fileDTO.getFileName());
+                fileMapper.deleteFile(FileVO.builder().filePath(filePath).fileTypeId(item.getChatMessageId()).build());
+            }
+            chatMessageMapper.deleteChatMessage(item.getChatMessageId());
+        });
     }
 
 

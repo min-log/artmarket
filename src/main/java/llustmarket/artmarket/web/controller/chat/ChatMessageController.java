@@ -61,9 +61,9 @@ public class ChatMessageController {
 
         // 3. 룸 정보 변경 (존재하는 방이 있을 시 마지막 메시지, 메시지 전송 시간 변경)
         if(chatMessageResponseDTO != null) chatRoomService.updateChatRoom(message.getSendChatRoomId(), chatMessageResponseDTO.getChatMsg(), chatMessageResponseDTO.getChatDate());
-
-
-        // 4. 대화내용 채팅방 내 사용자에게 전달
+        // 4. 채팅방 숨김 처리 된 내역일 때 숨김 처리 제거
+        chatService.updateChatListStatus(message.getSendChatRoomId());
+        // 5. 대화내용 채팅방 내 사용자에게 전달
         sendingOperations.convertAndSend("/sub/chat-room/get/" + message.getSendChatRoomId(), chatMessageResponseDTO);
     }
 

@@ -8,4 +8,5 @@ public interface FileMapper {
     void insertOne(FileVO vo);
     FileVO selectOnePathAndId(FileVO vo);
     FileVO selectOnefileName(String fileName);
+    int deleteFile(FileVO vo);
 }

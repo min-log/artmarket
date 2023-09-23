@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -34,6 +33,7 @@ public class ChatServiceImpl implements ChatService {
     private final MemberService memberService;
     private final ProductService productService;
     private final OrderService orderService;
+
 
     @Transactional
     @Override
@@ -60,13 +60,10 @@ public class ChatServiceImpl implements ChatService {
         ChatDTO dtoValue = searchOneExist(chatDTO);
         if(dtoValue == null){// 3. 내역이 존재 하지 않을 시
             log.info("내역 존재 x");
-
             // 작가 정보
             ProductDTO productDTO = productService.selectOne(roomDTO.getProductId());
             MemberDTO authorMember = memberService.selectOne(productDTO.getMemberId());
             roomDTO.setChatFromId(authorMember.getMemberId()); // 받는사람
-
-
             // 1. 룸생성 - DB
             // 방이름 (상대방 닉네임) 전달 -- 작가 아이디를 통해 가져오기
             ChatRoomDTO chatRoom = chatRoomService.registerChatRoom(roomDTO);
@@ -97,6 +94,7 @@ public class ChatServiceImpl implements ChatService {
         //chat_from_id
         ChatRoomDTO chatRoom = chatRoomService.searchChatRoomId(dtoValue.getChatRoomId());
         ChatRoomResponseDTO chatRoomResponseDTO = searchOneRoomId(chatRoom.getChatRoomId());
+
         return chatRoomResponseDTO;
     }
 
@@ -107,9 +105,19 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public int updateChatStatus(long roomId, long memberId) {
-        int i = chatMapper.updateChatStatus(Chat.builder().chatRoomId(roomId).memberId(memberId).chatStatus(true).build());
+    public int updateChatStatus(long roomId, long memberId,boolean status) {
+        int i = chatMapper.updateChatStatus(Chat.builder().chatRoomId(roomId).memberId(memberId).chatStatus(status).build());
         return i;
+    }
+
+    @Override
+    public void updateChatListStatus(long roomId) {
+        log.info("# 룸에 참여한 회원들 상태 변경 ");
+        // 룸에 참여한 회원 가져오기
+        List<Chat> chats = chatMapper.selectByRoomId(roomId);
+        chats.forEach(item->{
+            if(item.isChatStatus() == true) updateChatStatus(roomId,item.getMemberId(),false);
+        });
     }
 
 
@@ -125,6 +133,13 @@ public class ChatServiceImpl implements ChatService {
         }
         return modelMapper.map(vo, ChatDTO.class);
     }
+
+    public Boolean searchOneChatStatus(long roomId,long memberId) {
+        log.info("# 상태값 가져오기");
+        Chat chat = chatMapper.selectByRoomIdAndMemberId(Chat.builder().chatRoomId(roomId).memberId(memberId).build());
+        return chat.isChatStatus();
+    }
+
 
     @Override
     public ChatRoomResponseDTO searchOneRoomId(long roomId) {
@@ -142,78 +157,74 @@ public class ChatServiceImpl implements ChatService {
         return chatRoomDTO;
     }
 
-    @Override
-    public List<ChatDTO> searchChatAllByMemberId(long memberId) {
-        log.info("# 사용자의 대화참여 리스트 찾기");
-        List<Chat> chats = chatMapper.selectByMemberId(Chat.builder().memberId(memberId).build());
-        List<ChatDTO> dtoList = chats.stream().map(item -> modelMapper.map(item, ChatDTO.class)).collect(Collectors.toList());
-        return dtoList;
-    }
 
+
+
+
+    @Transactional
     @Override
     public boolean removeStateChat(long roomId, long memberId) {
         log.info("# 사용자 대화참여 상태값 변경");
         // 주문내역의 마감기간과 현제 날짜 비교하여 마감 후 일시 내 목록에서 숨김처리 가능
-
         // 1. 주문내역 확인
         ChatRoomDTO chatRoomDTO = chatRoomService.searchChatRoomId(roomId);
         long productId = chatRoomDTO.getProductId(); // 상품id
         // 1-1. 내가 주문한 내역이 있는지 확인
-        OrderDTO order;
-        OrderDTO orderDTO = orderService.selectOne(productId, memberId);
-
-        long otherMember = chatRoomDTO.getChatToId(); // 상대방ID
-        if(memberId == chatRoomDTO.getChatToId()) otherMember = chatRoomDTO.getChatFromId();
-
-        if(orderDTO == null){
+        OrderDTO order = orderService.selectOne(productId, memberId);
+        long otherMemberId = chatRoomDTO.getChatToId(); // 상대방ID
+        if(memberId == chatRoomDTO.getChatToId()) otherMemberId = chatRoomDTO.getChatFromId();
+        if(order == null){
             // 1-2. 내가 주문한 내역이 아닐경우, 상대방이 주문한 내역 확인
-            OrderDTO orderOtherDTO = orderService.selectOne(productId, otherMember);
+            OrderDTO orderOtherDTO = orderService.selectOne(productId, otherMemberId);
             order = orderOtherDTO;
         }
-        order = orderDTO;
 
-        if(order == null){
-            //1-3. 모두 주문한 내역이 아직 없을 경우 (문의만 한상태) -> 내역 바로 제거 가능
-
+        if(order != null){
+            //2. 주문한 내역이 존재, 마감기한과 현제 날짜 비교
+            // 마감기간 보다 현제 날짜가 이후 이면 chat_status true로 변경 -> 리스트에서 숨김처리
+            LocalDateTime deadline = order.getDeadline();
+            // deadline 이 현제보다 과거일 경우 true
+            boolean dateBefore = deadline.isBefore(LocalDateTime.now());
+            if(dateBefore == false) { // 삭제 불가능
+                log.info("주문진행 중인 상품 존재 삭제 불가능");
+                return false;
+            }
         }
 
-        //2. 주문한 내역이 존재, 마감기한과 현제 날짜 비교
-        // 마감기간 보다 현제 날짜가 이후 이면 chat_status true로 변경 -> 리스트에서 숨김처리
-        LocalDateTime deadline = order.getDeadline();
-        // deadline 이 현제보다 과거일 경우 true
-        boolean dateBefore = deadline.isBefore(LocalDateTime.now());
-        if(dateBefore == false) return false; // 삭제 불가능
         // 2-1. 나의 목록 상태 변경
-        int st = updateChatStatus(roomId, memberId);
-        log.info(" st: {}",st);
+        int st = updateChatStatus(roomId, memberId,true);
         // 3. 해당 룸에 포함되는 사람들의 chat 상태 비교 모두다 true 일경우 실제 삭제 작업
         //3-1. 상대방의 상태 값 가져오기
-        ChatDTO otherChatDTO = searchOneExist(ChatDTO.builder().productId(productId).memberId(otherMember).build());
-        boolean chatStatus = otherChatDTO.isChatStatus();
-        log.info("chatStatus:{}",chatStatus);
-
-        if(st == 1 && chatStatus == true){
+        Boolean memberStatus = searchOneChatStatus(roomId, otherMemberId);
+        if(st == 1 && memberStatus == true){
             // 모두다 삭제 일 경우 실제 삭제 로직
-            ChatDTO chatDTO = searchOneExist(ChatDTO.builder().productId(productId).memberId(memberId).build());
-            boolean result = removeChat(roomId, chatDTO.getChatId(), otherChatDTO.getChatId());
+            boolean result = removeChat(roomId, memberId, otherMemberId);
             return result;
         }
         return true;
     }
 
+
+    @Transactional
     @Override
-    public boolean removeChat(long roomId, long chatId, long otherChatId) {
+    public boolean removeChat(long roomId, long memberId, long otherMemberId) {
         log.info("# 실제 채팅 참여내역 삭제 로직");
         int result = 0;
-        int deleteChat = chatMapper.deleteChat(chatId);
-        int deleteChatOther = chatMapper.deleteChat(otherChatId);
+        //1. 메시지 내역 삭제
+        //1-1. 룸에 해당하는 메시지 내역 모두 가져와서 삭제
+        messageService.deleteMessageList(roomId);
+        //2. 채팅 참여 내역 삭제
+        int deleteChat = chatMapper.deleteChat(Chat.builder().chatRoomId(roomId).memberId(memberId).build());
+        int deleteChatOther = chatMapper.deleteChat(Chat.builder().chatRoomId(roomId).memberId(otherMemberId).build());
+        //3. 채팅 룸 삭제
         if(deleteChat == 1 && deleteChatOther == 1){
             result = chatRoomService.deleteChat(roomId);
         }
-
         if(result == 1) return true;
         return false;
     }
+
+
 
 
 }

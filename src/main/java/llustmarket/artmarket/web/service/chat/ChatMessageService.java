@@ -17,6 +17,7 @@ public interface ChatMessageService {
     ChatMessageResponseDTO searchChatMessageOne(long chatMessageId);
     List<ChatMessageResponseDTO> searchChatMessageList(long chatRoomId);
 
+    void deleteMessageList(long chatRoomId);
 
 
     default ChatMessage messageDTOToVO(ChatMessageRequestDTO dto){
@@ -39,9 +40,5 @@ public interface ChatMessageService {
                 .build();
         return result;
     }
-
-
-
-
 
 }

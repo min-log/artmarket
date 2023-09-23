@@ -38,8 +38,7 @@ public class ChatProductController {
             return ResponseEntity.status(HttpStatus.OK).body(result);
         }catch (Exception e){
             e.printStackTrace();
-            String errorMessage = "{\"errorMessage\": \"상품번호 또는 회원번호가 올바르지 않습니다.\"}";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorMessage);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(null);
         }
 
     }
