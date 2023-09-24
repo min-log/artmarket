@@ -1,18 +1,26 @@
 package llustmarket.artmarket.web.controller.product;
 
+import llustmarket.artmarket.domain.file.FileType;
+import llustmarket.artmarket.domain.file.FileVO;
 import llustmarket.artmarket.domain.product.Product;
+import llustmarket.artmarket.web.dto.file.FileDTO;
+import llustmarket.artmarket.web.dto.product.ProductDTO;
 import llustmarket.artmarket.web.dto.product.ProductRegisterDTO;
 import llustmarket.artmarket.web.dto.product.ProductUpdateDTO;
+import llustmarket.artmarket.web.mapper.file.FileMapper;
+import llustmarket.artmarket.web.service.file.FileService;
 import llustmarket.artmarket.web.service.product.ProductService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,12 +28,14 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class ProductController {
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
+    private final FileService fileService;
+    private final FileMapper fileMapper;
 
     @PostMapping("/mypage-articles-in")
-    public ResponseEntity<?> productRegisterProcess(@RequestBody @Valid ProductRegisterDTO productRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> productRegisterProcess(@ModelAttribute @Valid ProductRegisterDTO productRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<Map<String, String>> productRegisterErrors = new ArrayList<>();
 
@@ -42,15 +52,42 @@ public class ProductController {
         }
         if (productRequest.getId() != null && productRequest.getCategory() != null && productRequest.getArticleTitle() != null && productRequest.getArticleDetail() != null) {
             try {
-                Product product = new Product(
-                        productRequest.getId(),
-                        productRequest.getCategory(),
-                        productRequest.getArticleTitle(),
-                        productRequest.getArticleDetail()
-                );
-                productService.registerProduct(product);
-                return ResponseEntity.status(HttpStatus.CREATED).build();
+                // 상품 파일 저장
+                List<MultipartFile> articleFiles = productRequest.getArticleFile();
+                if (articleFiles != null && !articleFiles.isEmpty() && articleFiles.size() <= 5) {
+                    Product product = new Product(
+                            productRequest.getId(),
+                            productRequest.getCategory(),
+                            productRequest.getArticleTitle(),
+                            productRequest.getArticleDetail()
+                    );
+                    productService.registerProduct(product);
+                    for (MultipartFile articleFile : articleFiles) {
+                        // 파일 확장자 확인
+                        String extension = fileService.getExtension(articleFile);
+                        if (extension == null || !(extension.equals("jpg") || extension.equals("png") || extension.equals("jpeg") || extension.equals("gif"))) {
+                            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("허용된 확장자는 jpg, png, jpeg, gif 입니다.");
+                        }
+                        // 파일을 저장하고 데이터베이스에 등록
+                        FileDTO uploadedFile = fileService.fileRegister(FileType.PRODUCT, articleFile);
+                        // FileVO를 생성하여 데이터베이스에 저장
+                        ProductDTO lastProduct = productService.selectLastByMemberId(productRequest.getId());
+                        FileVO fileVO = FileVO.builder()
+                                .filePath(uploadedFile.getFilePath())
+                                .fileTypeId(lastProduct.getProductId())
+                                .fileOriginName(uploadedFile.getFileOriginName())
+                                .fileName(uploadedFile.getFileName())
+                                .fileDate(LocalDateTime.now())
+                                .build();
 
+                        fileMapper.insertOne(fileVO);
+                    }
+
+
+                    return ResponseEntity.status(HttpStatus.CREATED).build();
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미지는 최소 1개, 최대 5개까지 허용됩니다.");
+                }
             } catch (Exception e) {
                 List<Map<String, String>> productRegisterErrors = new ArrayList<>();
                 String fieldName = String.valueOf(e.getCause());
@@ -74,7 +111,7 @@ public class ProductController {
     }
 
     @PatchMapping("/mypage-articles-in")
-    public ResponseEntity<?> productUpdateProcess(@RequestBody @Valid ProductUpdateDTO productRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> productUpdateProcess(@ModelAttribute @Valid ProductUpdateDTO productRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<Map<String, String>> productUpdateErrors = new ArrayList<>();
 
@@ -90,16 +127,52 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(productUpdateErrors);
         }
         if (productRequest.getArticleModProductId() != null && productRequest.getArticleModCategory() != null &&
-                productRequest.getArticleModTitle() != null && productRequest.getArticleModDetail() != null) {
+                productRequest.getArticleModTitle() != null && productRequest.getArticleModDetail() != null && productRequest.getArticleModImgs() != null) {
             try {
                 Product product = productService.findProductByProductId(productRequest.getArticleModProductId());
                 if (product != null) {
+                    //상품 수정
                     productService.modifyProduct(
                             productRequest.getArticleModProductId(),
                             productRequest.getArticleModCategory(),
                             productRequest.getArticleModTitle(),
                             productRequest.getArticleModDetail()
                     );
+                    //기존 파일 삭제
+                    List<FileVO> filesToDelete = fileMapper.getFilesByTypeAndId("PRODUCT", productRequest.getArticleModProductId());
+                    for (FileVO fileToDelete : filesToDelete) {
+                        fileService.fileRemove(fileToDelete.getFilePath(), fileToDelete.getFileName());
+                    }
+                    FileVO fileToDelete = FileVO.builder()
+                            .filePath("PRODUCT")
+                            .fileTypeId(productRequest.getArticleModProductId())
+                            .build();
+                    fileMapper.deleteFile(fileToDelete);
+                    //파일 새로 추가
+                    List<MultipartFile> articleModFiles = productRequest.getArticleModImgs();
+                    if (articleModFiles != null && !articleModFiles.isEmpty() && articleModFiles.size() <= 5) {
+                        for (MultipartFile articleModFile : articleModFiles) {
+                            // 파일 확장자 확인
+                            String extension = fileService.getExtension(articleModFile);
+                            if (extension == null || !(extension.equals("jpg") || extension.equals("png") || extension.equals("jpeg") || extension.equals("gif"))) {
+                                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("허용된 확장자는 jpg, png, jpeg, gif 입니다.");
+                            }
+                            // 파일을 저장하고 데이터베이스에 등록
+                            FileDTO uploadedFile = fileService.fileRegister(FileType.PRODUCT, articleModFile);
+                            // FileVO를 생성하여 데이터베이스에 저장
+                            FileVO fileVO = FileVO.builder()
+                                    .filePath(uploadedFile.getFilePath())
+                                    .fileTypeId(productRequest.getArticleModProductId())
+                                    .fileOriginName(uploadedFile.getFileOriginName())
+                                    .fileName(uploadedFile.getFileName())
+                                    .fileDate(LocalDateTime.now())
+                                    .build();
+
+                            fileMapper.insertOne(fileVO);
+                        }
+                    } else {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미지는 최소 1개, 최대 5개까지 허용됩니다.");
+                    }
                     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
                 } else {
                     List<Map<String, String>> productModErrors = new ArrayList<>();
@@ -137,6 +210,11 @@ public class ProductController {
     public ResponseEntity<?> deleteProductById(@PathVariable("product_id") Long productId) {
         try {
             if (productService.findProductByProductId(productId) != null) {
+                List<FileVO> filesToDelete = fileMapper.getFilesByTypeAndId("PRODUCT", productId);
+                for (FileVO fileToDelte : filesToDelete) {
+                    fileService.fileRemove("PRODUCT", fileToDelte.getFileName());
+                    fileMapper.deleteFile(fileToDelte);
+                }
                 productService.deleteProductById(productId);
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             } else {
