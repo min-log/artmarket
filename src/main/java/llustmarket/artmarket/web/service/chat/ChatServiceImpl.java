@@ -105,18 +105,23 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public int updateChatStatus(long roomId, long memberId,boolean status) {
-        int i = chatMapper.updateChatStatus(Chat.builder().chatRoomId(roomId).memberId(memberId).chatStatus(status).build());
+    public int updateChatStatus(long roomId, long memberId,boolean status,LocalDateTime leaveDate) {
+        log.info("# 상태 변경 및 시간 변경");
+        int i = chatMapper.updateChatStatus(Chat.builder().chatRoomId(roomId).memberId(memberId).chatStatus(status).chatLeaveDate(leaveDate).build());
         return i;
     }
 
     @Override
-    public void updateChatListStatus(long roomId) {
-        log.info("# 룸에 참여한 회원들 상태 변경 ");
+    public void updateChatListStatus(long roomId,long memberId) {
+        log.info("# 룸에 참여한 회원들 상태 변경 및 알림 전송");
         // 룸에 참여한 회원 가져오기
         List<Chat> chats = chatMapper.selectByRoomId(roomId);
         chats.forEach(item->{
-            if(item.isChatStatus() == true) updateChatStatus(roomId,item.getMemberId(),false);
+            if(item.getMemberId() != memberId) {
+                if(item.isChatStatus() == true) updateChatStatus(roomId,item.getMemberId(),false,item.getChatLeaveDate());
+            }else{
+                if(item.isChatStatus() == true) updateChatStatus(roomId,item.getMemberId(),false,LocalDateTime.now());
+            }
         });
     }
 
@@ -192,7 +197,7 @@ public class ChatServiceImpl implements ChatService {
         }
 
         // 2-1. 나의 목록 상태 변경
-        int st = updateChatStatus(roomId, memberId,true);
+        int st = updateChatStatus(roomId, memberId,true,LocalDateTime.now());
         // 3. 해당 룸에 포함되는 사람들의 chat 상태 비교 모두다 true 일경우 실제 삭제 작업
         //3-1. 상대방의 상태 값 가져오기
         Boolean memberStatus = searchOneChatStatus(roomId, otherMemberId);

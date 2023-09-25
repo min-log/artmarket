@@ -15,7 +15,5 @@ public class WebSocketDisconnectHandler {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = accessor.getSessionId();
         log.info("연결 해재 ");
-
-        // 연결이 해제된 세션에 대한 추가 로직을 여기에 작성합니다.
     }
 }

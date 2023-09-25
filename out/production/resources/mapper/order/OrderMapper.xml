@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="llustmarket.artmarket.web.mapper.order.OrderMapper">
+    <select id="searchOneDeadline" resultType="llustmarket.artmarket.domain.order.Order"  >
+        select order_id, product_id, member_id, product_name, order_date, total_amount, quantity, deadline, order_status from
+            `order` where product_id = #{productId} and member_id = #{memberId}
+            order by deadline desc
+            LIMIT 1
+    </select>
+</mapper>

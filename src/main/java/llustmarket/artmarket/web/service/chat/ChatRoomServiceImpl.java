@@ -71,13 +71,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         // 1. 전달될 룸 리스트
         List<ChatRoomListDTO> roomListDTO = new ArrayList<>();
         chatRoomLists.forEach(item->{
-            log.info("item : {}",item);
             // 1-3. ChatRoom 정보 가져오기
             //  1-4. 전달될 객체
             ChatRoomListDTO chatRoomDTO = ChatRoomListDTO.builder()
                     .chatRoomId(item.getChatRoomId())
                     .chatMsg(item.getChatRoomMsg())
-                    .chatDate(item.getChatLeaveDate())
+                    .chatDate(item.getChatRoomLastDate())
                     .build();
 
             //  1-5. 전달될 객체에 상대방의 회원정보 추가

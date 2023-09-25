@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="llustmarket.artmarket.web.mapper.alert.AlertMapper">
+    <insert id="insertOne" parameterType="llustmarket.artmarket.domain.alert.Alert">
+        insert into alerts(member_id, alert_writer, alert_identity, alert_type, alert_path)
+        values(#{memberId},#{alertWriter},#{alertIdentity},#{alertType},#{alertPath})
+    </insert>
+    <select id="selectOne" resultType="llustmarket.artmarket.domain.alert.Alert" >
+        select *
+        from alerts where member_id = #{memberId}
+    </select>
+</mapper>
