@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface ProductMapper {
-    void insertProduct(Product product);
+    Long insertProduct(Product product);
 
     void updateProduct(
             @Param("productId") Long productId,
@@ -20,4 +20,6 @@ public interface ProductMapper {
     void deleteProductById(Long productId);
 
     Product selectOneByProductId(long productId);
+
+    Product selectLastByMemberId(Long memberId);
 }

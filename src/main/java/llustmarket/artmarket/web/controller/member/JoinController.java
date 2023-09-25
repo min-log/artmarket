@@ -82,7 +82,7 @@ public class JoinController {
 
             emailService.sendTokenByEmail(confirmEmail.getConfirmEmail(), token, new Date(expirationTime));
 
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             String errorMessage = "이메일 전송이 이미 진행 중입니다. 잠시 후 다시 시도하세요.";
 

@@ -40,4 +40,9 @@ public class ProductService {
         Product product = productMapper.selectOneByProductId(productId);
         return mapper.map(product, ProductDTO.class);
     }
+
+    public ProductDTO selectLastByMemberId(Long memberId) {
+        Product product = productMapper.selectLastByMemberId(memberId);
+        return mapper.map(product, ProductDTO.class);
+    }
 }
