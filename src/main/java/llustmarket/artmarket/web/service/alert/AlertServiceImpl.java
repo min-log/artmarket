@@ -30,28 +30,34 @@ public class AlertServiceImpl implements AlertService{
     @Transactional
     @Override
     public void registerAlert(long memberId,long alertPath, AlertType alertType) {
-        //상대 회원 구하기
-        MemberDTO memberDTO = null;
+
+        //현제 회원 정보
+        MemberDTO member = null;
+        // 상대 회원 Id
+        long authorMemberId = 0;
+
         switch (String.valueOf(alertType)){
             case "MESSAGE" : {
-                // 메시지
-                log.info("메시지");
+                    // 현제 회원 구하기
+                // 상대 회원 아이디값만 구하기
+                member = memberService.selectOne(memberId);
+                // 상대 회원 아이디
                 ChatRoomDTO chatRoomDTO = chatRoomService.searchChatRoomId(alertPath);
-                long authorMember = chatRoomDTO.getChatFromId();
-                if(memberId == authorMember) authorMember = chatRoomDTO.getChatToId();
-                memberDTO =memberService.selectOne(authorMember);
+                authorMemberId = chatRoomDTO.getChatFromId();
+                if(memberId == authorMemberId) authorMemberId = chatRoomDTO.getChatToId();
             }
             default  : {
                 // 주문상품
 
             }
-
         }
 
         Alert alert = Alert.builder()
-                .memberId(memberDTO.getMemberId())
-                .alertWriter(memberDTO.getNickname())
-                .alertIdentity(memberDTO.getIdentity())
+                //상대방 회원 정보
+                .memberId(authorMemberId)
+                //나의 정보
+                .alertWriter(member.getNickname())
+                .alertIdentity(member.getIdentity())
                 .alertType(String.valueOf(alertType))
                 .alertPath(alertPath)
                 .build();
@@ -63,9 +69,8 @@ public class AlertServiceImpl implements AlertService{
         log.info("# 회원의 알림 리스트");
         List<Alert> alerts = alertMapper.selectOne(memberId);
         List<AlramDTO> alramList = alerts.stream().map(item -> {
-            MemberDTO memberDTO = memberService.selectOne(item.getMemberId());
             return AlramDTO.builder()
-                    .alramSender(memberDTO.getNickname())
+                    .alramSender(item.getAlertWriter())
                     .alramType(item.getAlertType())
                     .alertDate(item.getAlertDate()).build();
         }).collect(Collectors.toList());

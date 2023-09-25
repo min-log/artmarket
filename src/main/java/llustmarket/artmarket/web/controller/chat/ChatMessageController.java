@@ -108,7 +108,6 @@ public class ChatMessageController {
             log.info("# 알림 전송");
             alertService.registerAlert(sendChatSender,message.getSendChatRoomId(), AlertType.MESSAGE);
         }
-
     }
 
 }
