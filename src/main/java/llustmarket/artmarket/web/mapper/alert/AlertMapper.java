@@ -9,4 +9,9 @@ import java.util.List;
 public interface AlertMapper {
     void insertOne(Alert vo);
     List<Alert> selectOne(long memberId);
+    Alert selectOnePathId(Alert vo);
+    void updateStatus(long memberId);
+    void updateDate (Alert vo);
+    int selectTotalNumber(long alramTotalID);
+
 }

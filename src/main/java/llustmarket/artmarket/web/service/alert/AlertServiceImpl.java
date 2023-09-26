@@ -12,9 +12,11 @@ import llustmarket.artmarket.web.service.chat.ChatRoomService;
 import llustmarket.artmarket.web.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class AlertServiceImpl implements AlertService{
+
+    private final ModelMapper modelMapper;
 
     private final MemberService memberService;
     private final ChatRoomService chatRoomService;
@@ -65,6 +69,19 @@ public class AlertServiceImpl implements AlertService{
     }
 
     @Override
+    public void updateStatus(long memberId) {
+        alertMapper.updateStatus(memberId);
+    }
+
+    @Override
+    public void updateDate(AlertDTO dto) {
+        log.info("# 알림 시간 업데이트");
+        dto.setAlertDate(LocalDateTime.now());
+        alertMapper.updateDate(modelMapper.map(dto,Alert.class));
+    }
+
+
+    @Override
     public Alrams searchOneAlert(long memberId) {
         log.info("# 회원의 알림 리스트");
         List<Alert> alerts = alertMapper.selectOne(memberId);
@@ -75,5 +92,25 @@ public class AlertServiceImpl implements AlertService{
                     .alertDate(item.getAlertDate()).build();
         }).collect(Collectors.toList());
         return Alrams.builder().alrams(alramList).build();
+    }
+
+    @Override
+    public AlertDTO searchOnePath(long pathId,AlertType alertType) {
+        log.info("동일한 메시지 찾아서 가져오기");
+        Alert vo = Alert.builder().alertPath(pathId).alertType(String.valueOf(alertType)).build();
+        try {
+            Alert alerts = alertMapper.selectOnePathId(vo);
+            return modelMapper.map(alerts,AlertDTO.class);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public int searchOneAlertNumber(long alramTotalID) {
+        int number = alertMapper.selectTotalNumber(alramTotalID);
+        log.info("selectTotalNumber : {}", number);
+        return number;
     }
 }

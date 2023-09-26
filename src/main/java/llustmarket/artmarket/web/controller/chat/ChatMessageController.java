@@ -4,6 +4,7 @@ package llustmarket.artmarket.web.controller.chat;
 
 import llustmarket.artmarket.domain.alert.AlertType;
 import llustmarket.artmarket.domain.chat.MessageType;
+import llustmarket.artmarket.web.dto.alert.AlertDTO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageRequestDTO;
 import llustmarket.artmarket.web.dto.chat.ChatMessageResponseDTO;
 import llustmarket.artmarket.web.dto.chat.ChatSessionDTO;
@@ -50,7 +51,7 @@ public class ChatMessageController {
         // StompHeaderAccessor를 사용하여 WebSocket 세션에서 사용자 정보 가져오기
         Map<String, Object> sessionAttributes = messageHeaderAccessor.getSessionAttributes();
         List<ChatSessionDTO> sessionList = (List<ChatSessionDTO>)sessionAttributes.get("chatSessionList");
-        log.info("sessionList 모든 사용자 수 : {}", sessionList.size());
+        // log.info("sessionList 모든 사용자 수 : {}", sessionList.size());
         if(sessionList.size() != 0){
             for (ChatSessionDTO session : sessionList) {
                 // log.info("같은방 다른 사용자가 존재할 시 ");
@@ -58,8 +59,15 @@ public class ChatMessageController {
             }
             if(memberOther == false){
                 log.info("# 알림");
-                // 같은 방의 다른 회원 없음 알림 전달
-                alertService.registerAlert(message.getSendChatSender(),message.getSendChatRoomId(), AlertType.MESSAGE);
+               //  기존 알림이 있을 시 시간만 업데이트
+                AlertDTO alertDTO = alertService.searchOnePath(message.getSendChatRoomId(), AlertType.MESSAGE);
+                if(alertDTO != null){
+                    alertService.updateDate(alertDTO);
+                }else {
+                    //같은 방의 다른 회원 없음 알림 전달
+                    alertService.registerAlert(message.getSendChatSender(),message.getSendChatRoomId(), AlertType.MESSAGE);
+                }
+
             }
         }
 

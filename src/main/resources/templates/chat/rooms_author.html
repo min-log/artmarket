@@ -16,6 +16,7 @@
         <ul th:each="room : ${chatRoomDTO.getMyChatRooms}">
           <li>
             <button th:onclick="chatRoomDelete([[${room.getChatRoomId}]])">삭제</button>
+            <br />
             <a href="javascript:void(0)" th:onclick="mypageChatRoom([[${room.getChatRoomId}]])" type="button">
               <b>[[${room.getChatSender}]]  ( [[${room.getChatSenderIdtity}]] ) </b>
               <p class="last_msg">[[${room.getChatMsg}]]</p>
