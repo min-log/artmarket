@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Log4j2
@@ -38,7 +39,7 @@ public class ChatRoomController {
 
     // 하나의 채팅 룸 안에 대화 내용 출력
     @PostMapping(value = "/myfage")
-    public ResponseEntity<Object> roomList(@RequestBody ChatRoomRequestDTO roomRequestDTO) {
+    public ResponseEntity<Object> roomListView(@RequestBody ChatRoomRequestDTO roomRequestDTO, HttpSession httpSession) {
         log.info("# 마이페이지 채팅 상세페이지");
         long clickChatId = roomRequestDTO.getClickChatId();
         long clickMember = roomRequestDTO.getClickMember();
@@ -48,6 +49,10 @@ public class ChatRoomController {
             // 속하는 회원이 아닐 경우
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+
+        // 연결된 회원 정보
+        httpSession.setAttribute("chatSession", ChatSessionDTO.builder().chatRoomID(clickChatId).memberId(clickMember).build());
+
         ChatRoomResponseDTO chatRoomResponseDTO = chatService.searchOneRoomId(clickChatId);
         // 존재하는 채팅방 룸 정보와 대화 내역 전송
         return ResponseEntity.status(HttpStatus.OK).body(chatRoomResponseDTO);

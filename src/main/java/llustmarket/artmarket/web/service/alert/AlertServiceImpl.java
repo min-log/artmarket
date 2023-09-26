@@ -30,14 +30,14 @@ public class AlertServiceImpl implements AlertService{
     @Transactional
     @Override
     public void registerAlert(long memberId,long alertPath, AlertType alertType) {
-
+        log.info("# 알림 전송");
         //현제 회원 정보
         MemberDTO member = null;
         // 상대 회원 Id
         long authorMemberId = 0;
 
-        switch (String.valueOf(alertType)){
-            case "MESSAGE" : {
+        switch (alertType){
+            case MESSAGE : {
                     // 현제 회원 구하기
                 // 상대 회원 아이디값만 구하기
                 member = memberService.selectOne(memberId);
