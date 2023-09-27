@@ -11,13 +11,13 @@ import llustmarket.artmarket.web.dto.chat.*;
 import llustmarket.artmarket.web.mapper.chat.ChatRoomMapper;
 import llustmarket.artmarket.web.mapper.file.FileMapper;
 import llustmarket.artmarket.web.mapper.member.MemberMapper;
+import llustmarket.artmarket.web.service.DateTimeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +31,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final ChatRoomMapper chatRoomMapper;
     private final MemberMapper memberMapper;
     private final FileMapper fileMapper;
+    private final DateTimeService dateTimeService;
 
 
     @Override
@@ -44,8 +45,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
-    public void updateChatRoom(long roomId, String message, LocalDateTime date) {
-        ChatRoom roomVO = ChatRoom.builder().chatRoomId(roomId).chatRoomMsg(message).chatRoomLastDate(date).build();
+    public void updateChatRoom(long roomId, String message, String date) {
+        ChatRoom roomVO = ChatRoom.builder().chatRoomId(roomId).chatRoomMsg(message).chatRoomLastDate(dateTimeService.StringToDate(date)).build();
         int result = chatRoomMapper.updateOne(roomVO);
     }
 

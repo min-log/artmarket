@@ -11,6 +11,7 @@ public interface AlertMapper {
     List<Alert> selectOne(long memberId);
     Alert selectOnePathId(Alert vo);
     void updateStatus(long memberId);
+    void updateOneStatus(Alert vo);
     void updateDate (Alert vo);
     int selectTotalNumber(long alramTotalID);
 

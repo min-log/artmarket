@@ -8,6 +8,7 @@ import llustmarket.artmarket.web.dto.alert.Alrams;
 import llustmarket.artmarket.web.dto.chat.ChatRoomDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
 import llustmarket.artmarket.web.mapper.alert.AlertMapper;
+import llustmarket.artmarket.web.service.DateTimeService;
 import llustmarket.artmarket.web.service.chat.ChatRoomService;
 import llustmarket.artmarket.web.service.member.EmailService;
 import llustmarket.artmarket.web.service.member.MemberService;
@@ -18,14 +19,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Log4j2
 @RequiredArgsConstructor
 @Service
-public class AlertServiceImpl implements AlertService{
+public class AlertServiceImpl implements AlertService {
 
     private final ModelMapper modelMapper;
 
@@ -34,6 +34,7 @@ public class AlertServiceImpl implements AlertService{
     private final AlertMapper alertMapper;
 
     private final EmailService emailService;
+    private final DateTimeService dateTimeService;
 
 
     @Transactional
@@ -69,9 +70,9 @@ public class AlertServiceImpl implements AlertService{
                 .alertIdentity(member.getIdentity())
                 .alertType(String.valueOf(alertType))
                 .alertPath(alertPath)
+                .alertDate(LocalDateTime.now())
                 .build();
         alertMapper.insertOne(alert);
-
         alertEmail(alert);
     }
 
@@ -79,6 +80,12 @@ public class AlertServiceImpl implements AlertService{
     public void updateStatus(long memberId) {
         alertMapper.updateStatus(memberId);
     }
+
+    @Override
+    public void updateOneCheck(long memberId, long pathId, AlertType pathType) {
+        alertMapper.updateOneStatus(Alert.builder().memberId(memberId).alertType(String.valueOf(pathType)).alertPath(pathId).build());
+    }
+
 
     @Override
     public void updateDate(AlertDTO dto) {
@@ -99,7 +106,7 @@ public class AlertServiceImpl implements AlertService{
                 AlramDTO.builder()
                         .alramSender(alert.getAlertWriter())
                         .alramType(alert.getAlertType())
-                        .alertDate(alert.getAlertDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")))
+                        .alertDate(dateTimeService.DateToString(alert.getAlertDate()))
                         .build());
     }
 
@@ -112,7 +119,7 @@ public class AlertServiceImpl implements AlertService{
             return AlramDTO.builder()
                     .alramSender(item.getAlertWriter())
                     .alramType(item.getAlertType())
-                    .alertDate(item.getAlertDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")))
+                    .alertDate(dateTimeService.DateToString(item.getAlertDate()))
                     .build();
         }).collect(Collectors.toList());
         return Alrams.builder().alrams(alramList).build();

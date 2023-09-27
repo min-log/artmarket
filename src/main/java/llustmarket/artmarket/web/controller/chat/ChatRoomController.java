@@ -1,7 +1,9 @@
 package llustmarket.artmarket.web.controller.chat;
 
 
+import llustmarket.artmarket.domain.alert.AlertType;
 import llustmarket.artmarket.web.dto.chat.*;
+import llustmarket.artmarket.web.service.alert.AlertService;
 import llustmarket.artmarket.web.service.chat.ChatRoomService;
 import llustmarket.artmarket.web.service.chat.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -22,6 +25,7 @@ public class ChatRoomController {
 
     private final ChatService chatService;
     private final ChatRoomService chatRoomService;
+    private final AlertService alertService;
 
     @GetMapping(value = "/myfage/{member_id}")
     public ResponseEntity<Object> roomList(@PathVariable(value = "member_id") long memberId) {
@@ -38,6 +42,7 @@ public class ChatRoomController {
 
 
     // 하나의 채팅 룸 안에 대화 내용 출력
+    @Transactional
     @PostMapping(value = "/myfage")
     public ResponseEntity<Object> roomListView(@RequestBody ChatRoomRequestDTO roomRequestDTO, HttpSession httpSession) {
         log.info("# 마이페이지 채팅 상세페이지");
@@ -53,8 +58,11 @@ public class ChatRoomController {
         // 연결된 회원 정보
         httpSession.setAttribute("chatSession", ChatSessionDTO.builder().chatRoomID(clickChatId).memberId(clickMember).build());
 
-        ChatRoomResponseDTO chatRoomResponseDTO = chatService.searchOneRoomId(clickChatId);
+        // 알림이 있었다면, 상태 변경
+        alertService.updateOneCheck(clickMember,clickChatId, AlertType.MESSAGE);
+
         // 존재하는 채팅방 룸 정보와 대화 내역 전송
+        ChatRoomResponseDTO chatRoomResponseDTO = chatService.searchOneRoomId(clickChatId);
         return ResponseEntity.status(HttpStatus.OK).body(chatRoomResponseDTO);
     }
 

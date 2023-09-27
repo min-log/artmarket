@@ -39,6 +39,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         ChatMessage chatMessage = messageDTOToVO(dto);
         chatMessageMapper.insertOne(chatMessage);
         ChatMessageResponseDTO requestDTO = searchChatMessageOne(chatMessage.getChatMessageId());
+
+
         return requestDTO;
     }
 
@@ -77,6 +79,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         if(chatMessageResponseDTO.getChatType().equals(String.valueOf(MessageType.FILE))){
             chatMessageResponseDTO = messageFileSet(chatMessageId, chatMessageResponseDTO);
         }
+
 
         return chatMessageResponseDTO;
     }

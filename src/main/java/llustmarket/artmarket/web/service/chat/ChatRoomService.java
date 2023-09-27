@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public interface ChatRoomService {
     ChatRoomDTO registerChatRoom(ChatRoomDTO dto);
-    void updateChatRoom(long roomId, String message, LocalDateTime date);
+    void updateChatRoom(long roomId, String message, String date);
     int deleteChat(long chatRoomId);
     ChatRoomDTO searchChatRoomId(long chatRoomId);
     ChatRoomListResponseDTO searchChatRoomList(long memberId);

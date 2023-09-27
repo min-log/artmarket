@@ -34,7 +34,6 @@ public class ChatServiceImpl implements ChatService {
     private final ProductService productService;
     private final OrderService orderService;
 
-
     @Transactional
     @Override
     public ChatRoomResponseDTO registerChat(long askMemberId, ChatRoomDTO roomDTO) {

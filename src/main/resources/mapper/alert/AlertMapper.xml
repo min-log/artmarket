@@ -12,6 +12,15 @@
         set alert_status = true
         where member_id = #{memberId}
     </update>
+
+    <update id="updateOneStatus">
+        update alerts
+        set alert_status = true
+        where member_id = #{memberId}
+          and alert_type = #{alertType}
+          and alert_path = #{alertPath}
+    </update>
+
     <update id="updateDate" parameterType="llustmarket.artmarket.domain.alert.Alert">
         update alerts set alert_date = #{alertDate}
         where alert_id = #{alertId}

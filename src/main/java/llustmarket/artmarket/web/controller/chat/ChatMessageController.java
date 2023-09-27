@@ -37,14 +37,16 @@ public class ChatMessageController {
     private final ChatService chatService;
     private final AlertService alertService;
 
-
-    @Transactional
     @MessageMapping(value = "/chat-room/send")
     public void message(ChatMessageRequestDTO message, SimpMessageHeaderAccessor messageHeaderAccessor){
         log.info("# 채팅방 대화 ");
         // log.info("# 같은 방의 참여자가 접속 중 인지 확인");
         boolean memberOther = false;
 
+        // 메시지 저장 및 전달 관련 로직
+        messageCommunication(message);
+
+        // 알림 관련 로직
         // StompHeaderAccessor를 사용하여 WebSocket 세션에서 사용자 정보 가져오기
         Map<String, Object> sessionAttributes = messageHeaderAccessor.getSessionAttributes();
         List<ChatSessionDTO> sessionList = (List<ChatSessionDTO>)sessionAttributes.get("chatSessionList");
@@ -67,13 +69,11 @@ public class ChatMessageController {
             }
         }
 
-        // 메시지 관련 처리
-        messageCommunication(message);
 
     }
 
-
-    private void messageCommunication(ChatMessageRequestDTO message){
+    @Transactional
+    public void messageCommunication(ChatMessageRequestDTO message){
         // 1. 화면에 전달할 객체
         ChatMessageResponseDTO chatMessageResponseDTO;
 
