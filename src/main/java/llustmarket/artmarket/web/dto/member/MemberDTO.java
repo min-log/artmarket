@@ -13,4 +13,5 @@ public class MemberDTO {
     private long memberId;
     private String nickname;
     private String identity;
+    private String email;
 }

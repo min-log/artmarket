@@ -9,6 +9,7 @@ import llustmarket.artmarket.web.dto.chat.ChatRoomDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
 import llustmarket.artmarket.web.mapper.alert.AlertMapper;
 import llustmarket.artmarket.web.service.chat.ChatRoomService;
+import llustmarket.artmarket.web.service.member.EmailService;
 import llustmarket.artmarket.web.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,9 @@ public class AlertServiceImpl implements AlertService{
     private final ChatRoomService chatRoomService;
     private final AlertMapper alertMapper;
 
+    private final EmailService emailService;
+
+
     @Transactional
     @Override
     public void registerAlert(long memberId,long alertPath, AlertType alertType) {
@@ -42,8 +47,7 @@ public class AlertServiceImpl implements AlertService{
 
         switch (alertType){
             case MESSAGE : {
-                    // 현제 회원 구하기
-                // 상대 회원 아이디값만 구하기
+                // 현제 회원 구하기
                 member = memberService.selectOne(memberId);
                 // 상대 회원 아이디
                 ChatRoomDTO chatRoomDTO = chatRoomService.searchChatRoomId(alertPath);
@@ -54,6 +58,7 @@ public class AlertServiceImpl implements AlertService{
                 // 주문상품
 
             }
+
         }
 
         Alert alert = Alert.builder()
@@ -66,6 +71,8 @@ public class AlertServiceImpl implements AlertService{
                 .alertPath(alertPath)
                 .build();
         alertMapper.insertOne(alert);
+
+        alertEmail(alert);
     }
 
     @Override
@@ -77,7 +84,23 @@ public class AlertServiceImpl implements AlertService{
     public void updateDate(AlertDTO dto) {
         log.info("# 알림 시간 업데이트");
         dto.setAlertDate(LocalDateTime.now());
-        alertMapper.updateDate(modelMapper.map(dto,Alert.class));
+        Alert alert = modelMapper.map(dto, Alert.class);
+        alertMapper.updateDate(alert);
+        alertEmail(alert);
+    }
+
+
+    private void alertEmail(Alert alert) {
+        // 상대방 회원 이메일 정보
+        long memberId = alert.getMemberId();
+        MemberDTO memberDTO = memberService.selectOne(memberId);
+        emailService.sendAlertByEmail(
+                memberDTO.getEmail(),
+                AlramDTO.builder()
+                        .alramSender(alert.getAlertWriter())
+                        .alramType(alert.getAlertType())
+                        .alertDate(alert.getAlertDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")))
+                        .build());
     }
 
 
@@ -89,7 +112,8 @@ public class AlertServiceImpl implements AlertService{
             return AlramDTO.builder()
                     .alramSender(item.getAlertWriter())
                     .alramType(item.getAlertType())
-                    .alertDate(item.getAlertDate()).build();
+                    .alertDate(item.getAlertDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")))
+                    .build();
         }).collect(Collectors.toList());
         return Alrams.builder().alrams(alramList).build();
     }
@@ -98,13 +122,15 @@ public class AlertServiceImpl implements AlertService{
     public AlertDTO searchOnePath(long pathId,AlertType alertType) {
         log.info("동일한 메시지 찾아서 가져오기");
         Alert vo = Alert.builder().alertPath(pathId).alertType(String.valueOf(alertType)).build();
+        Alert alerts = null;
         try {
-            Alert alerts = alertMapper.selectOnePathId(vo);
-            return modelMapper.map(alerts,AlertDTO.class);
+            alerts = alertMapper.selectOnePathId(vo);
         }catch (Exception e){
             e.printStackTrace();
             return null;
         }
+        if(alerts != null)  return modelMapper.map(alerts,AlertDTO.class);
+        return null;
     }
 
     @Override

@@ -14,17 +14,13 @@ import llustmarket.artmarket.web.service.chat.ChatRoomService;
 import llustmarket.artmarket.web.service.chat.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Map;
@@ -40,7 +36,8 @@ public class ChatMessageController {
     private final ChatRoomService chatRoomService;
     private final ChatService chatService;
     private final AlertService alertService;
-    private final List<ChatMessageRequestDTO> roomMember = new ArrayList<>();
+
+
     @Transactional
     @MessageMapping(value = "/chat-room/send")
     public void message(ChatMessageRequestDTO message, SimpMessageHeaderAccessor messageHeaderAccessor){
@@ -67,7 +64,6 @@ public class ChatMessageController {
                     //같은 방의 다른 회원 없음 알림 전달
                     alertService.registerAlert(message.getSendChatSender(),message.getSendChatRoomId(), AlertType.MESSAGE);
                 }
-
             }
         }
 

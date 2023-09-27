@@ -8,9 +8,7 @@ public interface AlertService {
     void registerAlert(long memberId, long alertPath, AlertType alertType);
     void updateStatus(long memberId);
     void updateDate(AlertDTO dto);
-
     Alrams searchOneAlert(long memberId);
     AlertDTO searchOnePath(long memberId ,AlertType alertType);
-
     int searchOneAlertNumber(long alramTotalID);
 }
