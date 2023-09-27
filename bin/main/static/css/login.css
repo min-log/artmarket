@@ -1,48 +1,5 @@
-container {
-  position: relative;
-  box-sizing: border-box;
-}
-
-@keyframes move-login {
-  0% {
-    transform: translate(0);
-  }
-  50% {
-    transform: translateX(-0.8rem);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-.login-background {
-  display: flex;
-  align-items: center;
-  height: 45rem;
-  overflow: hidden;
-  box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
-}
-
-.login-background-img {
-  transform: translateY(-15rem);
-  animation-name: move-login;
-  animation-duration: 4.4s;
-  animation-iteration-count: infinite;
-}
-
-.login-content {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  transform: translate(60rem, -45rem);
-  background-color: white;
-  width: 36rem;
-  height: 23rem;
-  opacity: 0.95;
-  padding: 7.5rem 8rem 15rem 20rem;
-}
-
 .login-content > * {
-  margin: 0.3rem;
+  margin: 0.9rem;
   width: 19rem;
 }
 
@@ -51,18 +8,30 @@ container {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
-  font-weight: bolder;
-  margin-bottom: 0.98rem;
-  color: rgba(48, 48, 48, 0.8);
+  margin-bottom: 0.3rem;
+  margin-top: 2rem;
+}
+
+.login-content > .login-title > img {
+  scale: 62%;
 }
 
 .login-info-join {
   display: flex;
   justify-content: center;
-  font-size: 0.85rem;
+  /* position: absolute; */
+  padding: 0.1rem 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: rgba(31, 31, 31, 0.85);
   cursor: pointer;
-  color: rgba(19, 19, 19, 0.9);
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  box-shadow: 0.5px 0.5px 0.3rem rgba(121, 120, 120, 0.2);
+}
+.login-info-join:hover {
+  scale: 103%;
+  transition-duration: 0.3s;
 }
 
 .login-content > .login-sub {
@@ -73,7 +42,7 @@ container {
 .login-content > .login-sub > input[type="text"],
 input[type="password"] {
   border: none;
-  border: solid 0.1rem rgba(49, 49, 49, 0.3);
+  border: solid 0.1rem rgba(190, 190, 190, 0.3);
   font-size: 0.9rem;
   padding: 0.7rem 0.5rem;
   margin-top: 0.4rem;
@@ -104,7 +73,7 @@ input[type="password"]:focus {
 .login-content > .login-sub > .login-serv > label {
   display: flex;
   align-items: center;
-  color: rgba(49, 49, 49, 1);
+  color: rgba(88, 88, 88, 0.8);
 }
 
 .login-content > .login-sub > .login-serv > label > input {
@@ -118,7 +87,7 @@ input[type="password"]:focus {
   border: 0;
   border-radius: 0.5rem;
   color: white;
-  background-color: rgba(94, 94, 235, 0.4);
+  background-color: rgba(27, 27, 27, 0.4);
   cursor: not-allowed;
 }
 

@@ -6,5 +6,6 @@ body {
   font-family: "Noto Sans KR", sans-serif;
   letter-spacing: 0.1rem;
   line-height: 1.6rem;
-  width: 1890px;
+  width: 1850px;
+  padding-left: 1.2rem;
 }

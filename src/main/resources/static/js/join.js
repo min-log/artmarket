@@ -1,33 +1,30 @@
-// const joinIdentityGeneral = document.querySelector('#join-identity-general')
-// const joinIdentityAuthor = document.querySelector('#join-identity-author')
+const joinIdentityGeneral = document.querySelector('#join-identity-general')
+const joinIdentityAuthor = document.querySelector('#join-identity-author')
 
-// const joinGeneralChecked = document.querySelector('.join-general-checked')
-// const joinAuthorChecked = document.querySelector('.join-author-checked')
+joinIdentityGeneral.setAttribute('value', '1')
+joinIdentityAuthor.setAttribute('value', '0')
 
-// joinGeneralChecked.setAttribute('value', '1')
-// joinAuthorChecked.setAttribute('value', '0')
+joinIdentityGeneral.addEventListener('click', function () {
+    modIdentityCheck(joinIdentityGeneral)
+    modIdentityCheck(joinIdentityAuthor)
+})
 
-// joinIdentityGeneral.addEventListener('click', function () {
-//     modIdentityCheck(joinGeneralChecked)
-//     modIdentityCheck(joinAuthorChecked)
-// })
+joinIdentityAuthor.addEventListener('click', function () {
+    modIdentityCheck(joinIdentityAuthor)
+    modIdentityCheck(joinIdentityGeneral)
+})
 
-// joinIdentityAuthor.addEventListener('click', function () {
-//     modIdentityCheck(joinAuthorChecked)
-//     modIdentityCheck(joinGeneralChecked)
-// })
+function modIdentityCheck(identityTag) {
 
-// function modIdentityCheck(identityTag) {
+    const checkColor = identityTag.getAttribute("value") === "1" ? 'rgba(31, 31, 31, 0.5)' : 'rgba(31, 31, 31, 0.9)'
+    identityTag.style.backgroundColor = checkColor
 
-//     const imgSrc = identityTag.getAttribute("value") === "1" ? 'non-checked' : 'checked'
-//     identityTag.setAttribute('src', `css/icon/${imgSrc}.png`)
-
-//     if (imgSrc === 'non-checked') {
-//         identityTag.setAttribute('value', '0')
-//     } else {
-//         identityTag.setAttribute('value', '1')
-//     }
-// }
+    if (checkColor === 'rgba(31, 31, 31, 0.5)') {
+        identityTag.setAttribute('value', '0')
+    } else {
+        identityTag.setAttribute('value', '1')
+    }
+}
 
 
 // 정규식을 위한 tag -search
@@ -49,8 +46,16 @@ const joinRepassword = document.querySelector('.join-repassword')
 const joinListPhone = document.querySelector('.join-list-phone')
 const joinPhone = document.querySelector('.join-phone')
 
-const joinListEmail = document.querySelector('.join-list-email')
+
+// 이전 입력한 이메일 등록
 const joinEmail = document.querySelector('.join-email')
+
+if (localStorage.getItem('email') !== null) {
+    joinEmail.value = localStorage.getItem('email')
+} else {
+    joinEmail.value = '저장이 안됐습니다.'
+}
+
 
 // 에러 메세지 스타일링
 function joinErrMsgStyle(errMsgTag) {
@@ -130,6 +135,8 @@ function joinErrMsgShow(joinInputTag) {
     }
 }
 
+let joinConflict
+
 joinName.addEventListener('focusout', function () {
     joinErrMsgShow(joinName)
     jointBtnMod()
@@ -143,11 +150,13 @@ joinId.addEventListener('focusout', function () {
 joinNickname.addEventListener('focusout', function () {
     joinErrMsgShow(joinNickname)
     jointBtnMod()
+
 })
 
 joinPassword.addEventListener('focusout', function () {
     joinErrMsgShow(joinPassword)
     jointBtnMod()
+
 })
 
 joinRepassword.addEventListener('focusout', function () {
@@ -189,15 +198,65 @@ function jointBtnMod() {
 
     for (var i = 0; i < joinInputList.length; i++) {
         joinBtnMod += Number(joinInputList[i].getAttribute('name'))
-        console.log(joinBtnMod)
     }
 
     if (joinBtnMod === 6) {
         joinBtn.style.backgroundColor = 'rgba(88, 88, 88, 1)'
         joinBtn.style.cursor = 'pointer'
     }
+
+    return joinBtnMod
 }
+
+// 회원가입 값들 보내기
+
+// joinInputList.push(joinName) // 0
+// joinInputList.push(joinId) // 1
+// joinInputList.push(joinNickname) // 2
+// joinInputList.push(joinPassword) // 3
+// joinInputList.push(joinRepassword) 
+// joinInputList.push(joinPhone) // 5
+
+
+const joinConflictMap = new Map()
+joinConflictMap.set('아이디', idErrMsg)
+joinConflictMap.set('닉네임', nicknameErrMsg)
+joinConflictMap.set('이메일', '')
+joinConflictMap.set('전화번호', phoneErrMsg)
+
 
 joinBtn.addEventListener('click', function () {
 
+    let joinStatus = 0
+
+    if (jointBtnMod() === 6) {
+
+        const selectJoinIdentity = joinIdentityGeneral.getAttribute('value') == 1 ? 'GENERAL' : 'AUTHOR'
+
+        fetch(`${baseUrl}/join`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                JoinIdentity: `${selectJoinIdentity}`,
+                JoinName: `${joinInputList[0].value}`,
+                JoinNickname: `${joinInputList[2].value}`,
+                JoinLoginId: `${joinInputList[1].value}`,
+                JoinPassword: `${joinInputList[3].value}`,
+                JoinPhone: `${joinInputList[5].value}`,
+                JoinEmail: `${localStorage.getItem('email')}`,
+            })
+        }).then(response => {
+            joinStatus = response.status
+            return response.json()
+        }).then((result) => {
+            if (joinStatus === 201) {
+                location.href = 'index.html'
+            } else if (joinStatus === 409) {
+                joinConflict = result
+            }
+        })
+    }
 })
+

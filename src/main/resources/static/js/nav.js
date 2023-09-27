@@ -95,7 +95,7 @@ navLogo.addEventListener("click", function () {
 })
 
 myfage.addEventListener("click", function () {
-    if (sessionStorage.getItem('memberId') === null) {
+    if (localStorage.getItem('id') === null) {
         notAcessMyfage()
     } else {
         location.href = "myfage.html"

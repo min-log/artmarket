@@ -1,7 +1,7 @@
 const loginId = document.getElementById('loginId')
 const loginPassword = document.getElementById('loginPassword')
 const loginSub = document.querySelector('.login-sub')
-const loginBtn = document.querySelector(".login-btn")
+const loginBtn = document.querySelector('.login-btn')
 const loginIdError = document.createElement('div')
 const loginPassError = document.createElement('div')
 const loginToJoin = document.querySelector('.login-info-join')
@@ -30,7 +30,7 @@ function noticeAlert(parentTag, notiMsg) {
     notibox.style.backgroundColor = 'white'
     notibox.style.padding = '1.5rem 1rem'
     notibox.style.borderRadius = '0.5rem'
-    notibox.style.boxShadow = '2px 2px 0.5rem rgba(94, 94, 235, 0.4)'
+    notibox.style.boxShadow = '2px 2px 0.5rem rgba(88, 88, 88, 0.3)'
 
     noticontent.style.marginBottom = '1.1rem'
     noticontent.style.fontSize = '0.9rem'
@@ -39,7 +39,7 @@ function noticeAlert(parentTag, notiMsg) {
     notibtn.style.fontSize = '0.8rem'
     notibtn.style.padding = '0.1rem 0.8rem'
     notibtn.style.borderRadius = '0.3rem'
-    notibtn.style.backgroundColor = 'rgba(94, 94, 235, 1)'
+    notibtn.style.backgroundColor = 'rgba(88, 88, 88, 1)'
     notibtn.style.color = 'white'
     notibtn.style.cursor = 'pointer'
 
@@ -105,11 +105,11 @@ function loginErrorMsgOnOff(check, msg, tag) {
 
 function btnModCheck() {
     if (btnModCheckList[0] && btnModCheckList[1]) {
-        loginBtn.style.backgroundColor = 'rgba(27, 27, 27, 1);'
+        loginBtn.style.backgroundColor = 'rgba(27, 27, 27, 1)'
         loginBtn.style.cursor = 'pointer'
     } else {
-        loginBtn.style.backgroundColor = 'rgba(27, 27, 27, 0.4);';
-        loginBtn.style.cursor = 'not-allowed';
+        loginBtn.style.backgroundColor = 'rgba(27, 27, 27, 0.4)'
+        loginBtn.style.cursor = 'not-allowed'
     }
 }
 

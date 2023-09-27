@@ -8,10 +8,10 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  transform: translateY(-26rem);
+  transform: translateY(-27.5rem);
   color: rgb(31, 31, 31);
-  margin-left: 26rem;
-  padding: 0.8rem 6rem 4rem 2rem;
+  margin-left: 22rem;
+  padding: 0.8rem 3rem 2rem 2rem;
 }
 
 .main-content > * {
@@ -32,6 +32,7 @@
 .main-content-btn {
   display: flex;
   margin-top: 0.8rem;
+  cursor: pointer;
 }
 
 .main-content-btn > * {
@@ -39,7 +40,7 @@
   margin-right: 1rem;
   color: rgba(31, 31, 31, 0.9);
   padding: 0.5rem 1.3rem;
-  border: solid 0.09rem rgba(31, 31, 31, 0.5);
+  border: solid 0.1rem rgba(31, 31, 31, 0.5);
   border-radius: 1rem;
 }
 
@@ -52,13 +53,13 @@
 /*상단 이미지 */
 @keyframes move-img {
   0% {
-    transform: translate(0);
+    transform: translate(12rem, 0);
   }
   50% {
-    transform: translateY(-2rem);
+    transform: translate(12rem, -2rem);
   }
   100% {
-    transform: translateY(0);
+    transform: translate(12rem, 0);
   }
 }
 
@@ -68,10 +69,10 @@
   height: 34rem;
   overflow: hidden;
   box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
+  background-color: rgba(249, 249, 249, 1);
 }
 
 .main-img-background {
-  transform: translateX(20rem);
   background-repeat: repeat;
   animation-name: move-img;
   animation-duration: 4.4s;
@@ -190,7 +191,7 @@
   font-size: 2.8rem;
   font-weight: bold;
   margin-bottom: 2.5rem;
-  color: rgb(31, 31, 31);
+  color: rgba(31, 31, 31, 0.8);
   margin-right: 1.5rem;
 }
 

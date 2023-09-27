@@ -3,20 +3,68 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script async src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script async src="./js/nav.js"></script>
     <script async src="./js/footer.js"></script>
+    <script async src="./js/all.js"></script>
     <script async src="./js/join.js"></script>
     <link rel="stylesheet" href="./css/nav.css" />
     <link rel="stylesheet" href="./css/footer.css" />
     <link rel="stylesheet" href="./css/all.css" />
+    <link rel="stylesheet" href="./css/join.css" />
+    <link rel="stylesheet" href="./css/login-to-join-backimg.css" />
+    <title>회원가입</title>
   </head>
   <body>
     <nav></nav>
-    <container>
-      <input type="file" id="join-file" />
-      <input type="button" class="join-btn" value="파일 업로드" />
+    <container class="login-to-join-container">
+      <div class="login-to-join-background">
+        <img class="login-to-join-background-img" src="./css/img/test1.jpg" />
+        <div class="join-title">회원가입</div>
+        <div class="join-content">
+          <div class="join-identity">
+            <div id="join-identity-general">일반회원</div>
+            <div id="join-identity-author">작가회원</div>
+          </div>
+          <div class="join-all-list">
+            <div class="join-list-name">
+              <div>이&nbsp;&nbsp;&nbsp;름</div>
+              <input type="text" class="join-name" />
+            </div>
+          </div>
+          <div class="join-all-list">
+            <div class="join-list-id">
+              <div>아이디</div>
+              <input type="text" class="join-id" />
+            </div>
+            <div class="join-list-nickname">
+              <div>닉네임</div>
+              <input type="text" class="join-nickname" />
+            </div>
+          </div>
+          <div class="join-all-list">
+            <div class="join-list-password">
+              <div>암&nbsp;&nbsp;&nbsp;호</div>
+              <input type="password" class="join-password" />
+            </div>
+            <div class="join-list-repassword">
+              <div>재입력</div>
+              <input type="password" class="join-repassword" />
+            </div>
+          </div>
+          <div class="join-all-list">
+            <div class="join-list-phone">
+              <div>휴대폰</div>
+              <input type="text" class="join-phone" />
+            </div>
+            <div class="join-list-email">
+              <div>이메일</div>
+              <input type="text" class="join-email" readonly />
+            </div>
+          </div>
+          <input type="button" class="join-btn" value="가입하기" />
+        </div>
+      </div>
     </container>
     <footer></footer>
   </body>
