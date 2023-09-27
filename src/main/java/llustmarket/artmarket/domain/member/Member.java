@@ -1,6 +1,7 @@
 package llustmarket.artmarket.domain.member;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Member {
 
     private Long memberId;
@@ -45,8 +47,8 @@ public class Member {
     private String accountBank;
     private String account;
 
-    @NotBlank(message = "신원 확인 정보는 필수 입력 항목입니다.")
-    @Size(max = 20, message = "신원 확인 정보는 최대 20글자까지 가능합니다.")
+    @NotBlank(message = "일반 회원, 판매 회원 정보는 필수 입력 항목입니다.")
+    @Size(max = 20, message = "역할 확인 정보는 최대 20글자까지 가능합니다.")
     private String identity;
     private String memberIntro = "안녕하세요";
     private Date memberDate = new Date();

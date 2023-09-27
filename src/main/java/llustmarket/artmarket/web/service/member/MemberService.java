@@ -3,6 +3,8 @@ package llustmarket.artmarket.web.service.member;
 import llustmarket.artmarket.domain.member.Member;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
 import llustmarket.artmarket.web.mapper.member.MemberMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,16 +13,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class MemberService {
-    
+
     private final MemberMapper memberMapper;
     private final ModelMapper modelMapper;
-
-    public MemberService(MemberMapper memberMapper, ModelMapper modelMapper) {
-        this.memberMapper = memberMapper;
-        this.modelMapper = modelMapper;
-    }
 
     @Transactional
     public void insertMember(Member member) {

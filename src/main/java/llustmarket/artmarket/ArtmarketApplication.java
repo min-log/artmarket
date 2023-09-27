@@ -11,6 +11,4 @@ public class ArtmarketApplication {
     public static void main(String[] args) {
         SpringApplication.run(ArtmarketApplication.class, args);
     }
-
-
 }
