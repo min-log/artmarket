@@ -6,6 +6,7 @@
     <script async src="./js/nav.js"></script>
     <script async src="./js/footer.js"></script>
     <script async src="./js/all.js"></script>
+    <script async src="./js/after-join.js"></script>
     <link rel="stylesheet" href="./css/nav.css" />
     <link rel="stylesheet" href="./css/footer.css" />
     <link rel="stylesheet" href="./css/all.css" />
@@ -18,17 +19,60 @@
     <container>
       <div class="login-to-join-background">
         <img class="login-to-join-background-img" src="./css/img/test1.jpg" />
-        <div class="join-title"></div>
-        <img src="./css/img/join-identity-title.png" />
         <div class="after-join-content">
-          <div class="after-join-identity">
-            <div id="join-identity-general">
-              <img src="./css/img/join-general.png" />
+          <div class="join-ing">
+            <img src="./css/icon/ingChecked.png" />
+            <div class="join-ing-line"></div>
+            <img src="./css/icon/ingChecked.png" />
+            <div class="join-ing-line"></div>
+            <img src="./css/icon/ingChecked.png" />
+          </div>
+          <div class="after-join-identity-title">
+            <div class="after-join-identity-title-list">
+              <img src="./css/icon/join-identity-title-img.png" />
+              <div>회원유형 선택</div>
             </div>
-            <div id="join-identity-author">
-              <img src="./css/img/join-author.png" />
+            <div class="after-join-identity-title-list">
+              해당하는 내용의 가입할 유형을 선택해주세요.
             </div>
           </div>
+          <div class="after-join-identity">
+            <div id="join-identity-general">
+              <img
+                class="join-general-img"
+                src="./css/icon/join-general-checked.png"
+              />
+              <div class="join-general-type-ko">일반유저</div>
+              <div class="join-general-type-en">GENERAL</div>
+              <div class="join-general-list">
+                다양한 작가들의 작품을 보고싶어요
+              </div>
+              <div class="join-general-list">
+                작가님에게 작품을 의뢰하고싶어요
+              </div>
+              <div class="join-general-list">안전한 거래를 하고 싶어요</div>
+            </div>
+            <div id="join-identity-author">
+              <img
+                class="join-author-img"
+                src="./css/icon/join-author-checked.png"
+              />
+              <div class="join-author-type-ko">작가 유저</div>
+              <div class="join-author-type-en">AUTHOR</div>
+              <div class="join-author-list">내 작품을 판매하고 싶어요.</div>
+              <div class="join-author-list">
+                의뢰인들과 직접 소통하고 싶어요
+              </div>
+              <div class="join-author-list">
+                실시간 작업 현황을 보여주고 싶어요
+              </div>
+            </div>
+          </div>
+          <input
+            type="button"
+            class="join-identity-btn"
+            value="다&nbsp;&nbsp;&nbsp;&nbsp;음"
+          />
         </div>
       </div>
     </container>
