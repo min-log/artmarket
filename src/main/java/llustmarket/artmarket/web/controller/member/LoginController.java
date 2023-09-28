@@ -64,9 +64,6 @@ public class LoginController {
                         Date limitDate = new Date(millis);
 
                         memberService.autoLogin(session.getId(), limitDate, loginUser.getLoginId());
-                    } else {
-                        int sessionTimeoutInSeconds = 3600; // 1시간 (3600초)
-                        session.setMaxInactiveInterval(sessionTimeoutInSeconds);
                     }
                     Map<String, String> loginSuccess = new HashMap<>();
                     loginSuccess.put("loginTrueIdentity", member.getIdentity());

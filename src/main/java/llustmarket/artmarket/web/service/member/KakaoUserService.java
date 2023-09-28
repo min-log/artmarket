@@ -3,6 +3,8 @@ package llustmarket.artmarket.web.service.member;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import llustmarket.artmarket.domain.member.Member;
+import llustmarket.artmarket.web.dto.member.JoinKakaoDTO;
 import llustmarket.artmarket.web.dto.member.KakaoUserInfoDto;
 import llustmarket.artmarket.web.mapper.member.MemberMapper;
 import llustmarket.artmarket.web.utils.JwtTokenUtils;
@@ -20,6 +22,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -105,11 +108,10 @@ public class KakaoUserService {
         return new KakaoUserInfoDto(id, nickname, email);
     }
 
-/*    // 3. 카카오ID로 회원가입 처리
-    private Member registerKakaoUserIfNeed(KakaoUserInfoDto kakaoUserInfo) {
+    // 3. 카카오ID로 회원가입 처리
+    public Member registerKakao(JoinKakaoDTO request) {
         // DB 에 중복된 email이 있는지 확인
-        String kakaoEmail = kakaoUserInfo.getEmail();
-        String nickname = kakaoUserInfo.getNickname();
+        String kakaoEmail = request.getKakaoJoinEmail();
         Member kakaoUser = memberMapper.findByUserEmail(kakaoEmail)
                 .orElse(null);
 
@@ -120,14 +122,14 @@ public class KakaoUserService {
             String encodedPassword = passwordEncoder.encode(password);
             Member highestMemberIdMember = memberMapper.findHighestMemberId();
             String loginId = "art" + (highestMemberIdMember.getMemberId() + 1) + "@kakao";
-            kakaoUser = new Member(name, nickname, loginId, password, phone, kakaoEmail, idenitity);
+            kakaoUser = new Member(request.getKakaoJoinName(), request.getKakaoJoinNickname(), loginId, password, request.getKakaoJoinPhone(), request.getKakaoJoinEmail(), request.getKakaoJoinIdentity());
             memberMapper.insertMember(kakaoUser);
 
         }
         return kakaoUser;
     }
 
-    // 4. 강제 로그인 처리
+  /*  // 4. 강제 로그인 처리
     private Authentication forceLogin(Member kakaoUser) {
         UserDetails userDetails = new UserDetailsImpl(kakaoUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

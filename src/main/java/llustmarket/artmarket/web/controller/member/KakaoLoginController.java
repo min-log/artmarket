@@ -1,11 +1,14 @@
 package llustmarket.artmarket.web.controller.member;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import llustmarket.artmarket.domain.member.Member;
+import llustmarket.artmarket.web.dto.member.JoinKakaoDTO;
 import llustmarket.artmarket.web.dto.member.KakaoUserInfoDto;
 import llustmarket.artmarket.web.dto.member.kakadoDuplicateDTO;
 import llustmarket.artmarket.web.service.member.KakaoUserService;
 import llustmarket.artmarket.web.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class KakaoLoginController {
@@ -98,7 +102,32 @@ public class KakaoLoginController {
     @GetMapping("/kakao-login")
     public ResponseEntity<Object> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
 
-        KakaoUserInfoDto kakaoUserInfo = kakaoUserService.kakaoLogin(code, response);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        try {
+            KakaoUserInfoDto kakaoUserInfo = kakaoUserService.kakaoLogin(code, response);
+            if (kakaoUserInfo != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(kakaoUserInfo);
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/join-kakao")
+    public ResponseEntity<Object> joinKakao(@RequestBody JoinKakaoDTO request) {
+        try {
+            Member member = kakaoUserService.registerKakao(request);
+            if (member != null) {
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            } else {
+                log.error("멤버가 널입니다.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

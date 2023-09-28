@@ -69,7 +69,7 @@
     </select>
     <select id="findByUserEmail" resultType="llustmarket.artmarket.domain.member.Member">
         SELECT *
-        FROM members
+        FROM member
         WHERE email = #{email}
     </select>
     <select id="findHighestMemberId" resultType="llustmarket.artmarket.domain.member.Member">
