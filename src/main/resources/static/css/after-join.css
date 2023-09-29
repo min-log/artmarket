@@ -24,7 +24,7 @@
     scale: 75%;
   }
   50% {
-    scale: 85%;
+    scale: 90%;
   }
   100% {
     scale: 75%;
@@ -58,9 +58,11 @@
 .after-join-identity-title {
   margin-left: 4rem;
 }
-.after-join-identity-title > :nth-child(2) {
+.after-join-identity-title-list-sub {
   margin-left: 4rem;
   margin-bottom: 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .after-join-identity-title-list {
@@ -74,7 +76,7 @@
   margin-right: 0.4rem;
 }
 
-.after-join-identity-title-list > div {
+.after-join-identity-title-list > .after-join-identity-title-list-main {
   font-size: 1.7rem;
   font-weight: 800;
 }
@@ -139,11 +141,5 @@
   border-radius: 0.5rem;
   background-color: white;
   color: rgba(41, 45, 50, 1);
-}
-
-.join-identity-btn:hover {
-  color: white;
-  font-weight: 700;
-  background-color: rgba(41, 45, 50, 1);
-  transition-duration: 0.2s;
+  cursor: not-allowed;
 }
