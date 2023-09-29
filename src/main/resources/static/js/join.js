@@ -1,262 +1,396 @@
 const joinIdentityGeneral = document.querySelector('#join-identity-general')
-const joinIdentityAuthor = document.querySelector('#join-identity-author')
+const joinGeneralImg = document.querySelector('.join-general-img')
+const joinGeneralTypeKo = document.querySelector('.join-general-type-ko')
+const joinGeneralTypeEn = document.querySelector('.join-general-type-en')
+const joinGeneralList = document.querySelectorAll('.join-general-list')
 
-joinIdentityGeneral.setAttribute('value', '1')
-joinIdentityAuthor.setAttribute('value', '0')
+const joinIdentityAuthor = document.querySelector('#join-identity-author')
+const joinAuthorImg = document.querySelector('.join-author-img')
+const joinAuthorTypeKo = document.querySelector('.join-author-type-ko')
+const joinAuthorTypeEn = document.querySelector('.join-author-type-en')
+const joinAuthorList = document.querySelectorAll('.join-author-list')
+
+const joinIdentityBtn = document.querySelector('.join-identity-btn')
+
+const joinIngLine = document.querySelectorAll('.join-ing-line')
+const joinIngImg = document.querySelectorAll('.join-ing-img')
+
+const joinNameErrMsg = document.createElement('div')
+const joinIdErrMsg = document.createElement('div')
+const joinNickNameErrMsg = document.createElement('div')
+const joinPassErrMsg = document.createElement('div')
+const joinRePassErrMsg = document.createElement('div')
+const joinPhoneErrMsg = document.createElement('div')
+const joinEmailErrMsg = document.createElement('div')
+
+const joinNameLabel = document.createElement('label')
+joinNameLabel.textContent = '이\u00a0\u00a0\u00a0\u00a0\u00a0름'
+const joinNameInput = document.createElement('input')
+joinNameInput.setAttribute('placeholder', '한글 2~5자')
+joinNameInput.setAttribute('type', 'text')
+joinNameLabel.appendChild(joinNameInput)
+
+const joinIdLabel = document.createElement('label')
+joinIdLabel.textContent = '아 이 디'
+const joinIdInput = document.createElement('input')
+joinIdInput.setAttribute('placeholder', '영문,숫자 6~20자')
+joinIdInput.setAttribute('type', 'text')
+joinIdLabel.appendChild(joinIdInput)
+
+const joinNickNameLabel = document.createElement('label')
+joinNickNameLabel.textContent = '닉 네 임'
+const joinNickNameInput = document.createElement('input')
+joinNickNameInput.setAttribute('placeholder', '영문,숫자,한글 3~10자')
+joinNickNameInput.setAttribute('type', 'text')
+joinNickNameLabel.appendChild(joinNickNameInput)
+
+const joinPassLabel = document.createElement('label')
+joinPassLabel.textContent = `암\u00a0\u00a0\u00a0\u00a0\u00a0호`
+const joinPassInput = document.createElement('input')
+joinPassInput.setAttribute('placeholder', '영문,숫자,특수기호 10자~')
+joinPassInput.setAttribute('type', 'password')
+joinPassLabel.appendChild(joinPassInput)
+
+const joinRePassLabel = document.createElement('label')
+joinRePassLabel.textContent = '재 입 력'
+const joinRePassInput = document.createElement('input')
+joinRePassInput.setAttribute('type', 'password')
+joinRePassLabel.appendChild(joinRePassInput)
+
+const joinPhoneLabel = document.createElement('label')
+joinPhoneLabel.textContent = '휴 대 폰'
+const joinPhoneInput = document.createElement('input')
+joinPhoneInput.setAttribute('type', 'phone')
+joinPhoneInput.setAttribute('placeholder', '010-1234-5678')
+joinPhoneLabel.appendChild(joinPhoneInput)
+
+const joinEmailLabel = document.createElement('label')
+joinEmailLabel.textContent = '이 메 일'
+const joinEmailInput = document.createElement('input')
+joinEmailInput.setAttribute('type', 'email')
+joinEmailLabel.appendChild(joinEmailInput)
+
+const joinInfoLabelArray = []
+const joinInfoInputArray = []
+const joinInfoErrMsgArray = []
+
+joinInfoLabelArray.push(joinNameLabel)
+joinInfoLabelArray.push(joinIdLabel)
+joinInfoLabelArray.push(joinNickNameLabel)
+joinInfoLabelArray.push(joinPassLabel)
+joinInfoLabelArray.push(joinRePassLabel)
+joinInfoLabelArray.push(joinPhoneLabel)
+joinInfoLabelArray.push(joinEmailLabel)
+
+joinInfoInputArray.push(joinNameInput)
+joinInfoInputArray.push(joinIdInput)
+joinInfoInputArray.push(joinNickNameInput)
+joinInfoInputArray.push(joinPassInput)
+joinInfoInputArray.push(joinRePassInput)
+joinInfoInputArray.push(joinPhoneInput)
+joinInfoInputArray.push(joinEmailInput)
+
+const joinErrMsgReg = new Map()
+joinErrMsgReg.set(joinInfoInputArray[0], commonNameReg)
+joinErrMsgReg.set(joinInfoInputArray[1], commonIdReg)
+joinErrMsgReg.set(joinInfoInputArray[2], commonNicknameReg)
+joinErrMsgReg.set(joinInfoInputArray[3], commonPassReg)
+joinErrMsgReg.set(joinInfoInputArray[4], '')
+joinErrMsgReg.set(joinInfoInputArray[5], commonPhoneReg)
+
+
+joinInfoErrMsgArray.push(joinNameErrMsg)
+joinInfoErrMsgArray.push(joinIdErrMsg)
+joinInfoErrMsgArray.push(joinNickNameErrMsg)
+joinInfoErrMsgArray.push(joinPassErrMsg)
+joinInfoErrMsgArray.push(joinRePassErrMsg)
+joinInfoErrMsgArray.push(joinPhoneErrMsg)
+joinInfoErrMsgArray.push(joinEmailErrMsg)
+
+function joinInfoErrMsgStyle(joinInfoErrMsgTag) {
+    joinInfoErrMsgTag.style.marginLeft = '6.5rem'
+    joinInfoErrMsgTag.style.fontSize = '0.8rem'
+}
+
+for (var i = 0; i < joinInfoErrMsgArray.length; i++) {
+    joinInfoErrMsgArray[i].textContent = '값을 입력해주세요.'
+    joinInfoErrMsgArray[i].style.visibility = 'hidden'
+    joinInfoErrMsgStyle(joinInfoErrMsgArray[i])
+}
+
+function joinIdentityHover(joinIdentityBoxTag, joinIdentityListTag1, joinIdentityListTag2, joinIdentityListTag3) {
+
+    joinIdentityBoxTag.style.border = 'solid 0.1rem rgba(41, 45, 50, 1)'
+    joinIdentityBoxTag.style.backgroundColor = 'white'
+    joinIdentityBoxTag.style.borderRadius = '1rem'
+    joinIdentityListTag1.style.color = 'rgba(41, 45, 50, 1)'
+    joinIdentityListTag1.style.fontWeight = '800'
+    joinIdentityListTag2.style.color = 'rgba(41, 45, 50, 1)'
+    joinIdentityListTag2.style.fontWeight = '800'
+    for (var i = 0; i < joinIdentityListTag3.length; i++) {
+        joinIdentityListTag3[i].style.color = 'rgba(41, 45, 50, 1)'
+        joinIdentityListTag3[i].style.fontWeight = '800'
+    }
+}
+
+function joinIdentityNotHover(joinIdentityBoxTag, joinIdentityListTag1, joinIdentityListTag2, joinIdentityListTag3) {
+    joinIdentityBoxTag.style.border = 'none'
+    joinIdentityBoxTag.style.backgroundColor = 'rgba(41, 45, 50, 1)'
+    joinIdentityBoxTag.style.borderRadius = '1rem'
+    joinIdentityListTag1.style.color = 'white'
+    joinIdentityListTag1.style.fontWeight = '500'
+    joinIdentityListTag2.style.color = 'white'
+    joinIdentityListTag2.style.fontWeight = '700'
+    for (var i = 0; i < joinIdentityListTag3.length; i++) {
+        joinIdentityListTag3[i].style.color = 'white'
+        joinIdentityListTag3[i].style.fontWeight = '300'
+    }
+}
+
+joinIdentityGeneral.addEventListener('mouseover', function () {
+    joinIdentityHover(joinIdentityGeneral, joinGeneralTypeKo, joinGeneralTypeEn, joinGeneralList)
+    joinGeneralImg.setAttribute('src', './css/icon/join-general-unchecked.png')
+})
+
+joinIdentityGeneral.addEventListener('mouseout', function () {
+    if (joinIdentityGeneral.getAttribute('value') !== 'true') {
+        joinIdentityNotHover(joinIdentityGeneral, joinGeneralTypeKo, joinGeneralTypeEn, joinGeneralList)
+        joinGeneralImg.setAttribute('src', './css/icon/join-general-checked.png')
+    } else {
+        joinIdentityHover(joinIdentityGeneral, joinGeneralTypeKo, joinGeneralTypeEn, joinGeneralList)
+        joinGeneralImg.setAttribute('src', './css/icon/join-general-unchecked.png')
+    }
+})
+
+joinIdentityAuthor.addEventListener('mouseover', function () {
+    joinIdentityHover(joinIdentityAuthor, joinAuthorTypeKo, joinAuthorTypeEn, joinAuthorList)
+    joinAuthorImg.setAttribute('src', './css/icon/join-author-unchecked.png')
+})
+
+joinIdentityAuthor.addEventListener('mouseout', function () {
+    if (joinIdentityAuthor.getAttribute('value') !== 'true') {
+        joinIdentityNotHover(joinIdentityAuthor, joinAuthorTypeKo, joinAuthorTypeEn, joinAuthorList)
+        joinAuthorImg.setAttribute('src', './css/icon/join-author-checked.png')
+    } else {
+        joinIdentityHover(joinIdentityAuthor, joinAuthorTypeKo, joinAuthorTypeEn, joinAuthorList)
+        joinAuthorImg.setAttribute('src', './css/icon/join-author-unchecked.png')
+    }
+})
+
 
 joinIdentityGeneral.addEventListener('click', function () {
-    modIdentityCheck(joinIdentityGeneral)
-    modIdentityCheck(joinIdentityAuthor)
+    joinBtnAfterStyle()
+    joinIdentityHover(joinIdentityGeneral, joinGeneralTypeKo, joinGeneralTypeEn, joinGeneralList)
+    joinGeneralImg.setAttribute('src', './css/icon/join-general-unchecked.png')
+    joinIdentityNotHover(joinIdentityAuthor, joinAuthorTypeKo, joinAuthorTypeEn, joinAuthorList)
+    joinAuthorImg.setAttribute('src', './css/icon/join-author-checked.png')
+    joinIdentityGeneral.setAttribute('value', 'true')
+    joinIdentityAuthor.setAttribute('value', 'false')
 })
 
 joinIdentityAuthor.addEventListener('click', function () {
-    modIdentityCheck(joinIdentityAuthor)
-    modIdentityCheck(joinIdentityGeneral)
+    joinBtnAfterStyle()
+    joinIdentityHover(joinIdentityAuthor, joinAuthorTypeKo, joinAuthorTypeEn, joinAuthorList)
+    joinAuthorImg.setAttribute('src', './css/icon/join-author-unchecked.png')
+    joinIdentityNotHover(joinIdentityGeneral, joinGeneralTypeKo, joinGeneralTypeEn, joinGeneralList)
+    joinGeneralImg.setAttribute('src', './css/icon/join-general-checked.png')
+    joinIdentityAuthor.setAttribute('value', 'true')
+    joinIdentityGeneral.setAttribute('value', 'false')
 })
 
-function modIdentityCheck(identityTag) {
-
-    const checkColor = identityTag.getAttribute("value") === "1" ? 'rgba(31, 31, 31, 0.5)' : 'rgba(31, 31, 31, 0.9)'
-    identityTag.style.backgroundColor = checkColor
-
-    if (checkColor === 'rgba(31, 31, 31, 0.5)') {
-        identityTag.setAttribute('value', '0')
-    } else {
-        identityTag.setAttribute('value', '1')
-    }
+function joinInfoStyle(joinInfoLabelTag, joinInfoInputTag) {
+    joinInfoLabelTag.style.margin = '0.2rem '
+    joinInfoInputTag.style.marginLeft = '2.5rem'
+    joinInfoInputTag.style.padding = '0.6rem 8rem 0.6rem 0.5rem'
+    joinInfoInputTag.style.borderRadius = '0.5rem'
+    joinInfoInputTag.style.outline = 'none'
+    joinInfoInputTag.style.border = 'none'
+    joinInfoInputTag.style.border = 'solid 0.1rem rgba(41, 45, 50, 0.3)'
 }
 
-
-// 정규식을 위한 tag -search
-const joinListName = document.querySelector('.join-list-name')
-const joinName = document.querySelector('.join-name')
-
-const joinListId = document.querySelector('.join-list-id')
-const joinId = document.querySelector('.join-id')
-
-const joinListNickname = document.querySelector('.join-list-nickname')
-const joinNickname = document.querySelector('.join-nickname')
-
-const joinListPassword = document.querySelector('.join-list-password')
-const joinPassword = document.querySelector('.join-password')
-
-const joinListRepassword = document.querySelector('.join-list-repassword')
-const joinRepassword = document.querySelector('.join-repassword')
-
-const joinListPhone = document.querySelector('.join-list-phone')
-const joinPhone = document.querySelector('.join-phone')
-
-
-// 이전 입력한 이메일 등록
-const joinEmail = document.querySelector('.join-email')
-
-if (localStorage.getItem('email') !== null) {
-    joinEmail.value = localStorage.getItem('email')
-} else {
-    joinEmail.value = '저장이 안됐습니다.'
+for (var i = 0; i < joinInfoLabelArray.length; i++) {
+    joinInfoLabelArray[i].appendChild(joinInfoErrMsgArray[i])
 }
 
+function joinErrMsgStyle(joinInfoInputTag, joinInfoErrTag) {
 
-// 에러 메세지 스타일링
-function joinErrMsgStyle(errMsgTag) {
-    errMsgTag.textContent = '값을 입력해주세요.'
-    errMsgTag.style.position = 'absolute'
-    errMsgTag.style.marginTop = '1.7rem'
-    errMsgTag.style.marginLeft = '4rem'
-    errMsgTag.style.fontSize = '0.7rem'
-    errMsgTag.style.color = 'red'
-    errMsgTag.style.display = 'none'
+    joinInfoInputTag.style.border = 'solid 0.1rem red'
+    joinInfoErrTag.style.color = 'red'
+    joinInfoErrTag.style.visibility = 'visible'
+
+    if (joinInfoInputTag.value === '') {
+        joinInfoErrTag.textContent = '값을 입력해주세요.'
+        joinInfoInputTag.setAttribute('name', 0)
+    } else if (joinErrMsgReg.get(joinInfoInputTag).test(joinInfoInputTag.value) === false) {
+        joinInfoErrTag.textContent = '형식에 맞지 않지 않습니다.'
+        joinInfoInputTag.setAttribute('name', 0)
+    } else if (joinErrMsgReg.get(joinInfoInputTag).test(joinInfoInputTag.value)) {
+        joinInfoInputTag.style.border = 'solid 0.1rem rgba(40, 154, 0, 0.72)'
+        joinInfoErrTag.style.color = 'rgba(40, 154, 0, 0.72)'
+        joinInfoErrTag.style.visibility = 'hidden'
+        joinInfoInputTag.setAttribute('name', 1)
+    }
+
+    if(joinInfoSubmit()===6){
+        joinBtnAfterStyle()
+    }
+
 }
 
-// 에러 메세지 변수 생성
-const nameErrMsg = document.createElement('div')
-nameErrMsg.setAttribute("class", "name-err-msg")
-joinErrMsgStyle(nameErrMsg)
-joinListName.appendChild(nameErrMsg)
+joinInfoInputArray[0].addEventListener('focusout', function () {
+    joinErrMsgStyle(joinInfoInputArray[0], joinInfoErrMsgArray[0])
 
-const idErrMsg = document.createElement('span')
-idErrMsg.setAttribute("class", "id-err-msg")
-joinErrMsgStyle(idErrMsg)
-joinListId.appendChild(idErrMsg)
+})
 
-const nicknameErrMsg = document.createElement('span')
-nicknameErrMsg.setAttribute("class", "nickname-err-msg")
-joinErrMsgStyle(nicknameErrMsg)
-nicknameErrMsg.style.marginLeft = '4.2rem'
-joinListNickname.appendChild(nicknameErrMsg)
+joinInfoInputArray[1].addEventListener('focusout', function () {
+    joinErrMsgStyle(joinInfoInputArray[1], joinInfoErrMsgArray[1])
 
-const passwordErrMsg = document.createElement('div')
-passwordErrMsg.setAttribute("class", "password-err-msg")
-joinErrMsgStyle(passwordErrMsg)
-joinListPassword.appendChild(passwordErrMsg)
+})
 
-const repasswordErrMsg = document.createElement('div')
-repasswordErrMsg.setAttribute("class", "repassword-err-msg")
-joinErrMsgStyle(repasswordErrMsg)
-repasswordErrMsg.style.marginLeft = '4.2rem'
-joinListRepassword.appendChild(repasswordErrMsg)
+joinInfoInputArray[2].addEventListener('focusout', function () {
+    joinErrMsgStyle(joinInfoInputArray[2], joinInfoErrMsgArray[2])
 
-const phoneErrMsg = document.createElement('div')
-phoneErrMsg.setAttribute("class", "phone-err-msg")
-joinErrMsgStyle(phoneErrMsg)
-joinListPhone.appendChild(phoneErrMsg)
+})
 
-const joinTagErrMap = new Map()
-joinTagErrMap.set(joinName, nameErrMsg)
-joinTagErrMap.set(joinId, idErrMsg)
-joinTagErrMap.set(joinNickname, nicknameErrMsg)
-joinTagErrMap.set(joinPassword, passwordErrMsg)
-joinTagErrMap.set(joinRepassword, repasswordErrMsg)
-joinTagErrMap.set(joinPhone, phoneErrMsg)
+joinInfoInputArray[3].addEventListener('focusout', function () {
+    joinErrMsgStyle(joinInfoInputArray[3], joinInfoErrMsgArray[3])
 
-const joinTagReg = new Map()
-joinTagReg.set(joinName, commonNameReg)
-joinTagReg.set(joinId, commonIdReg)
-joinTagReg.set(joinNickname, commonNicknameReg)
-joinTagReg.set(joinPassword, commonPassReg)
-joinTagReg.set(joinPhone, commonPhoneReg)
+})
 
-function joinErrMsgShow(joinInputTag) {
-
-    const joinErrTag = joinTagErrMap.get(joinInputTag)
-    joinErrTag.style.display = 'block'
-    joinInputTag.setAttribute("name", 0)
-
-
-    if (joinInputTag.value === '') {
-        joinErrTag.textContent = '값을 입력해주세요.'
-
-    } else if ((joinTagReg.get(joinInputTag)).test(joinInputTag.value) === false) {
-        joinErrTag.textContent = '잘못된 형식입니다.'
-
-    } else {
-        joinErrTag.style.display = 'none'
-        joinInputTag.setAttribute("name", 1)
+// 비밀번호 재입력
+joinInfoInputArray[4].addEventListener('focusout', function () {
+    if(joinInfoInputArray[4].value === ''){
+        joinInfoInputArray[4].style.border = 'solid 0.1rem red'
+        joinInfoErrMsgArray[4].style.color = 'red'
+        joinInfoErrMsgArray[4].style.visibility = 'visible'
+        joinInfoErrMsgArray[4].textContent = '값을 입력해주세요.'
+    }else if (joinInfoInputArray[3].value !== joinInfoInputArray[4].value) {
+        joinInfoInputArray[4].style.border = 'solid 0.1rem red'
+        joinInfoErrMsgArray[4].style.color = 'red'
+        joinInfoErrMsgArray[4].style.visibility = 'visible'
+        joinInfoErrMsgArray[4].textContent = '비밀번호와 다릅니다.'
+        joinInfoInputArray[4].setAttribute('name', 0)
+    } else if (joinInfoInputArray[3].value === joinInfoInputArray[4].value) {
+        joinInfoInputArray[4].style.border = 'solid 0.1rem rgba(40, 154, 0, 0.72)'
+        joinInfoErrMsgArray[4].style.color = 'rgba(40, 154, 0, 0.72)'
+        joinInfoErrMsgArray[4].style.visibility = 'hidden'
+        joinInfoInputArray[4].setAttribute('name', 1)
     }
+
+    if(joinInfoSubmit()===6){
+        joinBtnAfterStyle()
+    }
+})
+
+joinInfoInputArray[5].addEventListener('focusout', function () {
+    joinErrMsgStyle(joinInfoInputArray[5], joinInfoErrMsgArray[5])
+
+})
+
+// 이메일
+joinInfoInputArray[6].setAttribute('value',`${localStorage.getItem('email')}`)
+joinInfoInputArray[6].style.cursor = 'not-allowed'
+
+function joinBtnAfterStyle() {
+    joinIdentityBtn.style.color = 'white'
+    joinIdentityBtn.style.fontWeight = '700'
+    joinIdentityBtn.style.backgroundColor = 'rgba(41, 45, 50, 1)'
+    joinIdentityBtn.style.cursor = 'pointer'
 }
 
-let joinConflict
-
-joinName.addEventListener('focusout', function () {
-    joinErrMsgShow(joinName)
-    jointBtnMod()
-})
-
-joinId.addEventListener('focusout', function () {
-    joinErrMsgShow(joinId)
-    jointBtnMod()
-})
-
-joinNickname.addEventListener('focusout', function () {
-    joinErrMsgShow(joinNickname)
-    jointBtnMod()
-
-})
-
-joinPassword.addEventListener('focusout', function () {
-    joinErrMsgShow(joinPassword)
-    jointBtnMod()
-
-})
-
-joinRepassword.addEventListener('focusout', function () {
-
-    joinTagErrMap.get(joinRepassword).style.display = 'block'
-    joinRepassword.setAttribute("name", 0)
-
-    if (joinPassword.value === joinRepassword.value && joinRepassword.value !== '') {
-        joinTagErrMap.get(joinRepassword).style.display = 'none'
-        joinRepassword.setAttribute("name", 1)
-    } else if (joinPassword.value !== joinRepassword.value && joinRepassword.value !== '') {
-        joinTagErrMap.get(joinRepassword).textContent = '입력한 비밀번호와 다릅니다.'
-    } else if (joinRepassword.value === '') {
-        joinTagErrMap.get(joinRepassword).textContent = '값을 입력해주세요.'
-    }
-
-    jointBtnMod()
-})
-
-joinPhone.addEventListener('focusout', function () {
-    joinErrMsgShow(joinPhone)
-    jointBtnMod()
-})
-
-
-// input 태그 List
-const joinInputList = []
-joinInputList.push(joinName)
-joinInputList.push(joinId)
-joinInputList.push(joinNickname)
-joinInputList.push(joinPassword)
-joinInputList.push(joinRepassword)
-joinInputList.push(joinPhone)
-
-const joinBtn = document.querySelector('.join-btn')
-
-function jointBtnMod() {
-    let joinBtnMod = 0
-
-    for (var i = 0; i < joinInputList.length; i++) {
-        joinBtnMod += Number(joinInputList[i].getAttribute('name'))
-    }
-
-    if (joinBtnMod === 6) {
-        joinBtn.style.backgroundColor = 'rgba(88, 88, 88, 1)'
-        joinBtn.style.cursor = 'pointer'
-    }
-
-    return joinBtnMod
+function joinBtnBeforeStyle() {
+    joinIdentityBtn.style.border = 'none'
+    joinIdentityBtn.style.border = 'solid 0.1rem rgba(41, 45, 50, 1)'
+    joinIdentityBtn.style.borderRadius = '0.5rem'
+    joinIdentityBtn.style.backgroundColor = 'white'
+    joinIdentityBtn.style.color = 'rgba(41, 45, 50, 1)'
+    joinIdentityBtn.style.cursor = 'not-allowed'
 }
 
-// 회원가입 값들 보내기
+function joinInfoSubmit() {
+    let submit = 0
+    for (var i = 0; i < joinInfoInputArray.length - 1; i++) {
+        submit += Number(joinInfoInputArray[i].getAttribute('name'))
+    }
+    return submit
+}
 
-// joinInputList.push(joinName) // 0
-// joinInputList.push(joinId) // 1
-// joinInputList.push(joinNickname) // 2
-// joinInputList.push(joinPassword) // 3
-// joinInputList.push(joinRepassword) 
-// joinInputList.push(joinPhone) // 5
+joinIdentityBtn.addEventListener('click', function () {
+    if (joinIdentityAuthor.getAttribute('value') === null && joinIdentityGeneral.getAttribute('value') === null) {
+        alert('회원 유형을 선택해주세요.')
+    } else if (joinIdentityAuthor.getAttribute('value') !== null && joinIdentityGeneral.getAttribute('value') !== null) {
+        joinBtnBeforeStyle()
+        joinIdentityGeneral.getAttribute('value') === 'true' ? localStorage.setItem('joinIdentity', 'GENERAL') : localStorage.setItem('joinIdentity', 'AUTHOR')
+        joinIdentityGeneral.style.display = 'none'
+        joinIdentityAuthor.style.display = 'none'
 
+        const afterJoinIdentityTitleListImg = document.querySelector('.after-join-identity-title-list-img')
+        afterJoinIdentityTitleListImg.setAttribute('src','./css/icon/join-info-icon.png')
+        afterJoinIdentityTitleListImg.style.marginBottom = '0.7rem'
+        afterJoinIdentityTitleListImg.style.marginRight = '0.7rem'
+        const afterJoinIdentityTitleListMain = document.querySelector('.after-join-identity-title-list-main')
+        afterJoinIdentityTitleListMain.textContent = '회원정보 입력'
 
-const joinConflictMap = new Map()
-joinConflictMap.set('아이디', idErrMsg)
-joinConflictMap.set('닉네임', nicknameErrMsg)
-joinConflictMap.set('이메일', '')
-joinConflictMap.set('전화번호', phoneErrMsg)
+        const afterJoinIdentityTitleListSub = document.querySelector('.after-join-identity-title-list-sub')
+        afterJoinIdentityTitleListSub.textContent = '항목에 맞는 가입정보를 입력해주세요.'
+        afterJoinIdentityTitleListSub.style.marginTop = '0.1rem'
+        afterJoinIdentityTitleListSub.style.marginBottom = '2rem'
+        afterJoinIdentityTitleListSub.style.marginLeft = '3.5rem'
 
+        joinIdentityBtn.setAttribute('value', '회원가입')
+        joinIdentityBtn.style.fontSize = '1rem'
+        joinIdentityBtn.style.marginTop = '1rem'
 
-joinBtn.addEventListener('click', function () {
+        joinIngLine[0].style.borderBottom = 'solid 0.11rem rgba(41, 45, 50, 1)'
+        joinIngImg[0].style.animationName = 'none'
 
-    let joinStatus = 0
+        joinIngImg[1].style.animationDuration = '1.5s'
+        joinIngImg[1].style.animationName = 'ingImg'
+        joinIngImg[1].style.animationIterationCount = 'infinite'
+        joinIngImg[1].style.opacity = '1'
 
-    if (jointBtnMod() === 6) {
+        const afterJoinIdentity = document.querySelector('.after-join-identity')
 
-        const selectJoinIdentity = joinIdentityGeneral.getAttribute('value') == 1 ? 'GENERAL' : 'AUTHOR'
+        for (var i = 0; i < joinInfoLabelArray.length; i++) {
+            afterJoinIdentity.appendChild(joinInfoLabelArray[i])
+            joinInfoStyle(joinInfoLabelArray[i], joinInfoInputArray[i])
+        }
 
-        fetch(`${baseUrl}/join`, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                JoinIdentity: `${selectJoinIdentity}`,
-                JoinName: `${joinInputList[0].value}`,
-                JoinNickname: `${joinInputList[2].value}`,
-                JoinLoginId: `${joinInputList[1].value}`,
-                JoinPassword: `${joinInputList[3].value}`,
-                JoinPhone: `${joinInputList[5].value}`,
-                JoinEmail: `${localStorage.getItem('email')}`,
-            })
-        }).then(response => {
-            joinStatus = response.status
-            return response.json()
-        }).then((result) => {
-            if (joinStatus === 201) {
-                location.href = 'index.html'
-            } else if (joinStatus === 409) {
-                joinConflict = result
+        afterJoinIdentity.style.display = 'flex'
+        afterJoinIdentity.style.flexDirection = 'column'
+
+        joinIdentityBtn.addEventListener('click', function () {
+
+            let joinStatus = 0
+
+            if(joinInfoSubmit() === 6){
+                fetch(`${baseUrl}/join`,{
+                    method: 'POST',
+                    headers: {
+                        'content-type' : 'application/json'
+                    },
+                    body: JSON.stringify({
+                        JoinIdentity: `${localStorage.getItem('joinIdentity')}`,
+                        JoinName: `${joinNameInput.value}`,
+                        JoinNickname: `${joinNickNameInput.value}`,
+                        JoinLoginId: `${joinIdInput.value}`,
+                        JoinPassword: `${joinPassInput.value}`,
+                        JoinPhone: `${joinPhoneInput.value}`,
+                        JoinEmail: `${localStorage.getItem('email')}`,
+                    })
+                }).then(response => {
+                    joinStatus = response.status
+                    return response.json()
+                }).then((result) => {
+                    if (joinStatus === 201) {
+                        const afterJoinIdentityTitle = document.querySelector('.after-join-identity-title')
+                        afterJoinIdentityTitle.remove()
+                        afterJoinIdentity.remove()
+                    } else if (joinStatus === 409) {
+                        joinConflict = result
+                    }
+                })
             }
         })
     }
 })
-

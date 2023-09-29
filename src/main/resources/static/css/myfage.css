@@ -1,0 +1,37 @@
+.myfage-nav{
+    position: relative;
+}
+
+.myfage-nav-content{
+    position: absolute;
+}
+
+.myfage-nav-profile-menu {
+    display: flex;
+    flex-direction: column;
+}
+.myfage-nav-profile-menu > * {
+    background-color: white;
+    border-radius: 1rem;
+    margin-left: 2rem;
+    margin-bottom: 0.5rem;
+    padding-left: 0.7rem;
+    font-weight: 600;
+    color: rgba(41, 45, 50, 1);
+}
+
+.myfage-nav-profile-menu > :nth-child(1) {
+    width: 10.5rem;
+}
+
+.myfage-nav-profile-menu > :nth-child(2) {
+    width: 7.5rem;
+}
+
+.myfage-nav-profile-menu > :nth-child(3) {
+    width: 8.5rem;
+}
+
+footer {
+    margin-top: 0.1rem;
+  }

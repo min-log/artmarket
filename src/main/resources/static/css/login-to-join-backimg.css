@@ -64,17 +64,6 @@ container {
   padding: 8rem 10rem;
 }
 
-.join-content {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  border-radius: 0.8rem;
-  background-color: rgba(255, 255, 255, 1);
-  box-shadow: 2px 2px 0.5rem rgba(226, 226, 226, 0.1);
-  margin-left: 16rem;
-  padding: 3rem 10rem 4rem 10rem;
-}
-
 footer {
   margin-top: 0.1rem;
 }
