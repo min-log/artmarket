@@ -2,8 +2,9 @@ package llustmarket.artmarket.web.controller.member;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import llustmarket.artmarket.domain.member.Member;
+import llustmarket.artmarket.web.dto.member.GoogleAuthDTO;
 import llustmarket.artmarket.web.dto.member.JoinSocialDTO;
-import llustmarket.artmarket.web.service.member.KakaoUserService;
+import llustmarket.artmarket.web.service.member.GoogleUserService;
 import llustmarket.artmarket.web.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,46 +24,46 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class KakaoLoginController {
+public class GoogleLoginController {
     private final MemberService memberService;
-    private final KakaoUserService kakaoUserService;
+    private final GoogleUserService googleUserService;
 
-    @PostMapping("/agree-kakao")
-    public ResponseEntity<Object> confirmDuplicateKakao(@RequestBody @Valid JoinSocialDTO request, BindingResult bindingResult) {
+    @PostMapping("/agree-google")
+    public ResponseEntity<Object> confirmDuplicateGoogle(@RequestBody @Valid GoogleAuthDTO request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<Map<String, String>> confirmKakakoErrors = new ArrayList<>();
+            List<Map<String, String>> confirmGoogleErrors = new ArrayList<>();
 
             for (FieldError error : bindingResult.getFieldErrors()) {
                 String fieldName = error.getField();
                 String errorMessage = error.getDefaultMessage();
 
                 Map<String, String> errorMap = new HashMap<>();
-                errorMap.put("confirmKakaoErrorParam", fieldName);
-                errorMap.put("confirmKakaoErrorMsg", errorMessage);
-                confirmKakakoErrors.add(errorMap);
+                errorMap.put("confirmGoogleErrorParam", fieldName);
+                errorMap.put("confirmGoogleErrorMsg", errorMessage);
+                confirmGoogleErrors.add(errorMap);
             }
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(confirmKakakoErrors);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(confirmGoogleErrors);
         }
         try {
             List<Map<String, String>> duplications = new ArrayList<>();
-            checkDuplication("JoinNickname", request.getJoinNickname(), "닉네임", duplications);
-            checkDuplication("JoinEmail", request.getJoinEmail(), "이메일", duplications);
-            checkDuplication("JoinPhone", request.getJoinPhone(), "전화번호", duplications);
+            checkDuplication("JoinNickname", request.getGoogleJoinNickname(), "닉네임", duplications);
+            checkDuplication("JoinEmail", request.getGoogleJoinEmail(), "이메일", duplications);
+            checkDuplication("JoinPhone", request.getGoogleJoinPhone(), "전화번호", duplications);
             if (!duplications.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(duplications);
             }
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
-            List<Map<String, String>> confirmKakakoErrors = new ArrayList<>();
+            List<Map<String, String>> confirmGoogleErrors = new ArrayList<>();
             String fieldName = String.valueOf(e.getCause());
             String errorMessage = e.getMessage();
 
             Map<String, String> errorMap = new HashMap<>();
-            errorMap.put("confirmKakaoErrorParam", fieldName);
-            errorMap.put("confirmKakaoErrorMsg", errorMessage);
-            confirmKakakoErrors.add(errorMap);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(confirmKakakoErrors);
+            errorMap.put("confirmGoogleErrorParam", fieldName);
+            errorMap.put("confirmGoogleErrorMsg", errorMessage);
+            confirmGoogleErrors.add(errorMap);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(confirmGoogleErrors);
         }
     }
 
@@ -96,17 +97,16 @@ public class KakaoLoginController {
         }
     }
 
-    // 카카오 로그인
     // 구글 로그인
-    @GetMapping("/kakao-login")
-    public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        kakaoUserService.kakaoLogin(code, response);
+    @GetMapping("/google-login")
+    public void googleLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        googleUserService.googleLogin(code, response);
     }
 
-    @PostMapping("/join-kakao")
+    @PostMapping("/join-google")
     public ResponseEntity<Object> joinKakao(@RequestBody JoinSocialDTO request) {
         try {
-            Member member = kakaoUserService.registerKakao(request);
+            Member member = googleUserService.registerGoogle(request);
             if (member != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).build();
             } else {
@@ -115,7 +115,7 @@ public class KakaoLoginController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("/join-google의 request를 확인해 주세요");
         }
     }
 }

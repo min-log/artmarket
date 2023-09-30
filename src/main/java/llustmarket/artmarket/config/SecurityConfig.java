@@ -44,10 +44,8 @@ public class SecurityConfig {
                 .sessionFixation().migrateSession()
                 .maximumSessions(1) // 동일한 사용자로부터 한 번에 받을 수 있는 최대 세션 수
                 .maxSessionsPreventsLogin(false) // false일 경우, 새 세션을 생성하고 기존 세션을 무효화함
-                .expiredUrl("/session-expired") // 세션이 만료되면 이동할 URL
+                .expiredUrl("/") // 세션이 만료되면 이동할 URL
                 .sessionRegistry(sessionRegistry()); // 세션 관리자
-        // 리자
-        http.oauth2Login();
         http.csrf().disable();
         return http.build();
     }

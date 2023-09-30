@@ -15,6 +15,8 @@ public interface MemberMapper {
 
     void updatePasswordByMemberId(@Param("password") String password, @Param("memberId") Long memberId);
 
+    void updatePasswordByEmail(@Param("password") String password, @Param("email") String email);
+
     void updatePhoneByMemberId(@Param("memberId") Long memberId, @Param("newPhone") String newPhone);
 
     void updateEmailByMemberId(@Param("memberId") Long memberId, @Param("newEmail") String newEmail);
@@ -35,7 +37,7 @@ public interface MemberMapper {
 
     Optional<Member> findByUserEmail(String email);
 
-    Member findHighestMemberId();
+    Optional<Member> findHighestMemberId();
 
     //특정 회원의 세션아이디와 쿠키 유효기간을 저장
     void autoLogin(Map<String, Object> map);

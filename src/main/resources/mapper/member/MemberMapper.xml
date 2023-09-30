@@ -17,6 +17,11 @@
         SET password = #{password}
         WHERE member_id = #{memberId}
     </update>
+    <update id="updatePasswordByEmail">
+        UPDATE Member
+        SET password = #{password}
+        WHERE email = #{email}
+    </update>
     <update id="updatePhoneByMemberId">
         UPDATE member
         SET phone = #{newPhone}

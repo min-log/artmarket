@@ -64,6 +64,8 @@ public class LoginController {
                         Date limitDate = new Date(millis);
 
                         memberService.autoLogin(session.getId(), limitDate, loginUser.getLoginId());
+                    } else {
+                        session.setMaxInactiveInterval(3600);
                     }
                     Map<String, String> loginSuccess = new HashMap<>();
                     loginSuccess.put("loginTrueIdentity", member.getIdentity());

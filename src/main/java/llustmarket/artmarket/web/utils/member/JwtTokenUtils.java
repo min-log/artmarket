@@ -1,8 +1,9 @@
-package llustmarket.artmarket.web.utils;
+package llustmarket.artmarket.web.utils.member;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import llustmarket.artmarket.web.dto.member.GoogleLoginResponse;
 import llustmarket.artmarket.web.dto.member.KakaoUserInfoDto;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +21,14 @@ public class JwtTokenUtils {
     public final static long ACCESS_TOKEN_VALIDATION_SECOND = 1000L * 60 * 60 * 12; //12시간
 
     // 토큰 생성
-    public String generateJwtToken(KakaoUserInfoDto kakaoUserInfo) {
+    public String generateKakaoJwtToken(KakaoUserInfoDto kakaoUserInfo) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, kakaoUserInfo.getEmail());
+    }
+
+    public String generateGoogleJwtToken(GoogleLoginResponse googleUserInfo) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, googleUserInfo.getEmail());
     }
 
     // 토큰 생성 및 유효성 검증
