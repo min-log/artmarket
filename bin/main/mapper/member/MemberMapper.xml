@@ -17,39 +17,91 @@
         SET password = #{password}
         WHERE member_id = #{memberId}
     </update>
-
+    <update id="updatePasswordByEmail">
+        UPDATE Member
+        SET password = #{password}
+        WHERE email = #{email}
+    </update>
+    <update id="updatePhoneByMemberId">
+        UPDATE member
+        SET phone = #{newPhone}
+        WHERE member_id = #{memberId}
+    </update>
+    <update id="updateEmailByMemberId">
+        UPDATE member
+        SET email = #{newEmail}
+        WHERE member_id = #{memberId}
+    </update>
     <select id="isLoginIdDuplicate" resultType="int">
-        SELECT COUNT(*) FROM Member WHERE login_id = #{loginId}
+        SELECT COUNT(*)
+        FROM Member
+        WHERE login_id = #{loginId}
     </select>
 
     <select id="isNicknameDuplicate" resultType="int">
-        SELECT COUNT(*) FROM Member WHERE nickname = #{nickname}
+        SELECT COUNT(*)
+        FROM Member
+        WHERE nickname = #{nickname}
     </select>
 
     <select id="isEmailDuplicate" resultType="int">
-        SELECT COUNT(*) FROM Member WHERE email = #{email}
+        SELECT COUNT(*)
+        FROM Member
+        WHERE email = #{email}
     </select>
 
     <select id="isPhoneDuplicate" resultType="int">
-        SELECT COUNT(*) FROM Member WHERE phone = #{phone}
+        SELECT COUNT(*)
+        FROM Member
+        WHERE phone = #{phone}
     </select>
 
     <select id="selectMemberByLoginId" resultType="llustmarket.artmarket.domain.member.Member">
-        SELECT * FROM Member WHERE login_id = #{loginId}
+        SELECT *
+        FROM Member
+        WHERE login_id = #{loginId}
     </select>
 
     <select id="selectMemberByPhone" resultType="llustmarket.artmarket.domain.member.Member">
-        SELECT * FROM Member WHERE phone = #{phone}
+        SELECT *
+        FROM Member
+        WHERE phone = #{phone}
     </select>
     <select id="selectMemberByMemberId" resultType="llustmarket.artmarket.domain.member.Member">
-        SELECT * FROM Member WHERE member_id = #{memberId}
+        SELECT *
+        FROM Member
+        WHERE member_id = #{memberId}
     </select>
-
+    <select id="findByUserEmail" resultType="llustmarket.artmarket.domain.member.Member">
+        SELECT *
+        FROM member
+        WHERE email = #{email}
+    </select>
+    <select id="findHighestMemberId" resultType="llustmarket.artmarket.domain.member.Member">
+        <![CDATA[
+    SELECT *
+    FROM member
+    ORDER BY member_id DESC
+    LIMIT 1
+  ]]>
+    </select>
     <update id="autoLogin">
         update member
-        set
-        session_id=#{sessionId},
+        set session_id=#{sessionId},
         limit_date=#{limitDate}
-        where login_id= #{loginId};
+        where login_id = #{loginId};
     </update>
+    <select id="selectOneByMemberId" resultType="llustmarket.artmarket.domain.member.Member">
+        select member_id,
+        name,
+        nickname,
+        login_id,
+        password,
+        phone,
+        email,
+        account_bank,
+        account, identity, member_intro, member_date, withdrawl
+        from member
+        where member_id = #{memberId}
+    </select>
 </mapper>

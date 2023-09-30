@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LOGIN</title>
+    <title>로그인</title>
     <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script async src="./js/nav.js"></script>
     <script async src="./js/footer.js"></script>
@@ -12,31 +12,38 @@
     <link rel="stylesheet" href="./css/nav.css" />
     <link rel="stylesheet" href="./css/footer.css" />
     <link rel="stylesheet" href="./css/all.css" />
+    <link rel="stylesheet" href="./css/login-to-join-backimg.css" />
     <link rel="stylesheet" href="./css/login.css" />
   </head>
   <body>
     <nav></nav>
-    <container>
-      <div class="login-background">
-        <img class="login-background-img" src="./css/img/login.jpg" />
-      </div>
-      <div class="login-content">
-        <div class="login-title">Login</div>
-        <div class="login-info-join">아직 회원이 아니신가요?</div>
-        <div class="login-sub">
-          <input type="text" id="loginId" placeholder="ID" />
-          <input type="password" id="loginPassword" placeholder="PASSWORD" />
-          <input class="login-btn" type="button" value="LOGIN" />
-          <div class="login-serv">
-            <label
-              ><input class="login-auto" type="checkbox" />자동로그인</label
-            >
+    <container class="login-to-join-container">
+      <div class="login-to-join-background">
+        <img
+          class="login-to-join-background-img"
+          src="./css/img/test1.jpg"
+          style="opacity: 0.95"
+        />
+        <div class="login-content">
+          <div class="login-title"><img src="./css/img/ARTMARKET.png" /></div>
+          <div class="login-sub">
+            <input type="text" id="loginId" placeholder="ID" />
+            <input type="password" id="loginPassword" placeholder="PASSWORD" />
+            <input class="login-btn" type="button" value="LOGIN" />
+            <div class="login-serv">
+              <label
+                ><input class="login-auto" type="checkbox" />자동로그인</label
+              >
+            </div>
           </div>
-        </div>
-        <div class="social-login">
-          <img src="./css/icon/google.png" />
-          <img src="./css/icon/kakao.png" />
-          <div class="login-info-req">아이디, 비밀번호 찾기</div>
+          <div class="social-login">
+            <img src="./css/icon/google.png" />
+            <img src="./css/icon/kakao.png" />
+            <div class="login-info-req">아이디, 비밀번호 찾기</div>
+            <div class="login-info-join">
+              아직 아트마켓에 계정이 없으신가요?
+            </div>
+          </div>
         </div>
       </div>
     </container>
