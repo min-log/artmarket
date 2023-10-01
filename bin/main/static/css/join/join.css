@@ -71,7 +71,7 @@
   margin-bottom: -0.7rem;
 }
 
-.after-join-identity-title-list-img{
+.after-join-identity-title-list-img {
   margin-top: 0.8rem;
   margin-right: 0.4rem;
 }
@@ -142,4 +142,9 @@
   background-color: white;
   color: rgba(41, 45, 50, 1);
   cursor: not-allowed;
+}
+
+.join-complete-btn:hover {
+  scale: 103%;
+  transition-duration: 0.3s;
 }
