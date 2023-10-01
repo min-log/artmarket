@@ -17,13 +17,14 @@ function myfageChatRightAddTag(){
 
 const myfageRightChatBox = document.querySelector('.myfage-right-chat-box')
 
-function myfageChatListClick(){
+function myfageChatListClick(chatRoomId, chatProudct){
+
     myfageRightChatBox.insertAdjacentHTML('afterend',`
-    <div class="myfage-right-chat-box">
+    <div class="myfage-right-chat-box" id="${chatRoomId}">
     <div class="myfage-right-chat-box-top">
     <div class="myfage-right-chat-box-top-profile">
-      <div class="myafge-right-chat-box-top-nickname">웽웽옹</div>
-      <div class="myafge-right-chat-box-top-show-article">
+      <div class="myafge-right-chat-box-top-nickname"></div>
+      <div class="myafge-right-chat-box-top-show-article" id="${chatProudct}">
         작품 보러가기
       </div>
     </div>
@@ -33,24 +34,7 @@ function myfageChatListClick(){
       value="X"
     />
   </div>
-  <div class="myfage-right-chat-box-mid">
-    <div class="myfage-right-chat-box-mid-msg-me">
-      <div class="myfage-right-chat-box-mid-msg-me-time">
-        2023.09.25 12:26
-      </div>
-      <div class="myfage-right-chat-box-mid-msg-me-text">
-        다음에 다시 문의드리겠습니다.
-      </div>
-    </div>
-    <div class="myfage-right-chat-box-mid-msg-other">
-      <div class="myfage-right-chat-box-mid-msg-other-time">
-        2023.09.25 12:28
-      </div>
-      <div class="myfage-right-chat-box-mid-msg-other-text">
-        네 알겠습니다.
-      </div>
-    </div>
-  </div>
+  <div class="myfage-right-chat-box-mid"></div>
   <div class="myfage-right-chat-box-bot">
     <input class="myfage-right-chat-box-bot-send-text" type="text" />
     <img
@@ -65,7 +49,97 @@ function myfageChatListClick(){
   </div>`)
 }
 
+const myfageRightChatBoxMid = document.querySelector('.myfage-right-chat-box-mid')
+
+function myfageRightChatMsgs(chatWhoTag, chatWhoType, chatMsg, chatDate, chatType, chatFile, chatFileName, chatFileDownload){
+  myfageRightChatBoxMid.insertAdjacentHTML('beforeend',`
+  <div class="myfage-right-chat-box-mid-msg-${chatWhoTag}">
+    <div class="myfage-right-chat-box-mid-msg-${chatWhoTag}-time">${chatDate}</div>
+    <div class="myfage-right-chat-box-mid-msg-${chatWhoTag}-text">${chatMsg}</div>
+  </div>`)
+
+  const myfageRightChatBoxMidMsg = document.querySelector(`.myfage-right-chat-box-mid-msg-${chatWhoTag}`)
+  const myfageRightChatBoxMidMsgTime = document.querySelector(`.myfage-right-chat-box-mid-msg-${chatWhoTag}-time`)
+  const myfageRightChatBoxMidMsgText = document.querySelector(`.myfage-right-chat-box-mid-msg-${chatWhoTag}-text`)
+
+  if(chatType === 'ENTER'){
+    myfageRightChatBoxMidMsg.insertAdjacentHTML('afterbegin',`
+    <div class="myfage-right-chat-box-mid-enter">${chatWhoType}이 입장하셨습니다.</div>`)
+  }else if(chatType === 'LEAVE'){
+    myfageRightChatBoxMidMsgTime.remove()
+    myfageRightChatBoxMidMsgText.remove()
+    myfageRightChatBoxMidMsg.insertAdjacentHTML('afterbegin',`
+    <div class="myfage-right-chat-box-mid-leave">${chatWhoType}이 퇴장하셨습니다.</div>`)
+  }
+
+  if(chatFile !== null){
+    let fileExtention = chatFileName.split('.')
+    
+    if(fileExtention[fileExtention.length-1] === 'txt'){
+
+      myfageRightChatBoxMidMsg.insertAdjacentHTML('beforeend',`{
+        <a href="${chatFile}" download="${chatFileDownload}">
+      }`)
+    }else{
+      myfageRightChatBoxMidMsg.insertAdjacentHTML('beforeend',`
+        <img src="${baseUrl}${chatFile}">
+        <a href="${baseUrl}${chatFile}" download="${chatFileDownload}">
+      `)
+    }
+  }
+}
+
 myfageChatRightAddTag()
+
+const myfageChatLists = document.querySelectorAll('.myfage-chat-list')
+for(const myfageChatList of myfageChatLists){
+
+    let chatListStatus
+    myfageChatList.addEventListener('click',function(){
+        fetch(`${baseUrl}/myfage`,{
+            method: 'POST',
+            headers: {
+                'content-type' : 'applicaiton/json'
+            },
+            body: JSON.stringify({
+                clickChatId : `${myfageChatList.getAttribute('id')}`,
+                clickMember : `${localStorage.getItem('id')}`
+            })
+        }).then(response=> {
+            chatListStatus = response.status
+            return response.json()
+        }).then(data => {
+          if(chatListStatus === 201){
+            const myafgeRightChatBoxTopNickname = document.querySelector('.myafge-right-chat-box-top-nickname')
+            myafgeRightChatBoxTopNickname.textContent = myfageChatList.getAttribute('name')
+            myfageChatListClick(data.chatRoomId, data.chatProudct)
+            for(var i = 0; i < data.chatList.length; i++){
+              if(data.chatList[i].chatSender === localStorage.getItem('id')){
+                myfageRightChatMsgs('me',
+                  localStorage.getItem('nickname'), 
+                  data.chatList[i].chatMsg, 
+                  data.chatList[i].chatDate,
+                  data.chatList[i].chatType,
+                  data.chatList[i].chatFile,
+                  data.chatList[i].chatFileName,
+                  data.chatList[i].chatFileDownload)
+              }else{
+                myfageRightChatMsgs('other',
+                  myfageChatList.getAttribute('name'),
+                  data.chatList[i].chatMsg, 
+                  data.chatList[i].chatDate,
+                  data.chatList[i].chatType,
+                  data.chatList[i].chatFile,
+                  data.chatList[i].chatFileName,
+                  data.chatList[i].chatFileDownload)
+              }
+            }
+          }else if(chatListStatus === 400){
+            alert('알수 없는 오류로 채팅내용을 불러오지 못했습니다.')
+          }
+        })
+    })
+}
 
 myfageNavChat.addEventListener('click', function () {
     myfageChatRightAddTag()

@@ -5,28 +5,8 @@ function myfageChatMidAddTag() {
     let resStatusCode
 
     myfageMid.insertAdjacentHTML('afterend', `<div class="myfage-chat-box">
-    <div class="myfage-chat-not-check">안 읽은 메세지만 보기</div>
-    <div class="myfage-chat-list">
-        <div class="myfage-chat-content">
-            <div class="myfage-chat-profile">
-                <div class="myfage-chat-profile-identity">작가</div>
-                <div class="myfage-chat-profile-img">
-                    <img class="myfage-chat-profile-img-tag" src="./css/icon/myfage-profile-default.png" />
-                </div>
-            </div>
-            <div class="myafge-chat-info">
-                <div class="myfage-chat-info-top">
-                    <div class="myfage-chat-info-top-nickname"></div>
-                    <div class="myfage-chat-info-top-send-time"></div>
-                </div>
-                <div class="myfage-chat-info-msg"></div>
-            </div>
-        </div>
-        <div class="myfage-chat-delete">
-            <img class="myfage-chat-delete-img" src="./css/icon/chat-exit.png" />
-        </div>
-    </div>
-</div>`)
+        <div class="myfage-chat-not-check">안 읽은 메세지만 보기</div>
+    </div>`)
 
 const myfageNavProfileGreeting = document.querySelector('.myfage-nav-profile-greeting')
 const myfageNavProfileImgTag = document.querySelector('.myfage-nav-profile-img-tag')
@@ -34,7 +14,7 @@ const myfageNavProfileImgTag = document.querySelector('.myfage-nav-profile-img-t
 function myfageChatListBring(chatRoomId, chatRoomMsg, chatRoomLastDate, chatSender, chatSenderIdtity, chatSenderProfile){
     const myfageChatBox = document.querySelector('.myfage-chat-box')
     
-    myfageChatBox.insertAdjacentHTML('beforeend',`<div class="myfage-chat-list" id="${chatRoomId}">
+    myfageChatBox.insertAdjacentHTML('beforeend',`<div class="myfage-chat-list" id="${chatRoomId}" name="${chatSender}">
     <div class="myfage-chat-content">
         <div class="myfage-chat-profile">
             <div class="myfage-chat-profile-identity">${chatSenderIdtity}</div>
@@ -44,7 +24,7 @@ function myfageChatListBring(chatRoomId, chatRoomMsg, chatRoomLastDate, chatSend
         </div>
         <div class="myafge-chat-info">
             <div class="myfage-chat-info-top">
-                <div class="myfage-chat-info-top-nickname">${chatSender}</div>
+                <div class="myfage-chat-info-top-nickname" id="${chatSender}">${chatSender}</div>
                 <div class="myfage-chat-info-top-send-time">${chatRoomLastDate}</div>
             </div>
             <div class="myfage-chat-info-msg">${chatRoomMsg}</div>
@@ -67,6 +47,7 @@ function myfageChatListBring(chatRoomId, chatRoomMsg, chatRoomLastDate, chatSend
     }).then(data =>{
         if(resStatusCode === 200){
             myfageNavProfileGreeting.textContent = `안녕하세요.<br />${data.nickname}님`
+            localStorage.setItem('nickname',`${data.nickname}`)
             localStorage.setItem('intro',`${data.intro}`)
             myfageNavProfileImgTag.setAttribute('src',`${baseUrl}${data.profileImg}`)
             for(var i = 0; i < data.myChatRooms.length; i++){
@@ -90,5 +71,3 @@ myfageChatMidAddTag()
 myfageNavChat.addEventListener('click', function () {
     myfageChatMidAddTag()
 })
-
-const myfageChatList = document.querySelector('.myfage-chat-list')
