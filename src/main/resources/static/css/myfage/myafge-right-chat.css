@@ -1,9 +1,50 @@
-.myfage-right-chat-box {
+.myfage-right-chat-box,
+.myfage-right-chat-not-default {
   width: 34rem;
   border-radius: 1rem;
   box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
   margin: 5rem 0.5rem;
   background-color: rgba(41, 45, 50, 1);
+}
+
+.myfage-right-chat-not-default{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.myfage-right-chat-not-select{
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: white;
+  margin-bottom: 0.7rem;
+}
+
+.myfage-right-chat-not-select-advice{
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+@keyframes chat-not-select-icon-action{
+  0%{
+    transform: translateY(0);
+  }
+  50%{
+    transform: translateY(-1.2rem);
+  }
+  100%{
+    transform: translateY(0);
+  }
+}
+
+.myfage-right-chat-not-select-icon{
+  scale: 70%;
+  animation-name: chat-not-select-icon-action;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
 }
 
 .myfage-right-chat-box-top-profile {

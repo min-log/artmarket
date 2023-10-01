@@ -3,12 +3,10 @@ const myfageNav = document.querySelector('.myfage-nav')
 myfageNav.insertAdjacentHTML('afterend', `<div class="myfage-nav-content">
 <div class="myfage-nav-profile">
   <div class="myfage-nav-profile-img">
-    <img src="./css/img/profile-test.gif" />
+    <img class="myfage-nav-profile-img-tag" src="" />
   </div>
-  <div class="myfage-nav-profile-identity">일반 회원</div>
-  <div class="myfage-nav-profile-greeting">
-    안녕하세요.<br />박다은님
-  </div>
+  <div class="myfage-nav-profile-identity"></div>
+  <div class="myfage-nav-profile-greeting"></div>
 </div>
 <div class="myfage-nav-profile-menu">
   <div id="myfage-nav-profile-img-mod">프로필이미지 수정하기</div>
@@ -41,6 +39,9 @@ myfageNav.insertAdjacentHTML('afterend', `<div class="myfage-nav-content">
 <div>
 <img class="myfage-nav-img" src="./css/img/myfage-nav-img.png" />
 </div>`)
+
+const myfageNavProfileIdentity = document.querySelector('.myfage-nav-profile-identity')
+myfageNavProfileIdentity.textContent = localStorage.getItem('identity') === 'GENERAL' ? '일반 회원' : '작가 회원'
 
 const myfageNavChat = document.querySelector('#myfage-chat')
 const myfageNavInfo = document.querySelector('#myfage-info')
