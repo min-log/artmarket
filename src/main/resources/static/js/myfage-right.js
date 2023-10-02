@@ -1,6 +1,3 @@
-import SockJS from 'sockjs-client'
-const stomp = require('stompjs')
-
 const myfageRightChatBoxBotSendAttach = document.querySelector('.myfage-right-chat-box-bot-send-attach')
 
 const myfageChatAttachInputTag = document.createElement('input')
@@ -143,4 +140,14 @@ for(const myfageChatList of myfageChatLists){
 
 myfageNavChat.addEventListener('click', function () {
     myfageChatRightAddTag()
+})
+
+
+// ------------------------------ myfage-article
+
+const myfageRightArticleManageIntroFileIcon = document.querySelector('.myfage-right-article-manage-intro-file-icon')
+const myfageRightArticleManageIntroFileValue = document.querySelector('.myfage-right-article-manage-intro-file-value')
+
+myfageRightArticleManageIntroFileIcon.addEventListener('click',function(){
+  myfageRightArticleManageIntroFileValue.click()
 })

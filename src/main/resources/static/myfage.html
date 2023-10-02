@@ -17,7 +17,8 @@
     <link rel="stylesheet" href="./css/myfage/myfage-nav.css" />
     <!-- <link rel="stylesheet" href="./css/myfage/myfage-mid-chat.css" />
     <link rel="stylesheet" href="./css/myfage/myafge-right-chat.css" /> -->
-    <link rel="stylesheet" href="./css/myfage/myafge-mid-article.css" />
+    <link rel="stylesheet" href="./css/myfage/myfage-mid-article.css" />
+    <link rel="stylesheet" href="./css/myfage/myfage-right-article.css" />
   </head>
   <body>
     <nav></nav>
@@ -53,30 +54,70 @@
                 <img class="myfage-mid-article-box-bot-list-thumb-img" src="./css/img/profile-test.gif"/>
                 <img class="myfage-mid-article-box-bot-list-thumb-img" src="./css/img/profile-test.gif"/>
               </div>
-              <div class="myfage-mid-article-box-bot-list-right-top">
-                <div class="myfage-mid-article-box-bot-list-right-top-art">
-                  <div class="myfage-mid-article-box-bot-list-right-top-art-label">작품번호</div>
-                  <div class="myfage-mid-article-box-bot-list-right-top-art-value">2023096012140211</div>
+              <div class="myfage-mid-article-box-bot-list-content">
+                <div class="myfage-mid-article-box-bot-list-right-top">
+                  <div class="myfage-mid-article-box-bot-list-right-top-art">
+                    <div class="myfage-mid-article-box-bot-list-right-top-art-label">작품번호</div>
+                    <div class="myfage-mid-article-box-bot-list-right-top-art-value">2023096012140211</div>
+                  </div>
+                  <div class="myfage-mid-article-box-bot-list-right-top-onOff">
+                    <img class="myfage-mid-article-box-bot-list-right-top-onOff-icon" src="./css/icon/article-off.png">
+                  </div>
                 </div>
-                <div class="myfage-mid-article-box-bot-list-right-top-onOff">
-                  <img class="myfage-mid-article-box-bot-list-right-top-onOff-icon" src="./css/icon/article-off.png">
+                <div class="myfage-mid-article-box-bot-list-category">
+                  <div class="myfage-mid-article-box-bot-list-category-label">카테고리</div>
+                  <div class="myfage-mid-article-box-bot-list-category-value">CHARACTER</div>
+                </div>
+              </br>
+                <div class="myfage-mid-article-box-bot-list-order">
+                  <div class="myfage-mid-article-box-bot-list-order-label">주문</div>
+                  <div class="myfage-mid-article-box-bot-list-order-value">100</div>
+                </div>
+                <div class="myfage-mid-article-box-bot-list-mod-del">
+                  <div class="myfage-mid-article-box-bot-list-mod">수정하기</div>
+                  <div class="myfage-mid-article-box-bot-list-del">삭제하기</div>
                 </div>
               </div>
-              <div class="myfage-mid-article-box-bot-list-category">
-                <div class="myfage-mid-article-box-bot-list-category-label">카테고리</div>
-                <div class="myfage-mid-article-box-bot-list-category-value">CHARACTER</div>
-              </div>
-              <div class="myfage-mid-article-box-bot-list-order">
-                <div class="myfage-mid-article-box-bot-list-order-label">주문</div>
-                <div class="myfage-mid-article-box-bot-list-order-value">100</div>
-              </div>
-              <div class="myfage-mid-article-box-bot-list-mod">수정하기</div>
-              <div class="myfage-mid-article-box-bot-list-del">삭제하기</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="myfage-right"></div>
+      <div class="myfage-right">
+        <div class="myfage-right-article-manage-box">
+          <div class="myfage-right-article-manage-title">작품 등록하기</div>
+          <div class="myfage-right-article-manage-category">
+            <div class="myfage-right-article-manage-category-select-title">카테고리</div>
+            <div class="myfage-right-article-manage-category-select-box">
+              <div class="myfage-right-article-manage-category-select-box-illust">ILLUST</div>
+              <div class="myfage-right-article-manage-category-select-box-live">LIVE2D•3D</div>
+              <div class="myfage-right-article-manage-category-select-box-design">DESIGN</div>
+              <div class="myfage-right-article-manage-category-select-box-video">VIDEO</div>
+              <div class="myfage-right-article-manage-category-select-box-character">CHARACTER</div>
+            </div>
+            <div class="myfage-right-article-manage-category-select-box-caution"><img class="myfage-right-article-manage-caution-img" src="./css/icon/error.png">카테고리는 필수로 1개 선택하셔야합니다.</div>
+          </div>
+          <div class="myfage-right-article-manage-title-box">
+            <div class="myfage-right-article-manage-title-box-label">작품 제목</div>
+            <textarea class="myfage-right-article-manage-title-box-value" cols="53" rows="1"></textarea>
+          </div>
+          <div class="myfage-right-article-manage-intro-box">
+            <div class="myfage-right-article-manage-intro-box-label">작품 설명</div>
+            <textarea class="myfage-right-article-manage-intro-box-value" cols="53" rows="10"></textarea>
+          </div>
+          <div class="myfage-right-article-manage-file-box">
+            <div class="myfage-right-article-manage-intro-file-label">파일 첨부</div>
+            <img class="myfage-right-article-manage-intro-file-icon" src="./css/icon/article-file-upload-icon.png"/>
+            <input class="myfage-right-article-manage-intro-file-value" type="file"/>
+            <div class="myfage-right-article-manage-intro-file-caution"><img class="myfage-right-article-manage-caution-img" src="./css/icon/error.png">파일은 최소3개~최대5개까지 업로드 가능합니다.</div>
+            <div class="myfage-right-article-manage-intro-file-caution"><img class="myfage-right-article-manage-caution-img" src="./css/icon/error.png">가로길이는 850으로 맞춰주세요.</div>
+          </div>
+          <div class="myfage-right-article-manage-btn-box">
+            <div class="myfage-right-article-manage-btn-box-show">미리보기</div>
+            <div class="myfage-right-article-manage-btn-box-add">등록하기</div>
+          </div>
+        </div>
+        <img class="myfage-right-article-back-img" src="./css/img/myfage-right-article.png">
+      </div>
     </container>
     <footer></footer>
   </body>
