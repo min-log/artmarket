@@ -27,7 +27,6 @@ textarea{
 .detail-mid-right-deadline > *,
 .detail-mid-right-payment > * {
     font-size: 0.9rem;
-    margin: 0.1rem;
 }
 
 input {
@@ -47,7 +46,8 @@ input {
 }
 
 .detail-top-title-label,
-.detail-top-article-num-label{
+.detail-top-article-num-label,
+input[type="button"]{
     font-weight: 600;
     font-size: 0.9rem;
     background-color: rgba(41, 45, 50, 1);
@@ -60,15 +60,13 @@ input {
 .detail-mid{
     display: flex;
     justify-content: space-between;
-}
-
-.detail-top{
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
     border-bottom: solid 0.1rem rgba(41, 45, 50, 0.3);
 }
+
 .detail-mid{
-    padding: 0 2rem 0 1rem;
+    padding: 0 2rem 1rem 1rem;
 }
 
 .detail-mid-left{
@@ -90,3 +88,57 @@ input {
     margin-right: 1rem;
 }
 
+.detail-mid-right-payment-cost{
+    outline: none;
+    border: none;
+    border-bottom: solid 0.1rem;
+}
+
+.detail-bot-caution{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(41, 45, 50, 1);
+    color: white;
+    border-radius: 1rem;
+    padding: 0.25rem 2rem;
+    margin-bottom: 1rem;
+}
+
+.detail-bot-caution > * {
+    margin: 0 0.3rem;
+}
+
+.detail-bot-caution-icon{
+    scale: 95%;
+}
+
+.detail-bot-caution-title{
+    font-weight: 500;
+}
+
+.detail-bot-caution-intro{
+    font-size: 0.8rem;
+    font-weight: 300;
+}
+
+.detail-bot,
+.detail-bot-intro,
+.detail-bot-img,
+.detail-bot-img-lists
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.detail-bot-intro,
+.detail-bot-img{
+    margin-bottom: 5rem;
+}
+
+.detail-bot-intro-label,
+.detail-bot-img-label{
+    font-size: 1.4rem;
+    font-weight: 700;
+}
