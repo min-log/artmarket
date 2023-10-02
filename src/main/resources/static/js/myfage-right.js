@@ -15,11 +15,12 @@ function myfageChatRightAddTag(){
     </div>`)
 }
 
-const myfageRightChatBox = document.querySelector('.myfage-right-chat-box')
-
 function myfageChatListClick(chatRoomId, chatProudct){
 
-    myfageRightChatBox.insertAdjacentHTML('afterend',`
+  const myfageRightChatNotDefault = document.querySelector('.myfage-right-chat-not-default')
+  myfageRightChatNotDefault.style.display = none;
+
+  myfageRight.insertAdjacentHTML('beforeend',`
     <div class="myfage-right-chat-box" id="${chatRoomId}">
     <div class="myfage-right-chat-box-top">
     <div class="myfage-right-chat-box-top-profile">
@@ -89,7 +90,7 @@ function myfageRightChatMsgs(chatWhoTag, chatWhoType, chatMsg, chatDate, chatTyp
   }
 }
 
-myfageChatRightAddTag()
+// myfageChatRightAddTag()
 
 const myfageChatLists = document.querySelectorAll('.myfage-chat-list')
 for(const myfageChatList of myfageChatLists){

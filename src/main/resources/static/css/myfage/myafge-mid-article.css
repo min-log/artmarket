@@ -1,0 +1,76 @@
+select{
+    border: solid 0.1rem rgba(41, 45, 50, 0.3);
+    border-radius: 1rem;
+    padding: 0.2rem 0.5rem;
+    color: rgba(41, 45, 50, 0.8);
+    font-family: "Noto Sans KR", sans-serif;
+    box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.1);
+}
+
+input[type='date']::before{
+    content: attr(date-placeholder);
+    width: 100%;
+}
+
+input[type='date']:focus{
+    outline: none;
+}
+
+input[type='date']{
+    width: 6.2rem;
+    border: solid 0.1rem rgba(41, 45, 50, 0.3);
+    border-radius: 1rem;
+    padding: 0.2rem 0.5rem;
+    color: rgba(41, 45, 50, 0.8);
+    font-family: "Noto Sans KR", sans-serif;
+    box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.1);
+}
+
+.myfage-mid-article-box-top,
+.myfage-mid-article-box-top-manage,
+.myfage-mid-article-box-top-manage-onOff {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.myfage-mid-article-box-top-filter{
+    margin-right: 6rem;
+}
+
+.myfage-mid-article-box-top-manage-add{
+    background-color: rgba(41, 45, 50, 1);
+    font-size: 0.8rem;
+    color: white;
+    border-radius: 1rem;
+    padding: 0 1rem;
+    box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
+    margin-right: 0.5rem;
+}
+
+.myfage-mid-article-box-top-manage-onOff,
+.myfage-mid-article-box-top-manage-onOff-icon{
+    margin-top: 0.1rem;
+}
+
+.myfage-mid-article-box-top-manage-onOff-icon{
+    scale: 90%;
+}
+
+.myfage-mid-article-box-top-manage-onOff-label{
+    font-size: 0.9rem;
+    color:rgba(41, 45, 50, 1);
+    font-weight: 600;
+    margin-right: 0.1rem;
+}
+
+.myfage-mid-article-box-bot-list{
+    display: flex;
+}
+
+.myfage-mid-article-box-bot-list-thumb-img {
+    width: 10rem;
+    justify-content: center;
+    align-items: center;
+    border: solid 0.1rem;
+}

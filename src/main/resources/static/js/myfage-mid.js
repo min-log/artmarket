@@ -1,3 +1,4 @@
+// ---------------------------------------------- myfage-chat
 const myfageMid = document.querySelector('.myfage-mid')
 
 function myfageChatMidAddTag() {
@@ -6,6 +7,8 @@ function myfageChatMidAddTag() {
 
     myfageMid.insertAdjacentHTML('afterend', `<div class="myfage-chat-box">
         <div class="myfage-chat-not-check">안 읽은 메세지만 보기</div>
+        <div class="myfage-chat-box-default-title">현재 대화중인 채팅방이 없습니다.</div>
+        <div class="myfage-chat-box-default-intro">다양한 작품을 구경하고 작가에게 문의해보세요!</div>
     </div>`)
 
 const myfageNavProfileGreeting = document.querySelector('.myfage-nav-profile-greeting')
@@ -66,8 +69,16 @@ function myfageChatListBring(chatRoomId, chatRoomMsg, chatRoomLastDate, chatSend
     })
 }
 
-myfageChatMidAddTag()
+// myfageChatMidAddTag()
 
 myfageNavChat.addEventListener('click', function () {
     myfageChatMidAddTag()
+})
+
+
+
+// ---------------------------------------------- myfage-article
+
+myfageNavArticle.addEventListener('click',function(){
+    alert('준비중입니다.')
 })

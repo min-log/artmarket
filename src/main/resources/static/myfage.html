@@ -15,14 +15,67 @@
     <link rel="stylesheet" href="./css/default/footer.css" />
     <link rel="stylesheet" href="./css/default/all.css" />
     <link rel="stylesheet" href="./css/myfage/myfage-nav.css" />
-    <link rel="stylesheet" href="./css/myfage/myfage-mid-chat.css" />
-    <link rel="stylesheet" href="./css/myfage/myafge-right-chat.css" />
+    <!-- <link rel="stylesheet" href="./css/myfage/myfage-mid-chat.css" />
+    <link rel="stylesheet" href="./css/myfage/myafge-right-chat.css" /> -->
+    <link rel="stylesheet" href="./css/myfage/myafge-mid-article.css" />
   </head>
   <body>
     <nav></nav>
     <container>
       <div class="myfage-nav"></div>
-      <div class="myfage-mid"></div>
+      <div class="myfage-mid">
+        <div class="myfage-mid-article-box">
+          <div class="myfage-mid-article-box-top">
+            <div class="myfage-mid-article-box-top-filter">
+              <select class="myfage-mid-article-box-top-filter-category">
+                <option >카테고리</option>
+                <option value="ILLUST">ILLUST</option>
+                <option value="LIVE">LIVE2D•3D</option>
+                <option value="CHARACTER">CHARACTER</option>
+                <option value="DESIGN">DESIGN</option>
+                <option value="VIDEO">VIDEO</option>
+              </select>
+              <input type="date" date-placeholder="시작일" class="myfage-mid-article-box-top-start-date" />
+              <input type="date" date-placeholder="종료일" class="myfage-mid-article-box-top-end-date" />
+            </div>
+            <div class="myfage-mid-article-box-top-manage">
+              <div class="myfage-mid-article-box-top-manage-add">작품 등록하기</div>
+              <div class="myfage-mid-article-box-top-manage-onOff">
+                <div class="myfage-mid-article-box-top-manage-onOff-label">의뢰</div>
+                <img class="myfage-mid-article-box-top-manage-onOff-icon" src="./css/icon/article-on.png">
+              </div>
+            </div>
+          </div>
+          <div class="myfage-mid-article-box-bot">
+            <div class="myfage-mid-article-box-bot-list">
+              <div class="myfage-mid-article-box-bot-list-thumb">
+                <img class="myfage-mid-article-box-bot-list-thumb-img" src="./css/img/profile-test.gif"/>
+                <img class="myfage-mid-article-box-bot-list-thumb-img" src="./css/img/profile-test.gif"/>
+                <img class="myfage-mid-article-box-bot-list-thumb-img" src="./css/img/profile-test.gif"/>
+              </div>
+              <div class="myfage-mid-article-box-bot-list-right-top">
+                <div class="myfage-mid-article-box-bot-list-right-top-art">
+                  <div class="myfage-mid-article-box-bot-list-right-top-art-label">작품번호</div>
+                  <div class="myfage-mid-article-box-bot-list-right-top-art-value">2023096012140211</div>
+                </div>
+                <div class="myfage-mid-article-box-bot-list-right-top-onOff">
+                  <img class="myfage-mid-article-box-bot-list-right-top-onOff-icon" src="./css/icon/article-off.png">
+                </div>
+              </div>
+              <div class="myfage-mid-article-box-bot-list-category">
+                <div class="myfage-mid-article-box-bot-list-category-label">카테고리</div>
+                <div class="myfage-mid-article-box-bot-list-category-value">CHARACTER</div>
+              </div>
+              <div class="myfage-mid-article-box-bot-list-order">
+                <div class="myfage-mid-article-box-bot-list-order-label">주문</div>
+                <div class="myfage-mid-article-box-bot-list-order-value">100</div>
+              </div>
+              <div class="myfage-mid-article-box-bot-list-mod">수정하기</div>
+              <div class="myfage-mid-article-box-bot-list-del">삭제하기</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="myfage-right"></div>
     </container>
     <footer></footer>
