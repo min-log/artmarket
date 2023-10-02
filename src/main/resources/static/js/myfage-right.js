@@ -1,3 +1,6 @@
+import SockJS from 'sockjs-client'
+const stomp = require('stompjs')
+
 const myfageRightChatBoxBotSendAttach = document.querySelector('.myfage-right-chat-box-bot-send-attach')
 
 const myfageChatAttachInputTag = document.createElement('input')
@@ -52,42 +55,38 @@ function myfageChatListClick(chatRoomId, chatProudct){
 
 const myfageRightChatBoxMid = document.querySelector('.myfage-right-chat-box-mid')
 
-function myfageRightChatMsgs(chatWhoTag, chatWhoType, chatMsg, chatDate, chatType, chatFile, chatFileName, chatFileDownload){
+function myfageRightChatTalk(chatWhoTag, chatMsg, chatDate){
   myfageRightChatBoxMid.insertAdjacentHTML('beforeend',`
   <div class="myfage-right-chat-box-mid-msg-${chatWhoTag}">
     <div class="myfage-right-chat-box-mid-msg-${chatWhoTag}-time">${chatDate}</div>
     <div class="myfage-right-chat-box-mid-msg-${chatWhoTag}-text">${chatMsg}</div>
   </div>`)
+}
 
+function myfageRightChatFile(chatWhoTag, chatFile, chatFileName, chatFileDownload){
+
+  let fileExtention = chatFileName.split('.')
+
+  myfageRightChatBoxMid.insertAdjacentHTML('beforeend',`
+  <div class="myfage-right-chat-box-mid-msg-${chatWhoTag}"></div>`)
+  
   const myfageRightChatBoxMidMsg = document.querySelector(`.myfage-right-chat-box-mid-msg-${chatWhoTag}`)
-  const myfageRightChatBoxMidMsgTime = document.querySelector(`.myfage-right-chat-box-mid-msg-${chatWhoTag}-time`)
-  const myfageRightChatBoxMidMsgText = document.querySelector(`.myfage-right-chat-box-mid-msg-${chatWhoTag}-text`)
-
-  if(chatType === 'ENTER'){
-    myfageRightChatBoxMidMsg.insertAdjacentHTML('afterbegin',`
-    <div class="myfage-right-chat-box-mid-enter">${chatWhoType}이 입장하셨습니다.</div>`)
-  }else if(chatType === 'LEAVE'){
-    myfageRightChatBoxMidMsgTime.remove()
-    myfageRightChatBoxMidMsgText.remove()
-    myfageRightChatBoxMidMsg.insertAdjacentHTML('afterbegin',`
-    <div class="myfage-right-chat-box-mid-leave">${chatWhoType}이 퇴장하셨습니다.</div>`)
-  }
-
-  if(chatFile !== null){
-    let fileExtention = chatFileName.split('.')
     
-    if(fileExtention[fileExtention.length-1] === 'txt'){
-
-      myfageRightChatBoxMidMsg.insertAdjacentHTML('beforeend',`{
-        <a href="${chatFile}" download="${chatFileDownload}">
-      }`)
-    }else{
-      myfageRightChatBoxMidMsg.insertAdjacentHTML('beforeend',`
-        <img src="${baseUrl}${chatFile}">
-        <a href="${baseUrl}${chatFile}" download="${chatFileDownload}">
-      `)
-    }
+  if(fileExtention[fileExtention.length-1] === 'txt'){
+    myfageRightChatBoxMidMsg.insertAdjacentHTML('beforeend',`
+      <a href="${chatFile}" download="${chatFileDownload}">
+    `)
+  }else{
+    myfageRightChatBoxMidMsg.insertAdjacentHTML('beforeend',`
+      <img src="${baseUrl}${chatFile}">
+      <a href="${baseUrl}${chatFile}" download="${chatFileDownload}">
+    `)
   }
+}
+
+function myfageRightChatEnterLeave(chatWhoTag, chatWhoType, chatEnterLeaveMsg){
+  myfageRightChatBoxMid.insertAdjacentHTML('beforeend',`
+  <div class="myfage-right-chat-box-mid-${chatWhoTag}">${chatWhoType}이 ${chatEnterLeaveMsg}하셨습니다.</div>`)
 }
 
 // myfageChatRightAddTag()
@@ -113,26 +112,26 @@ for(const myfageChatList of myfageChatLists){
           if(chatListStatus === 201){
             const myafgeRightChatBoxTopNickname = document.querySelector('.myafge-right-chat-box-top-nickname')
             myafgeRightChatBoxTopNickname.textContent = myfageChatList.getAttribute('name')
+
             myfageChatListClick(data.chatRoomId, data.chatProudct)
-            for(var i = 0; i < data.chatList.length; i++){
-              if(data.chatList[i].chatSender === localStorage.getItem('id')){
-                myfageRightChatMsgs('me',
-                  localStorage.getItem('nickname'), 
-                  data.chatList[i].chatMsg, 
-                  data.chatList[i].chatDate,
-                  data.chatList[i].chatType,
-                  data.chatList[i].chatFile,
-                  data.chatList[i].chatFileName,
-                  data.chatList[i].chatFileDownload)
-              }else{
-                myfageRightChatMsgs('other',
-                  myfageChatList.getAttribute('name'),
-                  data.chatList[i].chatMsg, 
-                  data.chatList[i].chatDate,
-                  data.chatList[i].chatType,
-                  data.chatList[i].chatFile,
-                  data.chatList[i].chatFileName,
-                  data.chatList[i].chatFileDownload)
+
+            const chatClickLists = data.chatList
+            let chatWhoTag
+            let chatWhoType
+
+            for(chatClickList of chatClickLists){
+              
+              chatWhoTag = chatClickList.chatSender === localStorage.getItem('id') ? 'me' : 'other'
+              chatWhoType = chatClickList.chatSender === localStorage.getItem('id') ? localStorage.getItem('nickname') : myfageChatList.getAttribute('name')
+              
+              if(chatClickList.chatType === 'TALK'){
+                myfageRightChatTalk(chatWhoTag, chatMsg, chatDate)
+              }else if(chatClickList.chatType === 'FILE'){
+                myfageRightChatFile(chatWhoTag, chatClickList.chatFile, chatClickList.chatFileName, chatClickList.chatFileDownload)
+              }else if(chatClickList.chatType === 'ENTER'){
+                myfageRightChatEnterLeave(chatWhoTag, chatWhoType, '입장')
+              }else if(chatClickList.chatType === 'LEAVE'){
+                myfageRightChatEnterLeave(chatWhoTag, chatWhoType, '퇴장')
               }
             }
           }else if(chatListStatus === 400){
