@@ -5,6 +5,7 @@ import llustmarket.artmarket.web.dto.member.ConfirmEmailDTO;
 import llustmarket.artmarket.web.dto.member.JoinRequestDTO;
 import llustmarket.artmarket.web.service.member.EmailService;
 import llustmarket.artmarket.web.service.member.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -21,18 +22,12 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class JoinController {
     private final RedisTemplate<String, String> redisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final MemberService memberService;
     private final EmailService emailService;
-
-    public JoinController(PasswordEncoder passwordEncoder, MemberService memberService, EmailService emailService, RedisTemplate<String, String> redisTemplate) {
-        this.passwordEncoder = passwordEncoder;
-        this.memberService = memberService;
-        this.emailService = emailService;
-        this.redisTemplate = redisTemplate;
-    }
 
     @PostMapping("/join-confirm")
     public ResponseEntity<Object> sendTokenByEmail(@RequestBody @Valid ConfirmEmailDTO confirmEmail, BindingResult bindingResult) {

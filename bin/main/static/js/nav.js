@@ -6,8 +6,14 @@ const navMenu = document.createElement('div')
 navMenu.setAttribute("class", "nav-menu")
 
 const login = document.createElement('div')
-login.textContent = 'LOGIN'
-login.setAttribute("class", "login")
+
+if (localStorage.getItem("id") !== null) {
+    login.textContent = 'LOGOUT'
+    login.setAttribute("class", "logout")
+} else {
+    login.textContent = 'LOGIN'
+    login.setAttribute("class", "login")
+}
 
 const myfage = document.createElement('div')
 myfage.textContent = 'MYFAGE'
@@ -89,7 +95,7 @@ navLogo.addEventListener("click", function () {
 })
 
 myfage.addEventListener("click", function () {
-    if (sessionStorage.getItem('memberId') === null) {
+    if (localStorage.getItem('id') === null) {
         notAcessMyfage()
     } else {
         location.href = "myfage.html"
@@ -101,5 +107,11 @@ home.addEventListener("click", function () {
 })
 
 login.addEventListener("click", function () {
-    location.href = "login.html"
+    if (localStorage.getItem("id") !== null) {
+        localStorage.removeItem("id")
+        localStorage.removeItem("identity")
+        login.textContent = 'LOGIN'
+    } else {
+        location.href = "login.html"
+    }
 })

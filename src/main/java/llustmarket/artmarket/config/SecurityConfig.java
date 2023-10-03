@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,6 +17,10 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -33,6 +39,13 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("loginCookie")
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK));
+        // 세션 타임아웃 설정
+        http.sessionManagement()
+                .sessionFixation().migrateSession()
+                .maximumSessions(1) // 동일한 사용자로부터 한 번에 받을 수 있는 최대 세션 수
+                .maxSessionsPreventsLogin(false) // false일 경우, 새 세션을 생성하고 기존 세션을 무효화함
+                .expiredUrl("/") // 세션이 만료되면 이동할 URL
+                .sessionRegistry(sessionRegistry()); // 세션 관리자
         http.csrf().disable();
         return http.build();
     }
