@@ -43,6 +43,34 @@ myfageNav.insertAdjacentHTML('afterend', `<div class="myfage-nav-content">
 const myfageNavProfileIdentity = document.querySelector('.myfage-nav-profile-identity')
 myfageNavProfileIdentity.textContent = localStorage.getItem('identity') === 'GENERAL' ? '일반 회원' : '작가 회원'
 
+function myfageNavSet() {
+  const myfageNavProfileGreeting = document.querySelector('.myfage-nav-profile-greeting')
+  const myfageNavProfileImgTag = document.querySelector('.myfage-nav-profile-img-tag')
+
+  fetch(`${baseUrl}/myfage/${localStorage.getItem('id')}`, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json'
+    }
+  }).then(response => {
+    resStatusCode = response.status
+    return response.json()
+  }).then(data => {
+    if (resStatusCode === 200) {
+      myfageNavProfileGreeting.textContent = `안녕하세요. ${data.nickname}님`
+      localStorage.setItem('nickname', `${data.nickname}`)
+      localStorage.setItem('intro', `${data.intro}`)
+      if (data.profileImg === null) {
+        myfageNavProfileImgTag.setAttribute('src', `./css/img/profile-test.gif`)
+      } else {
+        myfageNavProfileImgTag.setAttribute('src', `${baseUrl}/${data.profileImg}`)
+      }
+    }
+  })
+}
+
+myfageNavSet()
+
 const myfageNavChat = document.querySelector('#myfage-chat')
 const myfageNavInfo = document.querySelector('#myfage-info')
 const myfageNavOrder = document.querySelector('#myfage-order')

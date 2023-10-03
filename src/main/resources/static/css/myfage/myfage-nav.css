@@ -28,6 +28,7 @@ container {
 }
 
 .myfage-nav-profile-greeting {
+  width: 11rem;
   color: white;
   font-size: 2rem;
   font-weight: 600;
@@ -38,7 +39,7 @@ container {
 .myfage-nav-profile-img {
   width: 5.5rem;
   height: 5.5rem;
-  border-radius: 200rem;
+  border-radius: 50%;
   overflow: hidden;
   display: flex;
   justify-content: center;
