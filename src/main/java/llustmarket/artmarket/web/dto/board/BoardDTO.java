@@ -1,14 +1,18 @@
 package llustmarket.artmarket.web.dto.board;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@ToString
+import java.util.List;
+
+
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@Builder
 public class BoardDTO {
 
     private Long productId;
@@ -18,5 +22,12 @@ public class BoardDTO {
 
     @JsonProperty(value = "proNickname")
     private String nickname;
+
+    @JsonProperty(value = "productImgs")
+    private List<BoardFileDTO> fileList;
+
+
+//    private String filePath;
+//    private String fileName;
 
 }

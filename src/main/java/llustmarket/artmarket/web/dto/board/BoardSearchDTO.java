@@ -11,4 +11,6 @@ import lombok.*;
 public class BoardSearchDTO {
 
     private String categoryKeyword;
+
+    private Long memberId;
 }

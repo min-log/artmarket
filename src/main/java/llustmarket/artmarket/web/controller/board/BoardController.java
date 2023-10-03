@@ -1,6 +1,7 @@
 package llustmarket.artmarket.web.controller.board;
 
 import llustmarket.artmarket.web.dto.board.BoardDTO;
+import llustmarket.artmarket.web.dto.board.BoardFileDTO;
 import llustmarket.artmarket.web.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/category")
@@ -22,15 +26,25 @@ public class BoardController {
     BoardService boardService;
 
     @GetMapping("/list/character")
-    public ResponseEntity<List<BoardDTO>> getCharacter() {
+    public ResponseEntity<Object> getCharacter() {
+
+        List<BoardFileDTO> files = boardService.getCharacterFile();
         List<BoardDTO> boards = boardService.getCharacter();
-        return ResponseEntity.status(HttpStatus.OK).body(boards);
+        Map<Object, Object> products = new LinkedHashMap<>();
+        products.put("products", boards);
+        products.put("productImgs", files);
+
+        return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
     @GetMapping("/list/illust")
-    public ResponseEntity<List<BoardDTO>> getIllust() {
+    public ResponseEntity<Object> getIllust() {
         List<BoardDTO> boards = boardService.getIllust();
-        return ResponseEntity.status(HttpStatus.OK).body(boards);
+        Map<String, List<BoardDTO>> products = new HashMap<>();
+
+
+        products.put("products", boards);
+        return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
     @GetMapping("/list/live")

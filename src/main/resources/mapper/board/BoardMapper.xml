@@ -5,31 +5,44 @@
     <select id="getCharacter" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
         SELECT p.product_id, p.product_title, m.nickname
         FROM art_market_db.product p , art_market_db.member m
-        WHERE category = 'character' AND p.member_id = m.member_id;
+        WHERE category = 'character' AND p.member_id = m.member_id
+        ORDER BY p.product_date DESC
+    </select>
+
+    <select id="getCharacterFile" resultType="llustmarket.artmarket.web.dto.board.BoardFileDTO">
+        SELECT f.file_path, f.file_name
+        FROM art_market_db.file f, art_market_db.product p
+        WHERE category = 'character' AND f.file_path = 'PRODUCT'
+        AND p.product_id = f.file_type_id
+        ORDER BY f.file_date ASC LIMIT 3
     </select>
 
     <select id="getIllust" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
         SELECT p.product_id, p.product_title, m.nickname
         FROM art_market_db.product p , art_market_db.member m
-        WHERE category = 'illust' AND p.member_id = m.member_id;
+        WHERE category = 'illust' AND p.member_id = m.member_id
+        ORDER BY p.product_date DESC
     </select>
 
     <select id="getLive" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
         SELECT p.product_id, p.product_title, m.nickname
         FROM art_market_db.product p , art_market_db.member m
-        WHERE category = 'live' AND p.member_id = m.member_id;
+        WHERE category = 'live' AND p.member_id = m.member_id
+        ORDER BY p.product_date DESC
     </select>
 
     <select id="getDesign" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
         SELECT p.product_id, p.product_title, m.nickname
         FROM art_market_db.product p , art_market_db.member m
-        WHERE category = 'design' AND p.member_id = m.member_id;
+        WHERE category = 'design' AND p.member_id = m.member_id
+        ORDER BY p.product_date DESC
     </select>
 
     <select id="getVideo" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
         SELECT p.product_id, p.product_title, m.nickname
         FROM art_market_db.product p , art_market_db.member m
-        WHERE category = 'video' AND p.member_id = m.member_id;
+        WHERE category = 'video' AND p.member_id = m.member_id
+        ORDER BY p.product_date DESC
     </select>
 
     <select id="getPopular" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
@@ -37,14 +50,14 @@
         FROM art_market_db.product p , art_market_db.member m, art_market_db.order o
         WHERE p.member_id = m.member_id AND p.product_id = o.product_id
         GROUP BY product_id
-        ORDER BY count(o.product_id) DESC;
+        ORDER BY count(o.product_id) DESC
     </select>
 
     <select id="getCurrent" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
         SELECT p.product_id, p.product_title, m.nickname
         FROM art_market_db.product p , art_market_db.member m
         WHERE p.member_id = m.member_id
-        ORDER BY p.product_date DESC;
+        ORDER BY p.product_date DESC
     </select>
 
     <select id="getSearch" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
@@ -53,6 +66,28 @@
         WHERE p.member_id = m.member_id AND (p.product_title LIKE CONCAT('%', #{categoryKeyword}, '%')
         OR m.nickname LIKE CONCAT('%', #{categoryKeyword}, '%')
         OR p.category LIKE CONCAT('%', #{categoryKeyword}, '%'))
-        ORDER BY p.product_date DESC;
+        ORDER BY p.product_date DESC
+    </select>
+
+    <select id="getAuthor" resultType="llustmarket.artmarket.web.dto.board.AuthorDTO">
+        SELECT m.nickname, f.file_path, f.file_name
+        FROM art_market_db.product p , art_market_db.member m, art_market_db.file f
+        WHERE f.file_path = 'PROFILE' AND p.product_id = #{productId}
+        AND p.member_id = m.member_id AND p.product_id = f.file_type_id
+    </select>
+
+    <select id="getProductDetail" resultType="llustmarket.artmarket.web.dto.board.ProductDetailDTO">
+        SELECT product_title, product_detail
+        FROM art_market_db.product
+        WHERE product_id = #{productId}
+
+    </select>
+
+    <select id="getProductFile" resultType="llustmarket.artmarket.web.dto.board.BoardFileDTO">
+        SELECT f.file_path, f.file_name
+        FROM art_market_db.file f, art_market_db.product p
+        WHERE f.file_path = 'PRODUCT' AND p.product_id = #{productId}
+        AND p.product_id = f.file_type_id
+        ORDER BY f.file_date ASC
     </select>
 </mapper>
