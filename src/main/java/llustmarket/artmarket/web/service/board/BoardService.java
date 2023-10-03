@@ -3,7 +3,6 @@ package llustmarket.artmarket.web.service.board;
 import llustmarket.artmarket.domain.board.BoardRepository;
 import llustmarket.artmarket.web.dto.board.AuthorDTO;
 import llustmarket.artmarket.web.dto.board.BoardDTO;
-import llustmarket.artmarket.web.dto.board.BoardFileDTO;
 import llustmarket.artmarket.web.dto.board.ProductDetailDTO;
 import llustmarket.artmarket.web.mapper.board.BoardMapper;
 import llustmarket.artmarket.web.mapper.file.FileMapper;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class BoardService {
         return boardMapper.getCharacter();
     }
 
-    public List<BoardFileDTO> getCharacterFile() {
+    public List getCharacterFile() {
         return boardMapper.getCharacterFile();
     }
 
@@ -73,7 +73,7 @@ public class BoardService {
         return boardMapper.getProductDetail(productId);
     }
 
-    public List<BoardFileDTO> getProductFile(Long productId) {
+    public List<Map<String, Object>> getProductFile(Long productId) {
         return boardMapper.getProductFile(productId);
     }
 }

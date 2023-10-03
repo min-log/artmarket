@@ -2,18 +2,18 @@ package llustmarket.artmarket.web.mapper.board;
 
 import llustmarket.artmarket.web.dto.board.AuthorDTO;
 import llustmarket.artmarket.web.dto.board.BoardDTO;
-import llustmarket.artmarket.web.dto.board.BoardFileDTO;
 import llustmarket.artmarket.web.dto.board.ProductDetailDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Mapper
 public interface BoardMapper {
     List<BoardDTO> getCharacter();
 
-    List<BoardFileDTO> getCharacterFile();
+    List getCharacterFile();
 
     List<BoardDTO> getIllust();
 
@@ -33,6 +33,6 @@ public interface BoardMapper {
 
     ProductDetailDTO getProductDetail(Long productId);
 
-    List<BoardFileDTO> getProductFile(Long productId);
+    List<Map<String, Object>> getProductFile(Long productId);
 
 }

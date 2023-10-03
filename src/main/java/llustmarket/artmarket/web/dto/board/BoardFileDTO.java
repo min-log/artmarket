@@ -10,11 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class BoardFileDTO {
-
-    private String filePath;
-
-    private String fileName;
-
+    
     private String productDetailImgs;
 
 

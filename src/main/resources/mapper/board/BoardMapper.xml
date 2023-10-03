@@ -9,7 +9,7 @@
         ORDER BY p.product_date DESC
     </select>
 
-    <select id="getCharacterFile" resultType="llustmarket.artmarket.web.dto.board.BoardFileDTO">
+    <select id="getCharacterFile" resultType="llustmarket.artmarket.domain.file.FileVO">
         SELECT f.file_path, f.file_name
         FROM art_market_db.file f, art_market_db.product p
         WHERE category = 'character' AND f.file_path = 'PRODUCT'
@@ -83,11 +83,16 @@
 
     </select>
 
-    <select id="getProductFile" resultType="llustmarket.artmarket.web.dto.board.BoardFileDTO">
+    <select id="getProductFile" resultMap="FileMap">
         SELECT f.file_path, f.file_name
         FROM art_market_db.file f, art_market_db.product p
         WHERE f.file_path = 'PRODUCT' AND p.product_id = #{productId}
         AND p.product_id = f.file_type_id
         ORDER BY f.file_date ASC
     </select>
+
+    <resultMap type="map" id="FileMap">
+        <result column="file_path" property="filePath"></result>
+        <result column="file_name" property="fileName"></result>
+    </resultMap>
 </mapper>
