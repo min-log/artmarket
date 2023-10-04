@@ -7,11 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -26,9 +21,12 @@ public class MemberService {
         memberMapper.insertMember(member);
     }
 
-    @Transactional
-    public void updateIdentity(Long memberId, String identity) {
-        memberMapper.updateIdentity(memberId, identity);
+    public void insertNormalMember(Member member) {
+        // identity가 비어있을 경우 기본값인 "normal"로 설정
+        if (member.getIdentity() == null || member.getIdentity().isEmpty()) {
+            member.setIdentity("normal");
+        }
+        memberMapper.insertMember(member);
     }
 
     @Transactional
