@@ -9,7 +9,6 @@ import llustmarket.artmarket.web.dto.board.ProductDetailDTO;
 import llustmarket.artmarket.web.mapper.file.FileMapper;
 import llustmarket.artmarket.web.mapper.product.ProductMapper;
 import llustmarket.artmarket.web.service.board.BoardService;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@Log4j2
 @RestController
 @RequestMapping("/product")
 public class ProductDetailController {
@@ -50,7 +48,6 @@ public class ProductDetailController {
             authors.setAuthorPofile("/" + memberProfile.getFilePath() + "/" + memberProfile.getFileName());
         }
 
-
         ProductDetailDTO productDetailDTO = ProductDetailDTO.builder().build();
         BoardFileDTO boardFileDTO = BoardFileDTO.builder().build();
         List pfiles = new ArrayList<>();
@@ -69,8 +66,6 @@ public class ProductDetailController {
                 productDetail(details.getProductDetail()).
                 productDetailImgs(productDetailDTO.getProductDetailImgs()).
                 build();
-        log.info(details.getProductDetail());
-        log.info(details.getProductTitle());
 
         Map<Object, Object> result = new LinkedHashMap<>();
         result.put("author", authors);

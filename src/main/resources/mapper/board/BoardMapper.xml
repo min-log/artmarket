@@ -2,47 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="llustmarket.artmarket.web.mapper.board.BoardMapper">
-    <select id="getCharacter" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+    <select id="getCategoryList" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
         SELECT p.product_id, p.product_title, m.nickname
         FROM art_market_db.product p , art_market_db.member m
-        WHERE category = 'character' AND p.member_id = m.member_id
+        WHERE category = #{category}
+        AND p.member_id = m.member_id
         ORDER BY p.product_date DESC
     </select>
 
-    <select id="getCharacterFile" resultType="llustmarket.artmarket.domain.file.FileVO">
+    <select id="getCategoryFile" resultMap="FileMap">
         SELECT f.file_path, f.file_name
         FROM art_market_db.file f, art_market_db.product p
-        WHERE category = 'character' AND f.file_path = 'PRODUCT'
+        WHERE category = #{category}
+        AND f.file_path = 'PRODUCT'
         AND p.product_id = f.file_type_id
-        ORDER BY f.file_date ASC LIMIT 3
-    </select>
-
-    <select id="getIllust" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
-        SELECT p.product_id, p.product_title, m.nickname
-        FROM art_market_db.product p , art_market_db.member m
-        WHERE category = 'illust' AND p.member_id = m.member_id
-        ORDER BY p.product_date DESC
-    </select>
-
-    <select id="getLive" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
-        SELECT p.product_id, p.product_title, m.nickname
-        FROM art_market_db.product p , art_market_db.member m
-        WHERE category = 'live' AND p.member_id = m.member_id
-        ORDER BY p.product_date DESC
-    </select>
-
-    <select id="getDesign" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
-        SELECT p.product_id, p.product_title, m.nickname
-        FROM art_market_db.product p , art_market_db.member m
-        WHERE category = 'design' AND p.member_id = m.member_id
-        ORDER BY p.product_date DESC
-    </select>
-
-    <select id="getVideo" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
-        SELECT p.product_id, p.product_title, m.nickname
-        FROM art_market_db.product p , art_market_db.member m
-        WHERE category = 'video' AND p.member_id = m.member_id
-        ORDER BY p.product_date DESC
+        ORDER BY f.file_date ASC
     </select>
 
     <select id="getPopular" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
@@ -70,10 +44,10 @@
     </select>
 
     <select id="getAuthor" resultType="llustmarket.artmarket.web.dto.board.AuthorDTO">
-        SELECT m.nickname, f.file_path, f.file_name
-        FROM art_market_db.product p , art_market_db.member m, art_market_db.file f
-        WHERE f.file_path = 'PROFILE' AND p.product_id = #{productId}
-        AND p.member_id = m.member_id AND p.product_id = f.file_type_id
+        SELECT m.nickname
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE p.product_id = #{productId}
+        AND p.member_id = m.member_id
     </select>
 
     <select id="getProductDetail" resultType="llustmarket.artmarket.web.dto.board.ProductDetailDTO">

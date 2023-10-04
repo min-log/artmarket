@@ -11,17 +11,9 @@ import java.util.Map;
 
 @Mapper
 public interface BoardMapper {
-    List<BoardDTO> getCharacter();
+    List<BoardDTO> getCategoryList(String category);
 
-    List getCharacterFile();
-
-    List<BoardDTO> getIllust();
-
-    List<BoardDTO> getLive();
-
-    List<BoardDTO> getDesign();
-
-    List<BoardDTO> getVideo();
+    List<Map<String, Object>> getCategoryFile(String category);
 
     List<BoardDTO> getPopular();
 

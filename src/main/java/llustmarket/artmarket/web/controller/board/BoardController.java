@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,45 +25,29 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
-    @GetMapping("/list/character")
-    public ResponseEntity<Object> getCharacter() {
+    @GetMapping("/list/{category}")
+    public ResponseEntity<Object> getCharacter(@PathVariable(value = "category") String category) {
 
-        List<BoardFileDTO> files = boardService.getCharacterFile();
-        List<BoardDTO> boards = boardService.getCharacter();
+        List<BoardDTO> boards = boardService.getCategoryList(category);
+        List<Map<String, Object>> files = boardService.getCategoryFile(category);
+
+        BoardDTO boardDTO = BoardDTO.builder().build();
+        BoardFileDTO boardFileDTO = BoardFileDTO.builder().build();
+        List pfiles = new ArrayList<>();
+
+        for (int i = 0; i < files.size(); i++) {
+            boardFileDTO.setProductDetailImgs("/" + files.get(i).get("filePath").toString() + "/" + files.get(i).get("fileName").toString());
+            pfiles.add(boardFileDTO.getProductDetailImgs());
+        }
+        boardDTO.setFileList(pfiles);
+
         Map<Object, Object> products = new LinkedHashMap<>();
         products.put("products", boards);
-        products.put("productImgs", files);
+        products.put("productImgs", pfiles);
 
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
-    @GetMapping("/list/illust")
-    public ResponseEntity<Object> getIllust() {
-        List<BoardDTO> boards = boardService.getIllust();
-        Map<String, List<BoardDTO>> products = new HashMap<>();
-
-
-        products.put("products", boards);
-        return ResponseEntity.status(HttpStatus.OK).body(products);
-    }
-
-    @GetMapping("/list/live")
-    public ResponseEntity<List<BoardDTO>> getLive() {
-        List<BoardDTO> boards = boardService.getLive();
-        return ResponseEntity.status(HttpStatus.OK).body(boards);
-    }
-
-    @GetMapping("/list/design")
-    public ResponseEntity<List<BoardDTO>> getDesign() {
-        List<BoardDTO> boards = boardService.getDesign();
-        return ResponseEntity.status(HttpStatus.OK).body(boards);
-    }
-
-    @GetMapping("/list/video")
-    public ResponseEntity<List<BoardDTO>> getVideo() {
-        List<BoardDTO> boards = boardService.getVideo();
-        return ResponseEntity.status(HttpStatus.OK).body(boards);
-    }
 
     @GetMapping("/array/popular")
     public ResponseEntity<List<BoardDTO>> getPopular() {

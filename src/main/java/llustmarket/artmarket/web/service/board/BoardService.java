@@ -1,12 +1,9 @@
 package llustmarket.artmarket.web.service.board;
 
-import llustmarket.artmarket.domain.board.BoardRepository;
 import llustmarket.artmarket.web.dto.board.AuthorDTO;
 import llustmarket.artmarket.web.dto.board.BoardDTO;
 import llustmarket.artmarket.web.dto.board.ProductDetailDTO;
 import llustmarket.artmarket.web.mapper.board.BoardMapper;
-import llustmarket.artmarket.web.mapper.file.FileMapper;
-import llustmarket.artmarket.web.mapper.product.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,36 +18,12 @@ public class BoardService {
     @Autowired
     private BoardMapper boardMapper;
 
-    final BoardRepository boardRepository;
-
-    @Autowired
-    ProductMapper productMapper;
-    @Autowired
-    FileMapper fileMapper;
-
-
-    public List<BoardDTO> getCharacter() {
-        return boardMapper.getCharacter();
+    public List<BoardDTO> getCategoryList(String category) {
+        return boardMapper.getCategoryList(category);
     }
 
-    public List getCharacterFile() {
-        return boardMapper.getCharacterFile();
-    }
-
-    public List<BoardDTO> getIllust() {
-        return boardMapper.getIllust();
-    }
-
-    public List<BoardDTO> getLive() {
-        return boardMapper.getLive();
-    }
-
-    public List<BoardDTO> getDesign() {
-        return boardMapper.getDesign();
-    }
-
-    public List<BoardDTO> getVideo() {
-        return boardMapper.getVideo();
+    public List<Map<String, Object>> getCategoryFile(String category) {
+        return boardMapper.getCategoryFile(category);
     }
 
     public List<BoardDTO> getPopular() {

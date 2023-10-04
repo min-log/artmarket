@@ -24,10 +24,6 @@ public class BoardDTO {
     private String nickname;
 
     @JsonProperty(value = "productImgs")
-    private List<BoardFileDTO> fileList;
-
-
-//    private String filePath;
-//    private String fileName;
-
+    private List fileList;
+    
 }
