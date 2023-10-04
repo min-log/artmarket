@@ -4,6 +4,7 @@ import llustmarket.artmarket.web.dto.board.AuthorDTO;
 import llustmarket.artmarket.web.dto.board.BoardDTO;
 import llustmarket.artmarket.web.dto.board.ProductDetailDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,9 @@ import java.util.Map;
 public interface BoardMapper {
     List<BoardDTO> getCategoryList(String category);
 
-    List<Map<String, Object>> getCategoryFile(String category);
+    List<Map<String, Object>> getCategoryFile(@Param("category") String category, @Param("productId") Long productId);
+
+    List<Map<String, Object>> getArrayFile(Long productId);
 
     List<BoardDTO> getPopular();
 
