@@ -14,7 +14,7 @@ import java.util.List;
 public class ProductUpdateDTO {
 
     @NotNull
-    private Long articleModProductId;
+    private String articleModProductId;
 
     @NotNull
     private String articleModCategory;

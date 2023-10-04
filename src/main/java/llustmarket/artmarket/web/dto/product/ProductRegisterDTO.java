@@ -14,7 +14,7 @@ import java.util.List;
 public class ProductRegisterDTO {
 
     @NotNull
-    private Long id;
+    private String id;
 
     @NotNull
     private String category;

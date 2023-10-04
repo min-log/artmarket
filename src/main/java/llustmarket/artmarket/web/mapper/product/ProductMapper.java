@@ -4,6 +4,8 @@ import llustmarket.artmarket.domain.product.Product;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface ProductMapper {
     Long insertProduct(Product product);
@@ -16,6 +18,8 @@ public interface ProductMapper {
     );
 
     Product findProductByProductId(Long productId);
+
+    List<Product> findProductByMemberId(Long memberId);
 
     void deleteProductById(Long productId);
 

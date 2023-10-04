@@ -16,6 +16,9 @@
     <select id="findProductByProductId" resultType="llustmarket.artmarket.domain.product.Product">
         select * from product where product_id=#{productId}
     </select>
+    <select id="findProductByMemberId" resultType="llustmarket.artmarket.domain.product.Product">
+        select * from product where member_id=#{memberId}
+    </select>
 
     <delete id="deleteProductById">
         DELETE FROM product WHERE product_id = #{productId}

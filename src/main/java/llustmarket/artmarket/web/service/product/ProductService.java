@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Log4j2
 @RequiredArgsConstructor
 @Service
@@ -29,6 +31,10 @@ public class ProductService {
 
     public Product findProductByProductId(Long productId) {
         return productMapper.findProductByProductId(productId);
+    }
+
+    public List<Product> findProductByMemberId(Long memberId) {
+        return productMapper.findProductByMemberId(memberId);
     }
 
     @Transactional

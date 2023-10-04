@@ -349,7 +349,6 @@ public class MemberController {
                     Map<String, String> errorMap = new HashMap<>();
                     errorMap.put("modPhoneErrorParam", fieldName);
                     errorMap.put("modPhoneErrorMsg", errorMessage);
-                    log.error("여기");
                     modPhoneErrors.add(errorMap);
 
                     return ResponseEntity.status(HttpStatus.CONFLICT).body(modPhoneErrors);

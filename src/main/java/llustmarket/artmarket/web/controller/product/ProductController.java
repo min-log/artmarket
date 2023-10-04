@@ -4,10 +4,12 @@ import llustmarket.artmarket.domain.file.FileType;
 import llustmarket.artmarket.domain.file.FileVO;
 import llustmarket.artmarket.domain.product.Product;
 import llustmarket.artmarket.web.dto.file.FileDTO;
+import llustmarket.artmarket.web.dto.product.Article;
 import llustmarket.artmarket.web.dto.product.ProductDTO;
 import llustmarket.artmarket.web.dto.product.ProductRegisterDTO;
 import llustmarket.artmarket.web.dto.product.ProductUpdateDTO;
 import llustmarket.artmarket.web.mapper.file.FileMapper;
+import llustmarket.artmarket.web.mapper.order.OrderMapper;
 import llustmarket.artmarket.web.service.file.FileService;
 import llustmarket.artmarket.web.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +35,45 @@ public class ProductController {
     private final ProductService productService;
     private final FileService fileService;
     private final FileMapper fileMapper;
+    private final OrderMapper orderMapper;
+
+    @GetMapping("/mypage-articles/{member_id}")
+    public ResponseEntity<Object> getArticles(@PathVariable("member_id") Long memberId) {
+        try {
+            // 멤버아이디로 Product DB에서 상품 여러 개 찾아 List에 담기
+            List<Product> memberProducts = productService.findProductByMemberId(memberId);
+            List<Article> articles = new ArrayList<>();
+
+            // List에 있는 반복문을 통해 상품별 정보 배열 담기
+            for (Product memberProduct : memberProducts) {
+                List<FileVO> productFiles = fileMapper.getFilesByTypeAndId("PRODUCT", memberProduct.getProductId());
+                List<String> fileNames = new ArrayList<>();
+
+                // 파일 이름만 추출해서 List에 추가
+                for (FileVO file : productFiles) {
+                    fileNames.add("/PRODUCT/" + file.getFileName());
+                }
+
+                Article article = new Article(
+                        memberProduct.getProductId(),  // product_id
+                        memberProduct.getCategory(),  // category
+                        memberProduct.getProductDate(),  // product_date
+                        orderMapper.countOrdersByProductId(memberProduct.getProductId()),  // quantity
+                        fileNames  // List of file names
+                );
+                articles.add(article);
+            }
+
+            // articles를 JSON 형태로 리턴
+            return ResponseEntity.ok(articles);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
     @PostMapping("/mypage-articles-in")
-    public ResponseEntity<?> productRegisterProcess(@ModelAttribute @Valid ProductRegisterDTO productRequest, BindingResult bindingResult) {
+    public ResponseEntity<Object> productRegisterProcess(@ModelAttribute @Valid ProductRegisterDTO productRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<Map<String, String>> productRegisterErrors = new ArrayList<>();
 
@@ -56,7 +94,7 @@ public class ProductController {
                 List<MultipartFile> articleFiles = productRequest.getArticleFile();
                 if (articleFiles != null && !articleFiles.isEmpty() && articleFiles.size() <= 5) {
                     Product product = new Product(
-                            productRequest.getId(),
+                            Long.valueOf(productRequest.getId()),
                             productRequest.getCategory(),
                             productRequest.getArticleTitle(),
                             productRequest.getArticleDetail()
@@ -71,7 +109,7 @@ public class ProductController {
                         // 파일을 저장하고 데이터베이스에 등록
                         FileDTO uploadedFile = fileService.fileRegister(FileType.PRODUCT, articleFile);
                         // FileVO를 생성하여 데이터베이스에 저장
-                        ProductDTO lastProduct = productService.selectLastByMemberId(productRequest.getId());
+                        ProductDTO lastProduct = productService.selectLastByMemberId(Long.valueOf(productRequest.getId()));
                         FileVO fileVO = FileVO.builder()
                                 .filePath(uploadedFile.getFilePath())
                                 .fileTypeId(lastProduct.getProductId())
@@ -111,7 +149,7 @@ public class ProductController {
     }
 
     @PatchMapping("/mypage-articles-in")
-    public ResponseEntity<?> productUpdateProcess(@ModelAttribute @Valid ProductUpdateDTO productRequest, BindingResult bindingResult) {
+    public ResponseEntity<Object> productUpdateProcess(@ModelAttribute @Valid ProductUpdateDTO productRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<Map<String, String>> productUpdateErrors = new ArrayList<>();
 
@@ -129,23 +167,23 @@ public class ProductController {
         if (productRequest.getArticleModProductId() != null && productRequest.getArticleModCategory() != null &&
                 productRequest.getArticleModTitle() != null && productRequest.getArticleModDetail() != null && productRequest.getArticleModImgs() != null) {
             try {
-                Product product = productService.findProductByProductId(productRequest.getArticleModProductId());
+                Product product = productService.findProductByProductId(Long.valueOf(productRequest.getArticleModProductId()));
                 if (product != null) {
                     //상품 수정
                     productService.modifyProduct(
-                            productRequest.getArticleModProductId(),
+                            Long.valueOf(productRequest.getArticleModProductId()),
                             productRequest.getArticleModCategory(),
                             productRequest.getArticleModTitle(),
                             productRequest.getArticleModDetail()
                     );
                     //기존 파일 삭제
-                    List<FileVO> filesToDelete = fileMapper.getFilesByTypeAndId("PRODUCT", productRequest.getArticleModProductId());
+                    List<FileVO> filesToDelete = fileMapper.getFilesByTypeAndId("PRODUCT", Long.valueOf(productRequest.getArticleModProductId()));
                     for (FileVO fileToDelete : filesToDelete) {
                         fileService.fileRemove(fileToDelete.getFilePath(), fileToDelete.getFileName());
                     }
                     FileVO fileToDelete = FileVO.builder()
                             .filePath("PRODUCT")
-                            .fileTypeId(productRequest.getArticleModProductId())
+                            .fileTypeId(Long.parseLong(productRequest.getArticleModProductId()))
                             .build();
                     fileMapper.deleteFile(fileToDelete);
                     //파일 새로 추가
@@ -162,7 +200,7 @@ public class ProductController {
                             // FileVO를 생성하여 데이터베이스에 저장
                             FileVO fileVO = FileVO.builder()
                                     .filePath(uploadedFile.getFilePath())
-                                    .fileTypeId(productRequest.getArticleModProductId())
+                                    .fileTypeId(Long.parseLong(productRequest.getArticleModProductId()))
                                     .fileOriginName(uploadedFile.getFileOriginName())
                                     .fileName(uploadedFile.getFileName())
                                     .fileDate(LocalDateTime.now())
@@ -207,7 +245,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/mypage-articles/{product_id}")
-    public ResponseEntity<?> deleteProductById(@PathVariable("product_id") Long productId) {
+    public ResponseEntity<Object> deleteProductById(@PathVariable("product_id") Long productId) {
         try {
             if (productService.findProductByProductId(productId) != null) {
                 List<FileVO> filesToDelete = fileMapper.getFilesByTypeAndId("PRODUCT", productId);
