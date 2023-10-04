@@ -357,7 +357,11 @@ function joinInfoShow() {
     joinIdentityBtn.addEventListener('click', function () {
 
         let joinStatus = 0
+<<<<<<< HEAD
         let resultResponseBody
+=======
+
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
         if (joinInfoSubmit() === 6) {
             fetch(`${baseUrl}/join`, {
                 method: 'POST',
@@ -375,6 +379,7 @@ function joinInfoShow() {
                 })
             }).then(response => {
                 joinStatus = response.status
+<<<<<<< HEAD
                 if (response.status === 409) {
                     resultResponseBody = response.json()
                 }
@@ -383,6 +388,15 @@ function joinInfoShow() {
                     joinCompleteAction()
                 } else if (joinStatus === 409) {
                     joinConflictJsonResult(resultResponseBody)
+=======
+                return response.json()
+            }).then((result) => {
+                if (joinStatus === 201) {
+                    joinCompleteAction()
+                } else if (joinStatus === 409) {
+                    console.log()
+                    joinConflictJsonResult(result)
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
                 }
             })
         }
@@ -405,19 +419,26 @@ function joinCompleteAction() {
 
     joinIngImg[2].style.opacity = '1'
 
+<<<<<<< HEAD
     const joinIng = document.querySelector('.join-ing')
     const afterJoinIdentityTitle = document.querySelector('.after-join-identity-title')
     const afterJoinIdentity = document.querySelector('.after-join-identity')
     const joinIdentityBtn = document.querySelector('.join-identity-btn')
 
     joinIng.remove()
+=======
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
     afterJoinIdentityTitle.remove()
     afterJoinIdentity.remove()
     joinIdentityBtn.remove()
 
+<<<<<<< HEAD
     let afterJoinContent = document.querySelector('.after-join-content')
 
     afterJoinContent.insertAdjacentHTML(
+=======
+    const joinComplete = afterJoinContent.insertAdjacentHTML(
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
         'beforeend',
         `<div class="join-complete-title">가입완료!</div>
         <div class="join-complete-intro-title">아트마켓에 회원이 된 것을 환영합니다.</div>
@@ -448,10 +469,14 @@ function joinCompleteAction() {
     }
 
     afterJoinContent.style.alignItems = 'center'
+<<<<<<< HEAD
     afterJoinContent.style.marginLeft = '23rem'
 
     localStorage.removeItem('email')
     localStorage.removeItem('joinIdentity')
+=======
+
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 
     function joinCompleteBtnStyle(btnTag) {
         btnTag.style.border = 'none'

@@ -231,27 +231,47 @@ function joinErrMsgStyle(joinInfoInputTag, joinInfoErrTag) {
         joinInfoInputTag.setAttribute('name', 1)
     }
 
+<<<<<<< HEAD
     if(joinInfoSubmit()===6){
+=======
+    if (joinInfoSubmit() === 6) {
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
         joinBtnAfterStyle()
     }
 
 }
 
+<<<<<<< HEAD
+=======
+//이름
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[0].addEventListener('focusout', function () {
     joinErrMsgStyle(joinInfoInputArray[0], joinInfoErrMsgArray[0])
 
 })
 
+<<<<<<< HEAD
+=======
+//아이디
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[1].addEventListener('focusout', function () {
     joinErrMsgStyle(joinInfoInputArray[1], joinInfoErrMsgArray[1])
 
 })
 
+<<<<<<< HEAD
+=======
+//닉네임
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[2].addEventListener('focusout', function () {
     joinErrMsgStyle(joinInfoInputArray[2], joinInfoErrMsgArray[2])
 
 })
 
+<<<<<<< HEAD
+=======
+//비밀번호
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[3].addEventListener('focusout', function () {
     joinErrMsgStyle(joinInfoInputArray[3], joinInfoErrMsgArray[3])
 
@@ -259,12 +279,20 @@ joinInfoInputArray[3].addEventListener('focusout', function () {
 
 // 비밀번호 재입력
 joinInfoInputArray[4].addEventListener('focusout', function () {
+<<<<<<< HEAD
     if(joinInfoInputArray[4].value === ''){
+=======
+    if (joinInfoInputArray[4].value === '') {
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
         joinInfoInputArray[4].style.border = 'solid 0.1rem red'
         joinInfoErrMsgArray[4].style.color = 'red'
         joinInfoErrMsgArray[4].style.visibility = 'visible'
         joinInfoErrMsgArray[4].textContent = '값을 입력해주세요.'
+<<<<<<< HEAD
     }else if (joinInfoInputArray[3].value !== joinInfoInputArray[4].value) {
+=======
+    } else if (joinInfoInputArray[3].value !== joinInfoInputArray[4].value) {
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
         joinInfoInputArray[4].style.border = 'solid 0.1rem red'
         joinInfoErrMsgArray[4].style.color = 'red'
         joinInfoErrMsgArray[4].style.visibility = 'visible'
@@ -277,18 +305,30 @@ joinInfoInputArray[4].addEventListener('focusout', function () {
         joinInfoInputArray[4].setAttribute('name', 1)
     }
 
+<<<<<<< HEAD
     if(joinInfoSubmit()===6){
+=======
+    if (joinInfoSubmit() === 6) {
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
         joinBtnAfterStyle()
     }
 })
 
+<<<<<<< HEAD
+=======
+//휴대폰 번호
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[5].addEventListener('focusout', function () {
     joinErrMsgStyle(joinInfoInputArray[5], joinInfoErrMsgArray[5])
 
 })
 
 // 이메일
+<<<<<<< HEAD
 joinInfoInputArray[6].setAttribute('value',`${localStorage.getItem('email')}`)
+=======
+joinInfoInputArray[6].setAttribute('value', `${localStorage.getItem('email')}`)
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[6].style.cursor = 'not-allowed'
 
 function joinBtnAfterStyle() {
@@ -307,6 +347,86 @@ function joinBtnBeforeStyle() {
     joinIdentityBtn.style.cursor = 'not-allowed'
 }
 
+<<<<<<< HEAD
+=======
+//가입 회원정보 입력 화면 구현
+function joinInfoShow() {
+    joinBtnBeforeStyle()
+    joinIdentityGeneral.getAttribute('value') === 'true' ? localStorage.setItem('joinIdentity', 'GENERAL') : localStorage.setItem('joinIdentity', 'AUTHOR')
+    joinIdentityGeneral.style.display = 'none'
+    joinIdentityAuthor.style.display = 'none'
+
+    const afterJoinIdentityTitleListImg = document.querySelector('.after-join-identity-title-list-img')
+    afterJoinIdentityTitleListImg.setAttribute('src', './css/icon/join-info-icon.png')
+    afterJoinIdentityTitleListImg.style.marginBottom = '0.7rem'
+    afterJoinIdentityTitleListImg.style.marginRight = '0.7rem'
+    const afterJoinIdentityTitleListMain = document.querySelector('.after-join-identity-title-list-main')
+    afterJoinIdentityTitleListMain.textContent = '회원정보 입력'
+
+    const afterJoinIdentityTitleListSub = document.querySelector('.after-join-identity-title-list-sub')
+    afterJoinIdentityTitleListSub.textContent = '항목에 맞는 가입정보를 입력해주세요.'
+    afterJoinIdentityTitleListSub.style.marginTop = '0.1rem'
+    afterJoinIdentityTitleListSub.style.marginBottom = '2rem'
+    afterJoinIdentityTitleListSub.style.marginLeft = '3.5rem'
+
+    joinIdentityBtn.setAttribute('value', '회원가입')
+    joinIdentityBtn.style.fontSize = '1rem'
+    joinIdentityBtn.style.marginTop = '1rem'
+
+    joinIngLine[0].style.borderBottom = 'solid 0.11rem rgba(41, 45, 50, 1)'
+    joinIngImg[0].style.animationName = 'none'
+
+    joinIngImg[1].style.animationDuration = '1.5s'
+    joinIngImg[1].style.animationName = 'ingImg'
+    joinIngImg[1].style.animationIterationCount = 'infinite'
+    joinIngImg[1].style.opacity = '1'
+
+    const afterJoinIdentity = document.querySelector('.after-join-identity')
+
+    for (var i = 0; i < joinInfoLabelArray.length; i++) {
+        afterJoinIdentity.appendChild(joinInfoLabelArray[i])
+        joinInfoStyle(joinInfoLabelArray[i], joinInfoInputArray[i])
+    }
+
+    afterJoinIdentity.style.display = 'flex'
+    afterJoinIdentity.style.flexDirection = 'column'
+
+    joinIdentityBtn.addEventListener('click', function () {
+
+        let joinStatus = 0
+
+        if (joinInfoSubmit() === 6) {
+            fetch(`${baseUrl}/join`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    JoinIdentity: `${localStorage.getItem('joinIdentity')}`,
+                    JoinName: `${joinNameInput.value}`,
+                    JoinNickname: `${joinNickNameInput.value}`,
+                    JoinLoginId: `${joinIdInput.value}`,
+                    JoinPassword: `${joinPassInput.value}`,
+                    JoinPhone: `${joinPhoneInput.value}`,
+                    JoinEmail: `${localStorage.getItem('email')}`,
+                })
+            }).then(response => {
+                joinStatus = response.status
+                return response.json()
+            }).then((result) => {
+                if (joinStatus === 201) {
+                    joinCompleteAction()
+                } else if (joinStatus === 409) {
+                    console.log()
+                    joinConflictJsonResult(result)
+                }
+            })
+        }
+    })
+}
+
+//가입정보 입력여부 버튼 핸들링
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 function joinInfoSubmit() {
     let submit = 0
     for (var i = 0; i < joinInfoInputArray.length - 1; i++) {
@@ -315,10 +435,109 @@ function joinInfoSubmit() {
     return submit
 }
 
+<<<<<<< HEAD
+=======
+//가입완료 화면 구현
+function joinCompleteAction() {
+    joinIngLine[1].style.borderBottom = 'solid 0.11rem rgba(41, 45, 50, 1)'
+    joinIngImg[1].style.animationName = 'none'
+
+    joinIngImg[2].style.opacity = '1'
+
+    afterJoinIdentityTitle.remove()
+    afterJoinIdentity.remove()
+    joinIdentityBtn.remove()
+
+    const joinComplete = afterJoinContent.insertAdjacentHTML(
+        'beforeend',
+        `<div class="join-complete-title">가입완료!</div>
+        <div class="join-complete-intro-title">아트마켓에 회원이 된 것을 환영합니다.</div>
+        <img class='join-complete-img' src='./css/icon/join-complete.png' />
+        <div class='join-complete-intro-sub'>다양한 작가님들의 작품을 구경하고 의뢰를 해보거나,</div>
+        <div class='join-complete-intro-sub'>자신만의 작품을 판매해보세요!</div>
+        <div class='join-complete-btn-box'>
+            <input class='join-complete-btn' type='button' value='메인화면으로 가기'>
+            <input class='join-complete-btn' type='button' value='로그인하러 가기'>
+        </div>`
+    )
+
+    const joinCompleteBtnBox = document.querySelector('.join-complete-btn-box')
+    joinCompleteBtnBox.style.display = 'flex'
+
+    const joinCompleteTitle = document.querySelector('.join-complete-title')
+    joinCompleteTitle.style.fontSize = '2.5rem'
+    joinCompleteTitle.style.fontWeight = '700'
+    joinCompleteTitle.style.marginBottom = '1rem'
+    joinCompleteTitle.style.marginTop = '3rem'
+
+    const joinCompleteImg = document.querySelector('.join-complete-img')
+    joinCompleteImg.style.margin = '2rem 0'
+
+    const joinCompleteIntroList = document.querySelectorAll('.join-complete-intro-sub')
+    for (var i = 0; i < joinCompleteIntroList.length; i++) {
+        joinCompleteIntroList[i].style.margin = '0 auto'
+    }
+
+    afterJoinContent.style.alignItems = 'center'
+
+
+    function joinCompleteBtnStyle(btnTag) {
+        btnTag.style.border = 'none'
+        btnTag.style.borderRadius = '0.5rem'
+        btnTag.style.padding = '0.5rem 2rem'
+        btnTag.style.margin = '3rem 1rem 5rem 1rem'
+        btnTag.style.color = 'white'
+        btnTag.style.fontWeight = '600'
+        btnTag.style.fontSize = '0.9rem'
+        btnTag.style.backgroundColor = 'rgba(41, 45, 50, 1)'
+        btnTag.style.cursor = 'pointer'
+    }
+
+    const joinCompleteBtn = document.querySelectorAll('.join-complete-btn')
+    for (var i = 0; i < joinCompleteBtn.length; i++) {
+        joinCompleteBtnStyle(joinCompleteBtn[i])
+    }
+
+    joinCompleteBtn[0].addEventListener('click', function () {
+        location.href = 'index.html'
+    })
+
+    joinCompleteBtn[1].addEventListener('click', function () {
+        location.href = 'login.html'
+    })
+}
+
+// 가입정보 중복값 체크
+const joinConflictInputMap = new Map()
+joinConflictInputMap.set('아이디', joinIdInput)
+joinConflictInputMap.set('닉네임', joinNickNameInput)
+joinConflictInputMap.set('이메일', joinEmailInput)
+joinConflictInputMap.set('전화번호', joinPhoneInput)
+
+
+const joinConflictErrMsgMap = new Map()
+joinConflictErrMsgMap.set('아이디', joinIdErrMsg)
+joinConflictErrMsgMap.set('닉네임', joinNickNameErrMsg)
+joinConflictErrMsgMap.set('이메일', joinEmailErrMsg)
+joinConflictErrMsgMap.set('전화번호', joinPhoneErrMsg)
+
+function joinConflictJsonResult(jsonResult) {
+    const jsonResultArray = jsonResult
+    for (var i = 0; i < jsonResultArray.length; i++) {
+        joinConflictInputMap.get(jsonResultArray[i].duplicateParam).style.border = 'solid 0.1rem red'
+        joinConflictErrMsgMap.get(jsonResultArray[i].duplicateParam).style.color = 'red'
+        joinConflictErrMsgMap.get(jsonResultArray[i].duplicateParam).style.visibility = 'visible'
+        joinConflictErrMsgMap.get(jsonResultArray[i].duplicateParam).textContent = '이미 가입된 데이터로 다른값을 입력해주세요.'
+    }
+}
+
+// identity 입력 화면 버튼 클릭 시
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinIdentityBtn.addEventListener('click', function () {
     if (joinIdentityAuthor.getAttribute('value') === null && joinIdentityGeneral.getAttribute('value') === null) {
         alert('회원 유형을 선택해주세요.')
     } else if (joinIdentityAuthor.getAttribute('value') !== null && joinIdentityGeneral.getAttribute('value') !== null) {
+<<<<<<< HEAD
         joinBtnBeforeStyle()
         joinIdentityGeneral.getAttribute('value') === 'true' ? localStorage.setItem('joinIdentity', 'GENERAL') : localStorage.setItem('joinIdentity', 'AUTHOR')
         joinIdentityGeneral.style.display = 'none'
@@ -392,5 +611,8 @@ joinIdentityBtn.addEventListener('click', function () {
                 })
             }
         })
+=======
+        joinInfoShow()
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
     }
 })

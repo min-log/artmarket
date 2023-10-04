@@ -6,18 +6,27 @@
 <mapper namespace="llustmarket.artmarket.web.mapper.file.FileMapper">
     <insert id="insertOne" useGeneratedKeys="true" keyProperty="fileId">
         insert into file(file_path, file_type_id, file_origin_name, file_name)
+<<<<<<< HEAD
         values (#{filePath}, #{fileTypeId}, #{fileOriginName}, #{fileName})
+=======
+        values (#{filePath},#{fileTypeId},#{fileOriginName},#{fileName})
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
     </insert>
 
     <select id="selectOnePathAndId" resultType="llustmarket.artmarket.domain.file.FileVO">
         select file_id, file_path, file_type_id, file_origin_name, file_name, file_date
+<<<<<<< HEAD
         from file
         where file_path = #{filePath}
           and file_type_id = #{fileTypeId}
+=======
+        from file where file_path = #{filePath} and file_type_id = #{fileTypeId}
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
     </select>
 
     <select id="selectOnefileName" resultType="llustmarket.artmarket.domain.file.FileVO">
         select file_id, file_path, file_type_id, file_origin_name, file_name, file_date
+<<<<<<< HEAD
         from file
         where file_name = #{fileName}
     </select>
@@ -34,5 +43,12 @@
         from file
         where file_path = #{filePath}
           and file_type_id = #{fileTypeId}
+=======
+        from file where file_name = #{fileName}
+    </select>
+
+    <delete id="deleteFile">
+        delete from file where file_path = #{filePath} and file_type_id = #{fileTypeId}
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
     </delete>
 </mapper>

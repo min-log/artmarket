@@ -107,11 +107,17 @@ home.addEventListener("click", function () {
 })
 
 login.addEventListener("click", function () {
+<<<<<<< HEAD
     if (localStorage.getItem("id") !== null || localStorage.getItem('nickname') !== null) {
         localStorage.removeItem("id")
         localStorage.removeItem("identity")
         localStorage.removeItem("intro")
         localStorage.removeItem("nickname")
+=======
+    if (localStorage.getItem("id") !== null) {
+        localStorage.removeItem("id")
+        localStorage.removeItem("identity")
+>>>>>>> fd57b801a3393f769ce472d989b08c9524125794
         login.textContent = 'LOGIN'
     } else {
         location.href = "login.html"
