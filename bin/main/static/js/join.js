@@ -231,47 +231,31 @@ function joinErrMsgStyle(joinInfoInputTag, joinInfoErrTag) {
         joinInfoInputTag.setAttribute('name', 1)
     }
 
-<<<<<<< HEAD
-    if(joinInfoSubmit()===6){
-=======
     if (joinInfoSubmit() === 6) {
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
         joinBtnAfterStyle()
     }
 
 }
 
-<<<<<<< HEAD
-=======
 //이름
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[0].addEventListener('focusout', function () {
     joinErrMsgStyle(joinInfoInputArray[0], joinInfoErrMsgArray[0])
 
 })
 
-<<<<<<< HEAD
-=======
 //아이디
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[1].addEventListener('focusout', function () {
     joinErrMsgStyle(joinInfoInputArray[1], joinInfoErrMsgArray[1])
 
 })
 
-<<<<<<< HEAD
-=======
 //닉네임
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[2].addEventListener('focusout', function () {
     joinErrMsgStyle(joinInfoInputArray[2], joinInfoErrMsgArray[2])
 
 })
 
-<<<<<<< HEAD
-=======
 //비밀번호
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[3].addEventListener('focusout', function () {
     joinErrMsgStyle(joinInfoInputArray[3], joinInfoErrMsgArray[3])
 
@@ -279,20 +263,12 @@ joinInfoInputArray[3].addEventListener('focusout', function () {
 
 // 비밀번호 재입력
 joinInfoInputArray[4].addEventListener('focusout', function () {
-<<<<<<< HEAD
-    if(joinInfoInputArray[4].value === ''){
-=======
     if (joinInfoInputArray[4].value === '') {
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
         joinInfoInputArray[4].style.border = 'solid 0.1rem red'
         joinInfoErrMsgArray[4].style.color = 'red'
         joinInfoErrMsgArray[4].style.visibility = 'visible'
         joinInfoErrMsgArray[4].textContent = '값을 입력해주세요.'
-<<<<<<< HEAD
-    }else if (joinInfoInputArray[3].value !== joinInfoInputArray[4].value) {
-=======
     } else if (joinInfoInputArray[3].value !== joinInfoInputArray[4].value) {
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
         joinInfoInputArray[4].style.border = 'solid 0.1rem red'
         joinInfoErrMsgArray[4].style.color = 'red'
         joinInfoErrMsgArray[4].style.visibility = 'visible'
@@ -305,30 +281,19 @@ joinInfoInputArray[4].addEventListener('focusout', function () {
         joinInfoInputArray[4].setAttribute('name', 1)
     }
 
-<<<<<<< HEAD
-    if(joinInfoSubmit()===6){
-=======
     if (joinInfoSubmit() === 6) {
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
         joinBtnAfterStyle()
     }
 })
 
-<<<<<<< HEAD
-=======
 //휴대폰 번호
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[5].addEventListener('focusout', function () {
     joinErrMsgStyle(joinInfoInputArray[5], joinInfoErrMsgArray[5])
 
 })
 
 // 이메일
-<<<<<<< HEAD
-joinInfoInputArray[6].setAttribute('value',`${localStorage.getItem('email')}`)
-=======
 joinInfoInputArray[6].setAttribute('value', `${localStorage.getItem('email')}`)
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinInfoInputArray[6].style.cursor = 'not-allowed'
 
 function joinBtnAfterStyle() {
@@ -347,8 +312,6 @@ function joinBtnBeforeStyle() {
     joinIdentityBtn.style.cursor = 'not-allowed'
 }
 
-<<<<<<< HEAD
-=======
 //가입 회원정보 입력 화면 구현
 function joinInfoShow() {
     joinBtnBeforeStyle()
@@ -394,6 +357,7 @@ function joinInfoShow() {
     joinIdentityBtn.addEventListener('click', function () {
 
         let joinStatus = 0
+        let joinResponseData
 
         if (joinInfoSubmit() === 6) {
             fetch(`${baseUrl}/join`, {
@@ -412,13 +376,14 @@ function joinInfoShow() {
                 })
             }).then(response => {
                 joinStatus = response.status
-                return response.json()
-            }).then((result) => {
+                if (response.status === 409) {
+                    joinResponseData = response.json()
+                }
+            }).then(() => {
                 if (joinStatus === 201) {
                     joinCompleteAction()
                 } else if (joinStatus === 409) {
-                    console.log()
-                    joinConflictJsonResult(result)
+                    joinConflictJsonResult(joinResponseData)
                 }
             })
         }
@@ -426,7 +391,6 @@ function joinInfoShow() {
 }
 
 //가입정보 입력여부 버튼 핸들링
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 function joinInfoSubmit() {
     let submit = 0
     for (var i = 0; i < joinInfoInputArray.length - 1; i++) {
@@ -435,20 +399,21 @@ function joinInfoSubmit() {
     return submit
 }
 
-<<<<<<< HEAD
-=======
 //가입완료 화면 구현
 function joinCompleteAction() {
-    joinIngLine[1].style.borderBottom = 'solid 0.11rem rgba(41, 45, 50, 1)'
-    joinIngImg[1].style.animationName = 'none'
 
-    joinIngImg[2].style.opacity = '1'
 
+    const joinIng = document.querySelector('.join-ing')
+    const afterJoinIdentityTitle = document.querySelector('.after-join-identity-title')
+    const afterJoinIdentity = document.querySelector('.after-join-identity')
+
+    joinIng.remove()
     afterJoinIdentityTitle.remove()
     afterJoinIdentity.remove()
     joinIdentityBtn.remove()
 
-    const joinComplete = afterJoinContent.insertAdjacentHTML(
+    const afterJoinContent = document.querySelector('.after-join-content')
+    afterJoinContent.insertAdjacentHTML(
         'beforeend',
         `<div class="join-complete-title">가입완료!</div>
         <div class="join-complete-intro-title">아트마켓에 회원이 된 것을 환영합니다.</div>
@@ -479,6 +444,7 @@ function joinCompleteAction() {
     }
 
     afterJoinContent.style.alignItems = 'center'
+    afterJoinContent.style.marginLeft = '24.5rem'
 
 
     function joinCompleteBtnStyle(btnTag) {
@@ -532,87 +498,10 @@ function joinConflictJsonResult(jsonResult) {
 }
 
 // identity 입력 화면 버튼 클릭 시
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
 joinIdentityBtn.addEventListener('click', function () {
     if (joinIdentityAuthor.getAttribute('value') === null && joinIdentityGeneral.getAttribute('value') === null) {
         alert('회원 유형을 선택해주세요.')
     } else if (joinIdentityAuthor.getAttribute('value') !== null && joinIdentityGeneral.getAttribute('value') !== null) {
-<<<<<<< HEAD
-        joinBtnBeforeStyle()
-        joinIdentityGeneral.getAttribute('value') === 'true' ? localStorage.setItem('joinIdentity', 'GENERAL') : localStorage.setItem('joinIdentity', 'AUTHOR')
-        joinIdentityGeneral.style.display = 'none'
-        joinIdentityAuthor.style.display = 'none'
-
-        const afterJoinIdentityTitleListImg = document.querySelector('.after-join-identity-title-list-img')
-        afterJoinIdentityTitleListImg.setAttribute('src','./css/icon/join-info-icon.png')
-        afterJoinIdentityTitleListImg.style.marginBottom = '0.7rem'
-        afterJoinIdentityTitleListImg.style.marginRight = '0.7rem'
-        const afterJoinIdentityTitleListMain = document.querySelector('.after-join-identity-title-list-main')
-        afterJoinIdentityTitleListMain.textContent = '회원정보 입력'
-
-        const afterJoinIdentityTitleListSub = document.querySelector('.after-join-identity-title-list-sub')
-        afterJoinIdentityTitleListSub.textContent = '항목에 맞는 가입정보를 입력해주세요.'
-        afterJoinIdentityTitleListSub.style.marginTop = '0.1rem'
-        afterJoinIdentityTitleListSub.style.marginBottom = '2rem'
-        afterJoinIdentityTitleListSub.style.marginLeft = '3.5rem'
-
-        joinIdentityBtn.setAttribute('value', '회원가입')
-        joinIdentityBtn.style.fontSize = '1rem'
-        joinIdentityBtn.style.marginTop = '1rem'
-
-        joinIngLine[0].style.borderBottom = 'solid 0.11rem rgba(41, 45, 50, 1)'
-        joinIngImg[0].style.animationName = 'none'
-
-        joinIngImg[1].style.animationDuration = '1.5s'
-        joinIngImg[1].style.animationName = 'ingImg'
-        joinIngImg[1].style.animationIterationCount = 'infinite'
-        joinIngImg[1].style.opacity = '1'
-
-        const afterJoinIdentity = document.querySelector('.after-join-identity')
-
-        for (var i = 0; i < joinInfoLabelArray.length; i++) {
-            afterJoinIdentity.appendChild(joinInfoLabelArray[i])
-            joinInfoStyle(joinInfoLabelArray[i], joinInfoInputArray[i])
-        }
-
-        afterJoinIdentity.style.display = 'flex'
-        afterJoinIdentity.style.flexDirection = 'column'
-
-        joinIdentityBtn.addEventListener('click', function () {
-
-            let joinStatus = 0
-
-            if(joinInfoSubmit() === 6){
-                fetch(`${baseUrl}/join`,{
-                    method: 'POST',
-                    headers: {
-                        'content-type' : 'application/json'
-                    },
-                    body: JSON.stringify({
-                        JoinIdentity: `${localStorage.getItem('joinIdentity')}`,
-                        JoinName: `${joinNameInput.value}`,
-                        JoinNickname: `${joinNickNameInput.value}`,
-                        JoinLoginId: `${joinIdInput.value}`,
-                        JoinPassword: `${joinPassInput.value}`,
-                        JoinPhone: `${joinPhoneInput.value}`,
-                        JoinEmail: `${localStorage.getItem('email')}`,
-                    })
-                }).then(response => {
-                    joinStatus = response.status
-                    return response.json()
-                }).then((result) => {
-                    if (joinStatus === 201) {
-                        const afterJoinIdentityTitle = document.querySelector('.after-join-identity-title')
-                        afterJoinIdentityTitle.remove()
-                        afterJoinIdentity.remove()
-                    } else if (joinStatus === 409) {
-                        joinConflict = result
-                    }
-                })
-            }
-        })
-=======
         joinInfoShow()
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
     }
 })
