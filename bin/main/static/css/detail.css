@@ -1,0 +1,144 @@
+container{
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 4rem;
+    border: solid 0.1rem rgba(41, 45, 50, 0.3);
+    padding: 0.7rem 2rem 1rem 2rem;
+}
+
+textarea{
+    resize: none;
+    outline: none;
+    border: solid 0.1rem rgba(41, 45, 50, 0.3);
+    padding: 0.5rem;
+}
+
+.detail-top-title,
+.detail-top-article-num,
+.detail-mid-right-chat,
+.detail-mid-right-deadline,
+.detail-mid-right-payment
+{
+    display: flex;
+    align-items: center;
+}
+
+.detail-mid-right-chat > *,
+.detail-mid-right-deadline > *,
+.detail-mid-right-payment > * {
+    font-size: 0.9rem;
+}
+
+input {
+    font-family: "Noto Sans KR", sans-serif;
+    scale: 90%;
+}
+
+.detail-top-title-label,
+.detail-top-article-num-label{
+    margin-right: 1rem;
+}
+
+.detail-mid-right-chat-label,
+.detail-mid-right-deadline-label,
+.detail-mid-right-payment-label{
+    margin-right: 0.3rem;
+}
+
+.detail-top-title-label,
+.detail-top-article-num-label,
+input[type="button"]{
+    font-weight: 600;
+    font-size: 0.9rem;
+    background-color: rgba(41, 45, 50, 1);
+    color: white;
+    border-radius: 1rem;
+    padding: 0.1rem 1rem;
+}
+
+.detail-top,
+.detail-mid{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    border-bottom: solid 0.1rem rgba(41, 45, 50, 0.3);
+}
+
+.detail-mid{
+    padding: 0 2rem 1rem 1rem;
+}
+
+.detail-mid-left{
+    display: flex;
+    align-items: center;
+}
+
+.detail-mid-left-profile-info-nickname{
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.detail-mid-left-profile-img-value{
+    width: 5rem;
+    height: 5rem;
+    border: solid 0.1rem;
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+
+.detail-mid-right-payment-cost{
+    outline: none;
+    border: none;
+    border-bottom: solid 0.1rem;
+}
+
+.detail-bot-caution{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(41, 45, 50, 1);
+    color: white;
+    border-radius: 1rem;
+    padding: 0.25rem 2rem;
+    margin-bottom: 1rem;
+}
+
+.detail-bot-caution > * {
+    margin: 0 0.3rem;
+}
+
+.detail-bot-caution-icon{
+    scale: 95%;
+}
+
+.detail-bot-caution-title{
+    font-weight: 500;
+}
+
+.detail-bot-caution-intro{
+    font-size: 0.8rem;
+    font-weight: 300;
+}
+
+.detail-bot,
+.detail-bot-intro,
+.detail-bot-img,
+.detail-bot-img-lists
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.detail-bot-intro,
+.detail-bot-img{
+    margin-bottom: 5rem;
+}
+
+.detail-bot-intro-label,
+.detail-bot-img-label{
+    font-size: 1.4rem;
+    font-weight: 700;
+}

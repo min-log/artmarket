@@ -107,9 +107,11 @@ home.addEventListener("click", function () {
 })
 
 login.addEventListener("click", function () {
-    if (localStorage.getItem("id") !== null) {
+    if (localStorage.getItem("id") !== null || localStorage.getItem('nickname') !== null) {
         localStorage.removeItem("id")
         localStorage.removeItem("identity")
+        localStorage.removeItem("intro")
+        localStorage.removeItem("nickname")
         login.textContent = 'LOGIN'
     } else {
         location.href = "login.html"
