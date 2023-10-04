@@ -358,11 +358,7 @@ function emailConfirmAlert(parentTag) {
                 confirmEmail: `${emailConfirmInput.value}`
             })
         }).then(response => {
-<<<<<<< HEAD
-            if (response.status === 201) {
-=======
             if (response.status === 200) {
->>>>>>> fd57b801a3393f769ce472d989b08c9524125794
                 tokenComfirmAlert(response.status)
             } else {
                 tokenComfirmAlert('알수 없는 오류로 메일 발송에 실패했습니다.')
