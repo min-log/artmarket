@@ -51,7 +51,7 @@ public class ProductController {
 
                 // 파일 이름만 추출해서 List에 추가
                 for (FileVO file : productFiles) {
-                    fileNames.add("/PRODUCT/" + file.getFileName());
+                    fileNames.add("\\product\\" + file.getFileName());
                 }
 
                 Article article = new Article(
