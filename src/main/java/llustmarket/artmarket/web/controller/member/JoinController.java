@@ -46,7 +46,11 @@ public class JoinController {
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(confirmEmailErrors);
         }
-
+        List<Map<String, String>> duplications = new ArrayList<>();
+        checkDuplication("JoinEmail", confirmEmail.getConfirmEmail(), "이메일", duplications);
+        if (!duplications.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(duplications);
+        }
         String uuid = UUID.randomUUID().toString();
         StringBuilder numericString = new StringBuilder();
         for (char c : uuid.toCharArray()) {
@@ -145,7 +149,6 @@ public class JoinController {
 
         checkDuplication("JoinLoginId", joinRequest.getJoinLoginId(), "아이디", duplications);
         checkDuplication("JoinNickname", joinRequest.getJoinNickname(), "닉네임", duplications);
-        checkDuplication("JoinEmail", joinRequest.getJoinEmail(), "이메일", duplications);
         checkDuplication("JoinPhone", joinRequest.getJoinPhone(), "전화번호", duplications);
 
         if (!duplications.isEmpty()) {
