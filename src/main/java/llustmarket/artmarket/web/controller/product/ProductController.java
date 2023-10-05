@@ -22,6 +22,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,34 +41,46 @@ public class ProductController {
     private final FileMapper fileMapper;
     private final OrderMapper orderMapper;
 
+    public byte[] getAttachmentImage(String filePath) {
+        try {
+            Path path = Paths.get(filePath);
+            return Files.readAllBytes(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @GetMapping("/mypage-articles/{member_id}")
     public ResponseEntity<Object> getArticles(@PathVariable("member_id") Long memberId) {
         try {
-            // 멤버아이디로 Product DB에서 상품 여러 개 찾아 List에 담기
             List<Product> memberProducts = productService.findProductByMemberId(memberId);
             List<Article> articles = new ArrayList<>();
 
-            // List에 있는 반복문을 통해 상품별 정보 배열 담기
             for (Product memberProduct : memberProducts) {
                 List<FileVO> productFiles = fileMapper.getFilesByTypeAndId("PRODUCT", memberProduct.getProductId());
-                List<String> fileNames = new ArrayList<>();
+                List<String> filePaths = new ArrayList<>();
 
-                // 파일 이름만 추출해서 List에 추가
                 for (FileVO file : productFiles) {
-                    fileNames.add("\\product\\" + file.getFileName());
+                    filePaths.add("C:\\upload\\" + file.getFilePath() + "\\" + file.getFileName()); // 경로로 변경
+                }
+
+                List<byte[]> imageDataList = new ArrayList<>();
+                for (String filePath : filePaths) {
+                    byte[] imageData = getAttachmentImage(filePath);
+                    imageDataList.add(imageData);
                 }
 
                 Article article = new Article(
-                        memberProduct.getProductId(),  // product_id
-                        memberProduct.getCategory(),  // category
-                        memberProduct.getProductDate(),  // product_date
-                        orderMapper.countOrdersByProductId(memberProduct.getProductId()),  // quantity
-                        fileNames  // List of file names
+                        memberProduct.getProductId(),
+                        memberProduct.getCategory(),
+                        memberProduct.getProductDate(),
+                        orderMapper.countOrdersByProductId(memberProduct.getProductId()),
+                        imageDataList
                 );
                 articles.add(article);
             }
 
-            // articles를 JSON 형태로 리턴
             return ResponseEntity.ok(articles);
         } catch (Exception e) {
             e.printStackTrace();
