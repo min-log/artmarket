@@ -1,0 +1,115 @@
+container {
+  margin: 0 auto;
+  display: flex;
+}
+
+.myfage-nav {
+  position: relative;
+}
+
+.myfage-nav-img {
+  width: 16rem;
+}
+
+.myfage-nav-content {
+  position: absolute;
+}
+
+.myfage-nav-profile-menu,
+.myfage-nav-profile {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+  margin-left: 2rem;
+}
+
+.myfage-nav-profile {
+  margin-top: 3rem;
+}
+
+.myfage-nav-profile-greeting {
+  width: 11rem;
+  color: white;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 2.5rem;
+  margin-top: 0.5rem;
+}
+
+.myfage-nav-profile-img {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.myfage-nav-profile-identity {
+  background-color: white;
+  color: rgba(41, 45, 50, 1);
+  /* border: solid 0.1rem rgba(41, 45, 50, 1); */
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5.5rem;
+  height: 1.4rem;
+  margin-top: -1.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.myfage-nav-profile-menu > * {
+  background-color: white;
+  border-radius: 1rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0.7rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: rgba(41, 45, 50, 1);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.myfage-nav-profile-menu > :nth-child(1) {
+  width: 8.4rem;
+}
+
+.myfage-nav-profile-menu > :nth-child(2) {
+  width: 6.2rem;
+}
+
+.myfage-nav-profile-menu > :nth-child(3) {
+  width: 6.8rem;
+}
+
+.myfage-nav-profile-menu > *:hover {
+  scale: 103%;
+  transition-duration: 0.1s;
+}
+
+.myfage-nav-menu {
+  margin: 3rem 0rem 0rem 4rem;
+}
+
+.myfage-nave-menu-list {
+  margin: 1.7rem 0;
+  display: flex;
+  cursor: pointer;
+}
+.myfage-nave-menu-list > img {
+  margin-right: 1.3rem;
+}
+
+.myfage-nave-menu-list > div {
+  color: white;
+}
+
+footer {
+  margin-top: 0.1rem;
+}

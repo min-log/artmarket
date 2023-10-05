@@ -19,9 +19,10 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/stomp/chat")
-                .setAllowedOriginPatterns("*")
+                .setAllowedOriginPatterns("http://localhost:8070")
                 .addInterceptors(new WebSocketConnectHandler(httpSession))
-                .withSockJS();
+                .withSockJS()
+                .setClientLibraryUrl("https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"); //sock-client.js 의 위치
     }
 
     /*어플리케이션 내부에서 사용할 path 지정할*/

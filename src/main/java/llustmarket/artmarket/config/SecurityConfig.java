@@ -47,6 +47,13 @@ public class SecurityConfig {
                 .expiredUrl("/") // 세션이 만료되면 이동할 URL
                 .sessionRegistry(sessionRegistry()); // 세션 관리자
         http.csrf().disable();
+
+        // X-Frame-Option 설정 1 - 동일 도메인 사용 시
+        http.headers().frameOptions().sameOrigin();
+        // X-Frame-Option 설정 2 - 프론트 도메인 주소 다를 시
+        // http.headers().frameOptions().disable()
+        // .addHeaderWriter(new StaticHeadersWriter("X-FRAME-OPTIONS", "ALLOW-FROM " + /* 허용할 URL입력 */))
+
         return http.build();
     }
 }
