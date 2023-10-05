@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="container">
-      member : [[${session.member}]]
+      member : [[${session.login}]]
       <div>
         임시 작가 회원 : 1 이지민 <br />
         임시 일반회원 - 번호 닉네임 <br />
@@ -87,7 +87,7 @@
               //accept: "application/json",
               contentType: "application/json; charset=utf-8",
               //dataType: "json",
-              data: JSON.stringify({'askProduct': 1,'askMember': [[${session.memberId}]]}),
+              data: JSON.stringify({'askProduct': 1,'askMember': [[${session.login.memberId}]]}),
               success:function (data) {
                   console.log("전달 받는 데이터 : " + JSON.stringify(data));
                   ChatRoom(data);
@@ -113,7 +113,9 @@
 
           //2. connection이 맺어지면 실행
           stomp.connect({}, function (frame){
-              console.log("STOMP Connection")
+              console.log("STOMP Connection");
+
+
 
               //4. subscribe(path, callback)으로 메세지를 받을 수 있음
               stomp.subscribe("/sub/chat-room/get/" + chatRoomId, function (chat) {
@@ -195,7 +197,7 @@
                       stomp.send('/pub/chat-room/send', {}, JSON.stringify({
                           sendChatRoomId: chatRoomId,
                           sendChatMsg: msg.value,
-                          sendChatSender: [[${session.memberId}]],
+                          sendChatSender: [[${session.login.memberId}]],
                           sendChatFile: fileDto // 바이트 배열로 변환하여 전송
 
                       }));
@@ -208,7 +210,7 @@
                   stomp.send('/pub/chat-room/send', {}, JSON.stringify({
                       sendChatRoomId: chatRoomId,
                       sendChatMsg: msg.value,
-                      sendChatSender: [[${session.memberId}]],
+                      sendChatSender: [[${session.login.memberId}]],
                       sendChatFile: null // 바이트 배열로 변환하여 전송
                   }));
               }
@@ -218,10 +220,7 @@
 
           // 연결 닫기
           $("#chatClose").on('click',function () {
-              stomp.send('/pub/chat-room/send', {}, JSON.stringify({
-                  closeChatRoomId : chatRoomId,
-                  closeChatMember : [[${session.memberId}]]
-              }));
+
 
               $("#modal").hide();
               stomp.unsubscribe();

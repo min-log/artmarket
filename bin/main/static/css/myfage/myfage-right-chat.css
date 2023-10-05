@@ -183,7 +183,7 @@
 .myfage-right-chat-box-bot-send-text {
   border: none;
   outline: none;
-  width: 22rem;
+  width: 25rem;
   height: 1.2rem;
   padding: 1rem;
   padding-right: 3rem;
@@ -191,7 +191,7 @@
 }
 
 .myfage-right-chat-box-bot-send-attach {
-  margin-left: -2.7rem;
+  margin-left: -3.8rem;
   scale: 90%;
   cursor: pointer;
 }

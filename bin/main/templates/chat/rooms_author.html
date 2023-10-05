@@ -8,7 +8,7 @@
 <body>
     <div class="container">
       <img th:src="${chatRoomDTO.getProfileImg}">
-      <div>[[${session.memberId}]]
+      <div>[[${session.login.memberId}]]
         <br />
         임시 작가 회원 : 이지민
       </div>
@@ -16,6 +16,7 @@
         <ul th:each="room : ${chatRoomDTO.getMyChatRooms}">
           <li>
             <button th:onclick="chatRoomDelete([[${room.getChatRoomId}]])">삭제</button>
+            <br />
             <a href="javascript:void(0)" th:onclick="mypageChatRoom([[${room.getChatRoomId}]])" type="button">
               <b>[[${room.getChatSender}]]  ( [[${room.getChatSenderIdtity}]] ) </b>
               <p class="last_msg">[[${room.getChatMsg}]]</p>
@@ -84,7 +85,7 @@
                 url: "/myfage",
                 type: "post",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({'clickChatId': id,"clickMember":[[${session.memberId}]]}),
+                data: JSON.stringify({'clickChatId': id,"clickMember":[[${session.login.memberId}]]}),
                 success:function (data) {
                     console.log("전달 받는 데이터 : " + JSON.stringify(data));
                     ChatRoom(data);
@@ -161,7 +162,6 @@
                         $("#msgArea").append(str);
                     }
 
-
                 });
 
             });
@@ -194,7 +194,7 @@
                         stomp.send('/pub/chat-room/send', {}, JSON.stringify({
                             sendChatRoomId: chatRoomId,
                             sendChatMsg: msg.value,
-                            sendChatSender:  [[${session.memberId}]],
+                            sendChatSender:  [[${session.login.memberId}]],
                             sendChatFile: fileDto // 바이트 배열로 변환하여 전송
 
                         }));
@@ -205,7 +205,7 @@
                     stomp.send('/pub/chat-room/send', {}, JSON.stringify({
                         sendChatRoomId: chatRoomId,
                         sendChatMsg: msg.value,
-                        sendChatSender: [[${session.memberId}]],
+                        sendChatSender: [[${session.login.memberId}]],
                         sendChatFile: null // 바이트 배열로 변환하여 전송
                     }));
                 }
@@ -218,10 +218,6 @@
 
             // 연결 닫기
             $("#chatClose").on('click',function () {
-                stomp.send('/pub/chat-room/send', {}, JSON.stringify({
-                    closeChatMember : chatRoomId,
-                    closeChatRoomId : [[${session.memberId}]]
-                }));
 
                 $("#modal").hide();
                 stomp.unsubscribe();
@@ -239,7 +235,7 @@
                 url: "/myfage",
                 type: "delete",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify({'remChatRoomId': roomId,"remChatMember":[[${session.memberId}]]}),
+                data: JSON.stringify({'remChatRoomId': roomId,"remChatMember":[[${session.login.memberId}]]}),
                 success:function (data) {
                     console.log("전달 받는 데이터 : " + JSON.stringify(data));
                     ChatRoom(data);

@@ -52,6 +52,10 @@ const illust = document.createElement('div')
 illust.setAttribute("class", "illust")
 illust.textContent = "ILLUST"
 
+illust.addEventListener('click', function () {
+    location.href = 'detail.html'
+})
+
 const live = document.createElement('div')
 live.setAttribute("class", "live")
 live.textContent = "LIVE2D•3D"

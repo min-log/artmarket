@@ -7,10 +7,10 @@ select {
   box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.1);
 }
 
-input[type="date"]::before {
+/* input[type="date"]::before {
   content: attr(date-placeholder);
   width: 100%;
-}
+} */
 
 input[type="date"]:focus {
   outline: none;
@@ -27,7 +27,7 @@ input[type="date"] {
 }
 
 .myfage-mid-article-box {
-  margin: 4rem 1rem 4rem 0.5rem;
+  margin: 4rem 1rem 1rem 0.5rem;
 }
 
 .myfage-mid-article-box-top {
@@ -73,14 +73,15 @@ input[type="date"] {
   padding: 1rem;
   border-radius: 1rem;
   box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .myfage-mid-article-box-bot-list-thumb-img {
   width: 10rem;
+  height: 7.2rem;
   justify-content: center;
   align-items: center;
-  border: solid 0.1rem rgba(88, 88, 88, 0.5);
+  border: solid 0.1rem rgba(88, 88, 88, 0.2);
   box-shadow: 2px 2px 0.2rem rgba(88, 88, 88, 0.1);
   border-radius: 1rem;
 }
