@@ -135,7 +135,8 @@ public class FileService {
     }
 
 
-    public ResponseEntity<Boolean> fileRemove(String filePath, String fileName) {
+    //파일 제거
+    public ResponseEntity<Boolean> fileRemove(String filePath, String fileName){
         log.info("이미지 제거 로직");
         String srcFileName = null;
         try {
@@ -151,5 +152,6 @@ public class FileService {
             return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 }

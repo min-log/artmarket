@@ -1,13 +1,16 @@
 package llustmarket.artmarket.web.controller.chat;
 
 
+import llustmarket.artmarket.domain.member.Member;
 import llustmarket.artmarket.web.dto.chat.ChatDTO;
 import llustmarket.artmarket.web.dto.chat.ChatRoomListResponseDTO;
+import llustmarket.artmarket.web.dto.chat.ChatSessionDTO;
 import llustmarket.artmarket.web.dto.member.MemberDTO;
 import llustmarket.artmarket.web.service.chat.ChatRoomService;
 import llustmarket.artmarket.web.service.chat.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +27,7 @@ import java.util.List;
 @Log4j2
 public class ChatTestController {
 
+    private final ModelMapper modelMapper;
     private final ChatService chatService;
     private final ChatRoomService chatRoomService;
 
@@ -32,9 +36,10 @@ public class ChatTestController {
         log.info("#마이페이지 회원 채팅방 리스트 전송");
         // 채팅방 생성
         //작가 회원
-        session.setAttribute("member", MemberDTO.builder().build());
-        MemberDTO authorMember = MemberDTO.builder().memberId(1).identity("AUTHOR").nickname("이지민").build();
-        session.setAttribute("authorMember",authorMember);
+        Object login = session.getAttribute("login");
+        log.info("login : {}",login);
+
+
 
         return "chat/rooms";
     }
@@ -42,18 +47,23 @@ public class ChatTestController {
 
     @GetMapping(value = "/roomList")
     public String roomList(Model model,HttpSession session){
-        // 채팅내역 조회
-        log.info("# All Chat roomList");
-        session.setAttribute("member", (MemberDTO)session.getAttribute("authorMember"));
-        MemberDTO member = (MemberDTO) session.getAttribute("member");
+        long memberId = 1;
+        try{
+            Member member = (Member) session.getAttribute("login");
 
-        log.info("member : {}",member);
-        session.setAttribute("userName",member.getNickname());
-        session.setAttribute("memberId",member.getMemberId());
+            ChatSessionDTO login = (ChatSessionDTO)session.getAttribute("login");
+            if(login == null){
+                session.setAttribute("login",ChatSessionDTO.builder().memberId(member.getMemberId()).build());
+            }
+            log.info("login : {}",login);
+            memberId = login.getMemberId();
 
-        List<ChatDTO> list = chatService.searchChatAllByMemberId(member.getMemberId());
-        ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchUserList(member.getMemberId(), list);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
+
+        ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchChatRoomList(memberId);
         model.addAttribute("chatRoomDTO", chatRoomListResponseDTO);
 
         return "chat/rooms_author";
@@ -62,8 +72,9 @@ public class ChatTestController {
     @PostMapping(value = "/user")
     public String user(MemberDTO memberDTO, HttpSession session){
 
+
         log.info("# session :{}",memberDTO);
-        session.setAttribute("member", memberDTO);
+        session.setAttribute("login", memberDTO);
         session.setAttribute("userName",memberDTO.getNickname());
         session.setAttribute("memberId",memberDTO.getMemberId());
 

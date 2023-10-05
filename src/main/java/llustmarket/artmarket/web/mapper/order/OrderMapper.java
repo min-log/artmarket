@@ -10,4 +10,5 @@ public interface OrderMapper {
 
     @Select("SELECT COUNT(quantity) FROM `order` WHERE product_id = #{productId}")
     int countOrdersByProductId(Long productId);
+    Order searchOneDeadline(Order vo);
 }
