@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,6 +28,16 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
+    public byte[] getAttachmentImage(String filePath) {
+        try {
+            Path path = Paths.get(filePath);
+            return Files.readAllBytes(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @GetMapping("/list/{category}")
     public ResponseEntity<Object> getCharacter(@PathVariable(value = "category") String category) {
         try {
@@ -32,17 +46,24 @@ public class BoardController {
 
             for (BoardDTO board : boards) {
                 List<Map<String, Object>> files = boardService.getCategoryFile(category, board.getProductId());
-                List fileList = new ArrayList<>();
+                List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("/PRODUCT/" + files.get(i).get("fileName").toString());
+                    fileList.add("C:\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                }
+
+                List<byte[]> imageDataList = new ArrayList<>();
+
+                for (String filePath : fileList) {
+                    byte[] image = getAttachmentImage(filePath);
+                    imageDataList.add(image);
                 }
 
                 BoardDTO boardDTO = new BoardDTO(
                         board.getProductId(),
                         board.getProductTitle(),
                         board.getNickname(),
-                        fileList
+                        imageDataList
                 );
                 boardList.add(boardDTO);
             }
@@ -67,18 +88,26 @@ public class BoardController {
 
             for (BoardDTO board : boards) {
                 List<Map<String, Object>> files = boardService.getArrayFile(board.getProductId());
-                List fileList = new ArrayList<>();
+                List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("/PRODUCT/" + files.get(i).get("fileName").toString());
+                    fileList.add("C:\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                }
+
+                List<byte[]> imageDataList = new ArrayList<>();
+
+                for (String filePath : fileList) {
+                    byte[] image = getAttachmentImage(filePath);
+                    imageDataList.add(image);
                 }
 
                 BoardDTO boardDTO = new BoardDTO(
                         board.getProductId(),
                         board.getProductTitle(),
                         board.getNickname(),
-                        fileList
+                        imageDataList
                 );
+
                 boardList.add(boardDTO);
             }
 
@@ -101,17 +130,24 @@ public class BoardController {
 
             for (BoardDTO board : boards) {
                 List<Map<String, Object>> files = boardService.getArrayFile(board.getProductId());
-                List fileList = new ArrayList<>();
+                List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("/PRODUCT/" + files.get(i).get("fileName").toString());
+                    fileList.add("C:\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                }
+
+                List<byte[]> imageDataList = new ArrayList<>();
+
+                for (String filePath : fileList) {
+                    byte[] image = getAttachmentImage(filePath);
+                    imageDataList.add(image);
                 }
 
                 BoardDTO boardDTO = new BoardDTO(
                         board.getProductId(),
                         board.getProductTitle(),
                         board.getNickname(),
-                        fileList
+                        imageDataList
                 );
                 boardList.add(boardDTO);
             }
@@ -135,17 +171,24 @@ public class BoardController {
 
             for (BoardDTO board : boards) {
                 List<Map<String, Object>> files = boardService.getArrayFile(board.getProductId());
-                List fileList = new ArrayList<>();
+                List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("/PRODUCT/" + files.get(i).get("fileName").toString());
+                    fileList.add("C:\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                }
+
+                List<byte[]> imageDataList = new ArrayList<>();
+
+                for (String filePath : fileList) {
+                    byte[] image = getAttachmentImage(filePath);
+                    imageDataList.add(image);
                 }
 
                 BoardDTO boardDTO = new BoardDTO(
                         board.getProductId(),
                         board.getProductTitle(),
                         board.getNickname(),
-                        fileList
+                        imageDataList
                 );
                 boardList.add(boardDTO);
             }
