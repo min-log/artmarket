@@ -130,7 +130,7 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
 
         chatFileReader.onload = function (e) {
 
-          const fileObject = e.target.result
+          const fileObject = e.target.result;
           productChatRoomBoxBotSendAttachFile.setAttribute('id', `${Array.from(new Uint8Array(fileObject))}`)
           productChatRoomBoxBotSendAttachFile.setAttribute('name', `${chatFileName}`)
         }

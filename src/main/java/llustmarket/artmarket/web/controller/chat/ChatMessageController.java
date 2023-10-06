@@ -50,14 +50,14 @@ public class ChatMessageController {
         // StompHeaderAccessor를 사용하여 WebSocket 세션에서 사용자 정보 가져오기
         Map<String, Object> sessionAttributes = messageHeaderAccessor.getSessionAttributes();
         List<ChatSessionDTO> sessionList = (List<ChatSessionDTO>)sessionAttributes.get("chatSessionList");
-        log.info("sessionList 모든 사용자 수 : {}", sessionList.size());
+        // log.info("sessionList 모든 사용자 수 : {}", sessionList.size());
         if(sessionList.size() != 0){
-            for (ChatSessionDTO session : sessionList) {
-                log.info("같은방 다른 사용자가 존재할 시 ");
-                if (session.getChatRoomID() == message.getSendChatRoomId() && session.getMemberId() != message.getSendChatSender())  memberOther = true;
+            for (ChatSessionDTO sessionOne : sessionList) {
+                //log.info("같은방 다른 사용자가 존재할 시 true");
+                if (sessionOne.getChatRoomID() == message.getSendChatRoomId() && sessionOne.getMemberId() != message.getSendChatSender())  memberOther = true;
             }
             if(memberOther == false){
-                log.info("# 알림");
+                // log.info("# 알림");
                //  기존 알림이 있을 시 시간만 업데이트
                 AlertDTO alertDTO = alertService.searchOnePath(message.getSendChatRoomId(), AlertType.MESSAGE);
                 if(alertDTO != null){
