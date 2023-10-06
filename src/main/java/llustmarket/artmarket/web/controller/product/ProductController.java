@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,16 +38,6 @@ public class ProductController {
     private final FileMapper fileMapper;
     private final OrderMapper orderMapper;
 
-    public byte[] getAttachmentImage(String filePath) {
-        try {
-            Path path = Paths.get(filePath);
-            return Files.readAllBytes(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     @GetMapping("/mypage-articles/{member_id}")
     public ResponseEntity<Object> getArticles(@PathVariable("member_id") Long memberId) {
         try {
@@ -62,12 +49,12 @@ public class ProductController {
                 List<String> filePaths = new ArrayList<>();
 
                 for (FileVO file : productFiles) {
-                    filePaths.add("C:\\upload\\" + file.getFilePath() + "\\" + file.getFileName()); // 경로로 변경
+                    filePaths.add("C:" + File.separator + "upload" + File.separator + file.getFilePath() + File.separator + file.getFileName());
                 }
 
                 List<byte[]> imageDataList = new ArrayList<>();
                 for (String filePath : filePaths) {
-                    byte[] imageData = getAttachmentImage(filePath);
+                    byte[] imageData = fileService.getAttachmentImage(filePath);
                     imageDataList.add(imageData);
                 }
 

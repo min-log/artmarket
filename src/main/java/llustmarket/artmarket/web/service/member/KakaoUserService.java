@@ -45,7 +45,7 @@ public class KakaoUserService {
         // 2. 토큰으로 카카오 API 호출
         KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
 
-        // 5. response Header에 JWT 토큰 추가
+        // 3. response Header에 JWT 토큰 추가
         kakaoUsersAuthorizationInput(kakaoUserInfo, response);
     }
 
