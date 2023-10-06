@@ -22,8 +22,12 @@ public class BoardService {
         return boardMapper.getCategoryList(category);
     }
 
-    public List<Map<String, Object>> getCategoryFile(String category) {
-        return boardMapper.getCategoryFile(category);
+    public List<Map<String, Object>> getCategoryFile(String category, Long productId) {
+        return boardMapper.getCategoryFile(category, productId);
+    }
+
+    public List<Map<String, Object>> getArrayFile(Long productId) {
+        return boardMapper.getArrayFile(productId);
     }
 
     public List<BoardDTO> getPopular() {
