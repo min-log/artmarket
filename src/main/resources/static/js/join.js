@@ -293,7 +293,7 @@ joinInfoInputArray[5].addEventListener('focusout', function () {
 })
 
 // 이메일
-joinInfoInputArray[6].setAttribute('value', `${localStorage.getItem('email')}`)
+joinInfoInputArray[6].setAttribute('value', `${sessionStorage.getItem('email')}`)
 joinInfoInputArray[6].style.cursor = 'not-allowed'
 
 function joinBtnAfterStyle() {
@@ -315,7 +315,7 @@ function joinBtnBeforeStyle() {
 //가입 회원정보 입력 화면 구현
 function joinInfoShow() {
     joinBtnBeforeStyle()
-    joinIdentityGeneral.getAttribute('value') === 'true' ? localStorage.setItem('joinIdentity', 'GENERAL') : localStorage.setItem('joinIdentity', 'AUTHOR')
+    joinIdentityGeneral.getAttribute('value') === 'true' ? sessionStorage.setItem('joinIdentity', 'GENERAL') : sessionStorage.setItem('joinIdentity', 'AUTHOR')
     joinIdentityGeneral.style.display = 'none'
     joinIdentityAuthor.style.display = 'none'
 
@@ -366,13 +366,13 @@ function joinInfoShow() {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify({
-                    JoinIdentity: `${localStorage.getItem('joinIdentity')}`,
+                    JoinIdentity: `${sessionStorage.getItem('joinIdentity')}`,
                     JoinName: `${joinNameInput.value}`,
                     JoinNickname: `${joinNickNameInput.value}`,
                     JoinLoginId: `${joinIdInput.value}`,
                     JoinPassword: `${joinPassInput.value}`,
                     JoinPhone: `${joinPhoneInput.value}`,
-                    JoinEmail: `${localStorage.getItem('email')}`,
+                    JoinEmail: `${sessionStorage.getItem('email')}`,
                 })
             }).then(response => {
                 joinStatus = response.status

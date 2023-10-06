@@ -41,13 +41,13 @@ myfageNav.insertAdjacentHTML('afterend', `<div class="myfage-nav-content">
 </div>`)
 
 const myfageNavProfileIdentity = document.querySelector('.myfage-nav-profile-identity')
-myfageNavProfileIdentity.textContent = localStorage.getItem('identity') === 'GENERAL' ? '일반 회원' : '작가 회원'
+myfageNavProfileIdentity.textContent = sessionStorage.getItem('identity') === 'GENERAL' ? '일반 회원' : '작가 회원'
 
 function myfageNavSet() {
   const myfageNavProfileGreeting = document.querySelector('.myfage-nav-profile-greeting')
   const myfageNavProfileImgTag = document.querySelector('.myfage-nav-profile-img-tag')
 
-  fetch(`${baseUrl}/myfage/${localStorage.getItem('id')}`, {
+  fetch(`${baseUrl}/myfage/${sessionStorage.getItem('id')}`, {
     method: 'GET',
     headers: {
       'content-type': 'application/json'
@@ -58,8 +58,8 @@ function myfageNavSet() {
   }).then(data => {
     if (resStatusCode === 200) {
       myfageNavProfileGreeting.textContent = `안녕하세요. ${data.nickname}님`
-      localStorage.setItem('nickname', `${data.nickname}`)
-      localStorage.setItem('intro', `${data.intro}`)
+      sessionStorage.setItem('nickname', `${data.nickname}`)
+      sessionStorage.setItem('intro', `${data.intro}`)
       if (data.profileImg === null) {
         myfageNavProfileImgTag.setAttribute('src', `./css/img/profile-test.gif`)
       } else {

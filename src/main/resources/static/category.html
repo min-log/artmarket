@@ -4,16 +4,71 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script async src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script async src="./js/nav.js"></script>
     <script async src="./js/footer.js"></script>
-    <link rel="stylesheet" href="./css/nav.css" />
-    <link rel="stylesheet" href="./css/footer.css" />
-    <link rel="stylesheet" href="./css/all.css" />
+    <script async src="./js/all.js"></script>
+    <link rel="stylesheet" href="./css/default/nav.css" />
+    <link rel="stylesheet" href="./css/default/footer.css" />
+    <link rel="stylesheet" href="./css/default/all.css" />
+    <link rel="stylesheet" href="./css/category.css" />
   </head>
   <body>
     <nav></nav>
-    <container></container>
+    <container>
+      <div class="category-box">
+        <div class="category-top">
+          <div class="category-title">LIVE2D*3D</div>
+          <div class="category-intro">
+            작가들의 다양한 작품을 한눈에 보세요!
+          </div>
+        </div>
+        <div class="category-filter">
+          <select class="category-filter-pop-cur">
+            <option value="popular">인기순</option>
+            <option value="current">최신순</option>
+          </select>
+          <div class="cateogry-keyword-search">
+            <input type="text" class="cateogry-keyword-search-box" />
+            <img class="cateogry-keyword-search-icon" src="" />
+          </div>
+        </div>
+        <div class="category-content">
+          <div class="category-list-box">
+            <div class="category-list-box-img-lists">
+              <div class="category-list-box-img-list">
+                <img
+                  class="category-list-box-img-value"
+                  src="./css/img/content1.jpg"
+                />
+              </div>
+              <div class="category-list-box-img-list">
+                <img
+                  class="category-list-box-img-value"
+                  src="./css/img/content2.jpg"
+                />
+              </div>
+              <div class="category-list-box-img-list">
+                <img
+                  class="category-list-box-img-value"
+                  src="./css/img/content3.jpg"
+                />
+              </div>
+            </div>
+            <div class="category-list-box-title">
+              작품타이틀작품타이틀작품타이틀작품타이틀작품타이틀12
+            </div>
+            <div class="category-list-box-etc">
+              <div class="category-list-box-nickname">믹믹믹믹믹믹믹믹믹믹</div>
+              <input
+                type="button"
+                class="category-list-box-go-detail"
+                value="상세페이지 보러가기"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </container>
     <footer></footer>
   </body>
 </html>
