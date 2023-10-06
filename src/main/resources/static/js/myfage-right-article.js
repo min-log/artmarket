@@ -164,7 +164,7 @@ function myfageArticleRightAddTag() {
   myfageRightArticleManageCategorySelectBoxIllust.addEventListener('click', function () {
     articleCategorySelect()
     articleCategoryClick(myfageRightArticleManageCategorySelectBoxIllust)
-    localStorage.setItem('artCategory', 'illust')
+    sessionStorage.setItem('artCategory', 'illust')
   })
 
   myfageRightArticleManageCategorySelectBoxIllust.addEventListener('mouseover', function () {
@@ -178,7 +178,7 @@ function myfageArticleRightAddTag() {
   myfageRightArticleManageCategorySelectBoxLive.addEventListener('click', function () {
     articleCategorySelect()
     articleCategoryClick(myfageRightArticleManageCategorySelectBoxLive)
-    localStorage.setItem('artCategory', 'live')
+    sessionStorage.setItem('artCategory', 'live')
   })
 
   myfageRightArticleManageCategorySelectBoxLive.addEventListener('mouseover', function () {
@@ -193,7 +193,7 @@ function myfageArticleRightAddTag() {
   myfageRightArticleManageCategorySelectBoxDesign.addEventListener('click', function () {
     articleCategorySelect()
     articleCategoryClick(myfageRightArticleManageCategorySelectBoxDesign)
-    localStorage.setItem('artCategory', 'design')
+    sessionStorage.setItem('artCategory', 'design')
   })
 
   myfageRightArticleManageCategorySelectBoxDesign.addEventListener('mouseover', function () {
@@ -207,7 +207,7 @@ function myfageArticleRightAddTag() {
   myfageRightArticleManageCategorySelectBoxVideo.addEventListener('click', function () {
     articleCategorySelect()
     articleCategoryClick(myfageRightArticleManageCategorySelectBoxVideo)
-    localStorage.setItem('artCategory', 'video')
+    sessionStorage.setItem('artCategory', 'video')
   })
 
   myfageRightArticleManageCategorySelectBoxVideo.addEventListener('mouseover', function () {
@@ -221,7 +221,7 @@ function myfageArticleRightAddTag() {
   myfageRightArticleManageCategorySelectBoxCharacter.addEventListener('click', function () {
     articleCategorySelect()
     articleCategoryClick(myfageRightArticleManageCategorySelectBoxCharacter)
-    localStorage.setItem('artCategory', 'character')
+    sessionStorage.setItem('artCategory', 'character')
   })
 
   myfageRightArticleManageCategorySelectBoxCharacter.addEventListener('mouseover', function () {
@@ -400,8 +400,8 @@ function myfageArticleRightAddTag() {
       const myfageRightArticleManageIntroBoxValue = document.querySelector('.myfage-right-article-manage-intro-box-value')
 
 
-      articleAddFormData.append('id', localStorage.getItem('id'))
-      articleAddFormData.append('category', localStorage.getItem('artCategory'))
+      articleAddFormData.append('id', sessionStorage.getItem('id'))
+      articleAddFormData.append('category', sessionStorage.getItem('artCategory'))
       articleAddFormData.append('articleTitle', myfageRightArticleManageTitleBoxValue.value)
       articleAddFormData.append('articleDetail', myfageRightArticleManageIntroBoxValue.value)
 
@@ -417,6 +417,7 @@ function myfageArticleRightAddTag() {
       }).then(() => {
         if (articleAddStatus === 201) {
           alert('등록이 완료되었습니다.')
+          sessionStorage.removeItem('artCategory')
           location.reload()
         }
       })

@@ -29,7 +29,7 @@ function myfageArticleMidAddTag() {
   const myfageMidArticleBoxBot = document.querySelector('.myfage-mid-article-box-bot')
   let articleGetStatus
 
-  fetch(`${baseUrl}/mypage-articles/${localStorage.getItem('id')}`, {
+  fetch(`${baseUrl}/mypage-articles/${sessionStorage.getItem('id')}`, {
     method: 'GET',
     headers: {
       'content-type': 'application/json'

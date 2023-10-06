@@ -7,7 +7,6 @@ const commonEmailReg = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
 const commonTokenReg = /\d\d\d\d\d\d/i
 
 const baseUrl = 'http://localhost:8070'
-// const fileUrl = 'C:\\upload'
 
 function fadeIn(fadeTag) {
     let fadeOpacity = 0;

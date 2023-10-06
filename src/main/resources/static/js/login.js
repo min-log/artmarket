@@ -162,8 +162,8 @@ loginBtn.addEventListener("click", function () {
             return response.json()
         }).then(data => {
             if (resStatus === 200) {
-                localStorage.setItem('id', data.loginTrueId)
-                localStorage.setItem('identity', data.loginTrueIdentity)
+                sessionStorage.setItem('id', data.loginTrueId)
+                sessionStorage.setItem('identity', data.loginTrueIdentity)
                 location.href = 'index.html'
 
             } else if (resStatus === 401) {

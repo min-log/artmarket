@@ -50,10 +50,10 @@ public class ChatMessageController {
         // StompHeaderAccessor를 사용하여 WebSocket 세션에서 사용자 정보 가져오기
         Map<String, Object> sessionAttributes = messageHeaderAccessor.getSessionAttributes();
         List<ChatSessionDTO> sessionList = (List<ChatSessionDTO>)sessionAttributes.get("chatSessionList");
-        // log.info("sessionList 모든 사용자 수 : {}", sessionList.size());
+        log.info("sessionList 모든 사용자 수 : {}", sessionList.size());
         if(sessionList.size() != 0){
             for (ChatSessionDTO session : sessionList) {
-                // log.info("같은방 다른 사용자가 존재할 시 ");
+                log.info("같은방 다른 사용자가 존재할 시 ");
                 if (session.getChatRoomID() == message.getSendChatRoomId() && session.getMemberId() != message.getSendChatSender())  memberOther = true;
             }
             if(memberOther == false){

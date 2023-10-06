@@ -204,25 +204,31 @@ input[type="button"]:not(.product-chat-room-box-top-show-exit) {
 
 .product-chat-room-box-mid-msg-me {
   float: right;
+  clear: both;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .product-chat-room-box-mid-msg-me-time {
-  float: right;
   color: white;
   font-size: 0.7rem;
   font-weight: 400;
-  margin-right: 0.4rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .product-chat-room-box-mid-msg-me-text {
-  clear: both;
   background-color: white;
   font-size: 0.8rem;
   font-weight: 600;
   border-radius: 0.7rem;
   padding: 0.3rem 0.8rem;
   margin-bottom: 0.4rem;
-  margin-left: 1.1rem;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .product-chat-room-box-mid-msg-other {

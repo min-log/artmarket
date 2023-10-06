@@ -31,28 +31,33 @@ public class WebSocketConnectHandler implements HandshakeInterceptor {
         if (request instanceof ServletServerHttpRequest) {
             // HttpSession에서 사용자 정보 가져오기
             ChatSessionDTO userDTO = (ChatSessionDTO) httpSession.getAttribute("chatSession");
-            //log.info("연결된 사용자 : {}",userDTO);
+            log.info("연결된 사용자 : {}",userDTO);
             // WebSocket 세션에 사용자 정보 저장
-            if(null==attributes.get("chatSessionList")){
+
+            if(null ==  attributes.get("chatSessionList")){
+                log.info("첫진입");
                 chatSessionList.add(userDTO);
                 attributes.put("chatSessionList", chatSessionList);
+                return true;
             }
 
             // 복제 하여 사용 -- 동시 접속시 오류 줄일 수 잇다 .
-            List<ChatSessionDTO> chatSessions = (List<ChatSessionDTO>)attributes.get("chatSessionList");
             List<ChatSessionDTO> copyOfChatSessionList;
+            List<ChatSessionDTO> chatSessions = (List<ChatSessionDTO>)attributes.get("chatSessionList");
+            log.info("접속 수 :{}",chatSessions.size());
             synchronized (chatSessionList) {
                 copyOfChatSessionList = new ArrayList<>(chatSessions);
             }
-            for(ChatSessionDTO i : copyOfChatSessionList){
-                if(i.getMemberId() != userDTO.getMemberId() && i.getChatRoomID() != userDTO.getChatRoomID()){
+            for(ChatSessionDTO user : copyOfChatSessionList){
+                if(user.getMemberId() != userDTO.getMemberId() && user.getChatRoomID() != userDTO.getChatRoomID()){
                     //동일한 회원, 동일한 방이 아닐 경우
-                    chatSessionList.add(userDTO);
-                    attributes.put("chatSessionList",chatSessionList);
+                    copyOfChatSessionList.add(userDTO);
+                    attributes.put("chatSessionList",copyOfChatSessionList);
                 }
             }
             attributes.put("chatSessionUser",userDTO);
             if (userDTO != null) return true;
+
         }
         return false;
     }

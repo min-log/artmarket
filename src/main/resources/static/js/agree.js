@@ -318,7 +318,7 @@ function emailConfirmAlert(parentTag) {
 
     function tokenComfirmAlert(statusCodeValue) {
 
-        localStorage.setItem("email", `${emailConfirmInput.value}`)
+        sessionStorage.setItem("email", `${emailConfirmInput.value}`)
         emailConfirmInput.value = null
 
         if (typeof statusCodeValue === 'number') {

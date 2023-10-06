@@ -7,7 +7,7 @@ navMenu.setAttribute("class", "nav-menu")
 
 const login = document.createElement('div')
 
-if (localStorage.getItem("id") !== null) {
+if (sessionStorage.getItem("id") !== null) {
     login.textContent = 'LOGOUT'
     login.setAttribute("class", "logout")
 } else {
@@ -60,6 +60,11 @@ const live = document.createElement('div')
 live.setAttribute("class", "live")
 live.textContent = "LIVE2D•3D"
 
+live.addEventListener('click', function () {
+    location.href = 'category.html'
+    sessionStorage.setItem('selectcategory', 'live')
+})
+
 const character = document.createElement('div')
 character.setAttribute("class", "character")
 character.textContent = "CHARACTER"
@@ -98,22 +103,23 @@ navLogo.addEventListener("click", function () {
     location.href = "index.html"
 })
 
-myfage.addEventListener("click", function () {
-    if (localStorage.getItem('id') === null) {
-        notAcessMyfage()
-    } else {
-        location.href = "myfage.html"
-    }
-})
+if (sessionStorage.getItem('id') === null) {
+    myfage.style.display = 'none'
+    alram.style.display = 'none'
+} else {
+    myfage.addEventListener('click', function () {
+        location.href = 'myfage.html'
+    })
+}
 
 home.addEventListener("click", function () {
     location.href = "index.html"
 })
 
 login.addEventListener("click", function () {
-    if (localStorage.getItem("id") !== null) {
-        localStorage.removeItem("id")
-        localStorage.removeItem("identity")
+    if (sessionStorage.getItem("id") !== null) {
+        sessionStorage.removeItem("id")
+        sessionStorage.removeItem("identity")
         login.textContent = 'LOGIN'
     } else {
         location.href = "login.html"
