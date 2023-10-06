@@ -13,5 +13,6 @@ public class Article {
     private String articleCategory;
     private Date articleDate;
     private int articleTotalOrder;
+    private List<String> articleImgsName;
     private List<byte[]> articleImgs;
 }
