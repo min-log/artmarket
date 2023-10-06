@@ -8,7 +8,7 @@ const detailMidLeftProfileInfoIntro = document.querySelector('.detail-mid-left-p
 const detailBotIntroValue = document.querySelector('.detail-bot-intro-value')
 const detailBotImgLists = document.querySelector('.detail-bot-img-lists')
 
-const productId = 20
+const productId = 1
 
 const productChatRoom = document.querySelector('.product-chat-room')
 productChatRoom.style.display = 'none'
@@ -130,7 +130,7 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
 
         chatFileReader.onload = function (e) {
 
-          const fileObject = e.target.result
+          const fileObject = e.target.result;
           productChatRoomBoxBotSendAttachFile.setAttribute('id', `${Array.from(new Uint8Array(fileObject))}`)
           productChatRoomBoxBotSendAttachFile.setAttribute('name', `${chatFileName}`)
         }

@@ -139,7 +139,7 @@ function myfageChatListClick(chatRoomId, chatSender) {
   }).then(response => {
     return response.json()
   }).then(data => {
-
+    console.log("받아온데이터 값")
     console.log(data)
     // const myfageRightChatBoxMid = document.querySelector('.myfage-right-chat-box-mid')
 
