@@ -47,8 +47,10 @@ public class ProductController {
             for (Product memberProduct : memberProducts) {
                 List<FileVO> productFiles = fileMapper.getFilesByTypeAndId("PRODUCT", memberProduct.getProductId());
                 List<String> filePaths = new ArrayList<>();
+                List<String> fileNames = new ArrayList<>();
 
                 for (FileVO file : productFiles) {
+                    fileNames.add(file.getFileName());
                     filePaths.add("C:" + File.separator + "upload" + File.separator + file.getFilePath() + File.separator + file.getFileName());
                 }
 
@@ -63,6 +65,7 @@ public class ProductController {
                         memberProduct.getCategory(),
                         memberProduct.getProductDate(),
                         orderMapper.countOrdersByProductId(memberProduct.getProductId()),
+                        fileNames,
                         imageDataList
                 );
                 articles.add(article);
