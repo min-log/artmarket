@@ -149,6 +149,7 @@ public class KakaoUserService {
                 responseBody.put("loginTrueName", member.get().getName());
                 response.setHeader("Authorization", "BEARER " + token);
                 response.setHeader("Content-type", "application/json;charset=UTF-8");
+                ResponseEntity.status(HttpStatus.OK).body(responseBody);
 //             response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
             } else {
                 Map<String, Object> responseBody = new HashMap<>();
@@ -156,6 +157,7 @@ public class KakaoUserService {
                 responseBody.put("email", kakaoUserInfo.getEmail());
                 response.setHeader("Authorization", "BEARER " + token);
                 response.setHeader("Content-type", "application/json;charset=UTF-8");
+                ResponseEntity.status(HttpStatus.OK).body(responseBody);
 //             response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
             }
 
