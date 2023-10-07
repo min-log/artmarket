@@ -133,7 +133,7 @@ public class KakaoUserService {
     }
 
     // 5. response Header에 JWT 토큰 추가
-    private void kakaoUsersAuthorizationInput(KakaoUserInfoDto kakaoUserInfo, HttpServletResponse response) {
+    private ResponseEntity<Object> kakaoUsersAuthorizationInput(KakaoUserInfoDto kakaoUserInfo, HttpServletResponse response) {
         String token = null;
         try {
             JwtTokenUtils jwtTokenUtils = new JwtTokenUtils();
@@ -149,7 +149,7 @@ public class KakaoUserService {
                 responseBody.put("loginTrueName", member.get().getName());
                 response.setHeader("Authorization", "BEARER " + token);
                 response.setHeader("Content-type", "application/json;charset=UTF-8");
-                ResponseEntity.status(HttpStatus.OK).body(responseBody);
+                return ResponseEntity.status(HttpStatus.OK).body(responseBody);
 //             response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
             } else {
                 Map<String, Object> responseBody = new HashMap<>();
@@ -157,13 +157,13 @@ public class KakaoUserService {
                 responseBody.put("email", kakaoUserInfo.getEmail());
                 response.setHeader("Authorization", "BEARER " + token);
                 response.setHeader("Content-type", "application/json;charset=UTF-8");
-                ResponseEntity.status(HttpStatus.OK).body(responseBody);
+                log.info("token = {}", token);
+                return ResponseEntity.status(HttpStatus.OK).body(responseBody);
 //             response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("여기가 오류");
         }
-        log.info("token = {}", token);
     }
 }
