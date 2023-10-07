@@ -21,8 +21,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -36,14 +36,14 @@ public class KakaoUserService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String client_id;
 
-    public String kakaoLogin(String code, HttpServletResponse response, HttpSession session) throws JsonProcessingException {
+    public String kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
         log.info("accessToken = {}", accessToken);
         // 2. 토큰으로 카카오 API 호출
         KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
         // 3. response Header에 JWT 토큰 추가
-        String redirectURL = kakaoUsersAuthorizationInput(kakaoUserInfo, response, session);
+        String redirectURL = kakaoUsersAuthorizationInput(kakaoUserInfo, response);
 
         return redirectURL;
     }
@@ -124,7 +124,7 @@ public class KakaoUserService {
             String loginId = "art" + highestMembrId + "@kakao";
 
             String password = request.getJwtToken();
-            Member kakaoUser = new Member(request.getJoinName(), request.getJoinNickname(), loginId, password,
+            Member kakaoUser = new Member(request.getJoinName(), request.getJoinNickname(), loginId, passwordEncoder.encode(password),
                     request.getJoinPhone(), request.getJoinEmail(), request.getJoinIdentity());
             memberMapper.insertMember(kakaoUser);
             return kakaoUser;
@@ -134,29 +134,50 @@ public class KakaoUserService {
     }
 
     // 5. response Header에 JWT 토큰 추가
-    private String kakaoUsersAuthorizationInput(KakaoUserInfoDto kakaoUserInfo, HttpServletResponse response, HttpSession session) {
+    private String kakaoUsersAuthorizationInput(KakaoUserInfoDto kakaoUserInfo, HttpServletResponse response) {
         String token = null;
         try {
             JwtTokenUtils jwtTokenUtils = new JwtTokenUtils();
             token = jwtTokenUtils.generateKakaoJwtToken(kakaoUserInfo);
-            Optional<Member> member =
-                    memberMapper.findByUserEmail(kakaoUserInfo.getEmail());
+            Optional<Member> member = memberMapper.findByUserEmail(kakaoUserInfo.getEmail());
 
             if (member.isPresent()) {
-                memberMapper.updatePasswordByEmail(token, kakaoUserInfo.getEmail());
-                session.setAttribute("loginTrueIdentity", member.get().getIdentity());
-                session.setAttribute("loginTrueId", member.get().getMemberId());
-                session.setAttribute("loginTrueName", member.get().getName());
+                memberMapper.updatePasswordByEmail(passwordEncoder.encode(token), kakaoUserInfo.getEmail());
+
+                // 세션 대신 쿠키에 정보 저장
+                Cookie loginTrueIdentity = new Cookie("loginTrueIdentity", member.get().getIdentity());
+                Cookie loginTrueId = new Cookie("loginTrueId", String.valueOf(member.get().getMemberId()));
+                Cookie loginTrueName = new Cookie("loginTrueName", member.get().getName());
+
+                // 쿠키의 유효 시간 설정 (초 단위)
+                int maxAge = 1 * 60 * 60; // 예시로 1시간 유지
+
+                loginTrueIdentity.setMaxAge(maxAge);
+                loginTrueId.setMaxAge(maxAge);
+                loginTrueName.setMaxAge(maxAge);
+
+                response.addCookie(loginTrueIdentity);
+                response.addCookie(loginTrueId);
+                response.addCookie(loginTrueName);
+
                 return "redirect:/index.html";
-//             response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
             } else {
-                session.setAttribute("joinType", "SOCIAL");
-                session.setAttribute("email", kakaoUserInfo.getEmail());
-//                response.setHeader("Authorization", "BEARER " + token);
-//                response.setHeader("Content-type", "application/json;charset=UTF-8");
-                log.info("token = {}", token);
+                // 세션 대신 쿠키에 정보 저장
+                Cookie joinType = new Cookie("joinType", "SOCIAL");
+                Cookie email = new Cookie("email", kakaoUserInfo.getEmail());
+                Cookie jwtToken = new Cookie("jwtToken", token);
+
+                // 쿠키의 유효 시간 설정 (초 단위)
+                int maxAge = 1 * 60 * 60; // 예시로 1시간 유지
+
+                joinType.setMaxAge(maxAge);
+                email.setMaxAge(maxAge);
+
+                response.addCookie(joinType);
+                response.addCookie(email);
+                response.addCookie(jwtToken);
+
                 return "redirect:/join.html";
-//             response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
             }
         } catch (Exception e) {
             e.printStackTrace();

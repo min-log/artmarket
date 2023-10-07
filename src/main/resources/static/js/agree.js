@@ -190,7 +190,7 @@ AgreeBtn.addEventListener('click', function () {
 
 // 백에서 아직 소셜 구현 x
 socialGoogleBox.addEventListener('click', function () {
-
+    location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=242939801101-svnsms546a27mk3i9mhfisb7fd0ge7l9.apps.googleusercontent.com&redirect_uri=http://localhost:8070/google-login&response_type=code&scope=email profile`
 })
 
 const kakaoCode = 'b78977a50a13ce81576485688bc20490'
@@ -203,32 +203,9 @@ const kakaoRequestUrl = `https://kauth.kakao.com/oauth/authorize
 
 // 카카오 가입
 socialKaKaoBox.addEventListener('click', function () {
-    location.href = `${kakaoRequestUrl}`;
+    location.href = `${kakaoRequestUrl}`
 });
 
-// URL에서 코드 추출 및 요청 보내기
-const urlParams = new URLSearchParams(window.location.search);
-const receivedCode = urlParams.get('code');
-
-if (receivedCode) {
-    const url = `http://localhost:8070/kakao-login?code=${receivedCode}`;
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    };
-
-    fetch(url, requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            // 여기서 프론트엔드에서 필요한 작업을 수행하세요.
-        })
-        .catch(error => console.error('Error:', error));
-} else {
-    console.error("코드가 없습니다.");
-}
 
 // 자사 가입
 siteBox.addEventListener('click', function () {

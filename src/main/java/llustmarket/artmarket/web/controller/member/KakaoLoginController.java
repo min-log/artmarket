@@ -15,7 +15,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,9 +100,9 @@ public class KakaoLoginController {
 
     // 카카오 로그인
     @GetMapping("/kakao-login")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response, HttpSession session) throws JsonProcessingException {
+    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         log.info("code={}", code);
-        String redirectURL = kakaoUserService.kakaoLogin(code, response, session);
+        String redirectURL = kakaoUserService.kakaoLogin(code, response);
         return redirectURL;
     }
 

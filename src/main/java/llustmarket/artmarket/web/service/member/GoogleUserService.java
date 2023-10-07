@@ -21,12 +21,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @Log4j2
@@ -41,16 +38,17 @@ public class GoogleUserService {
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String client_secret;
 
-    public void googleLogin(String code, HttpServletResponse response) throws JsonProcessingException {
-        // 1. "인가 코드"로 "액세스 토큰" 요청https://accounts.google.com/o/oauth2/v2/auth?client_id=242939801101-svnsms546a27mk3i9mhfisb7fd0ge7l9.apps.googleusercontent.com&redirect_uri=http://localhost:8070/google-login&response_type=code&scope=email profile
+    public String googleLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+
+        // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
         log.info("accessToken = {}", accessToken);
-
         // 2. 토큰으로 카카오 API 호출
         GoogleLoginResponse googleUserInfo = getGoogleUserInfo(accessToken);
+        // 3. response Header에 JWT 토큰 추가
+        String redirectURL = googleUsersAuthorizationInput(googleUserInfo, response);
 
-        // 5. response Header에 JWT 토큰 추가
-        googleUsersAuthorizationInput(googleUserInfo, (HttpServletResponseWrapper) response);
+        return redirectURL;
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
@@ -116,7 +114,7 @@ public class GoogleUserService {
         String id = jsonNode.get("id").asText();
         String email = jsonNode.get("email").asText();
 
-        return new GoogleLoginResponse(id, Objects.requireNonNullElse(email, ""));
+        return new GoogleLoginResponse(id, id);
 
     }
 
@@ -131,7 +129,7 @@ public class GoogleUserService {
             }
             String loginId = "art" + highestMembrId + "@google";
             String password = request.getJwtToken();
-            Member googleUser = new Member(request.getJoinName(), request.getJoinNickname(), loginId, password, request.getJoinPhone(), request.getJoinEmail(), request.getJoinIdentity());
+            Member googleUser = new Member(request.getJoinName(), request.getJoinNickname(), loginId, passwordEncoder.encode(password), request.getJoinPhone(), request.getJoinEmail(), request.getJoinIdentity());
             memberMapper.insertMember(googleUser);
             return googleUser;
         } else {
@@ -139,7 +137,7 @@ public class GoogleUserService {
         }
     }
 
-    private void googleUsersAuthorizationInput(GoogleLoginResponse googleUserInfo, HttpServletResponse response) {
+    private String googleUsersAuthorizationInput(GoogleLoginResponse googleUserInfo, HttpServletResponse response) {
         String token = null;
         try {
             JwtTokenUtils jwtTokenUtils = new JwtTokenUtils();
@@ -147,24 +145,46 @@ public class GoogleUserService {
             Optional<Member> member = memberMapper.findByUserEmail(googleUserInfo.getEmail());
 
             if (member.isPresent()) {
-                memberMapper.updatePasswordByEmail(token, googleUserInfo.getEmail());
-                Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("loginTrueIdentity", member.get().getIdentity());
-                responseBody.put("loginTrueId", member.get().getMemberId());
-                responseBody.put("loginTrueName", member.get().getName());
-                response.setHeader("Authorization", "BEARER " + token);
-                response.setHeader("Content-type", "application/json;charset=UTF-8");
-                response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
+                memberMapper.updatePasswordByEmail(passwordEncoder.encode(token), googleUserInfo.getEmail());
+
+                // 세션 대신 쿠키에 정보 저장
+                Cookie loginTrueIdentity = new Cookie("loginTrueIdentity", member.get().getIdentity());
+                Cookie loginTrueId = new Cookie("loginTrueId", String.valueOf(member.get().getMemberId()));
+                Cookie loginTrueName = new Cookie("loginTrueName", member.get().getName());
+
+                // 쿠키의 유효 시간 설정 (초 단위)
+                int maxAge = 1 * 60 * 60; // 예시로 1시간 유지
+
+                loginTrueIdentity.setMaxAge(maxAge);
+                loginTrueId.setMaxAge(maxAge);
+                loginTrueName.setMaxAge(maxAge);
+
+                response.addCookie(loginTrueIdentity);
+                response.addCookie(loginTrueId);
+                response.addCookie(loginTrueName);
+
+                return "redirect:/index.html";
             } else {
-                Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("email", googleUserInfo.getEmail());
-                response.setHeader("Authorization", "BEARER " + token);
-                response.setHeader("Content-type", "application/json;charset=UTF-8");
-                response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
+                // 세션 대신 쿠키에 정보 저장
+                Cookie joinType = new Cookie("joinType", "SOCIAL");
+                Cookie email = new Cookie("email", googleUserInfo.getEmail());
+                Cookie jwtToken = new Cookie("jwtToken", token);
+
+                // 쿠키의 유효 시간 설정 (초 단위)
+                int maxAge = 1 * 60 * 60; // 예시로 1시간 유지
+
+                joinType.setMaxAge(maxAge);
+                email.setMaxAge(maxAge);
+
+                response.addCookie(joinType);
+                response.addCookie(email);
+                response.addCookie(jwtToken);
+
+                return "redirect:/join.html";
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return "여기가 오류";
         }
-        log.info("token = {}", token);
     }
 }

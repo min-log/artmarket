@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +23,13 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class GoogleLoginController {
     private final MemberService memberService;
     private final GoogleUserService googleUserService;
 
+    @ResponseBody
     @PostMapping("/agree-google")
     public ResponseEntity<Object> confirmDuplicateGoogle(@RequestBody @Valid GoogleAuthDTO request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -99,10 +101,12 @@ public class GoogleLoginController {
 
     // 구글 로그인
     @GetMapping("/google-login")
-    public void googleLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        googleUserService.googleLogin(code, response);
+    public String googleLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        String redirectURL = googleUserService.googleLogin(code, response);
+        return redirectURL;
     }
 
+    @ResponseBody
     @PostMapping("/join-google")
     public ResponseEntity<Object> joinKakao(@RequestBody JoinSocialDTO request) {
         try {
