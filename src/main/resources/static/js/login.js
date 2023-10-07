@@ -164,6 +164,14 @@ loginBtn.addEventListener("click", function () {
             if (resStatus === 200) {
                 sessionStorage.setItem('id', data.loginTrueId)
                 sessionStorage.setItem('identity', data.loginTrueIdentity)
+
+                if (data.loginTrueIdentity == 'GENERAL') {
+                    sessionStorage.setItem('login-profile-img', './css/icon/login-general.png')
+                } else {
+                    sessionStorage.setItem('login-profile-img', './css/icon/login-author.png')
+                }
+                sessionStorage.setItem('login-profile-intro', `${data.loginTrueName}님, 어서오세요`)
+
                 location.href = 'index.html'
 
             } else if (resStatus === 401) {

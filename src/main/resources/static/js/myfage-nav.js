@@ -47,7 +47,7 @@ function myfageNavSet() {
   const myfageNavProfileGreeting = document.querySelector('.myfage-nav-profile-greeting')
   const myfageNavProfileImgTag = document.querySelector('.myfage-nav-profile-img-tag')
 
-  fetch(`${baseUrl}/myfage/${sessionStorage.getItem('id')}`, {
+  fetch(`/myfage/${sessionStorage.getItem('id')}`, {
     method: 'GET',
     headers: {
       'content-type': 'application/json'
@@ -61,7 +61,7 @@ function myfageNavSet() {
       sessionStorage.setItem('nickname', `${data.nickname}`)
       sessionStorage.setItem('intro', `${data.intro}`)
       if (data.profileImg === null) {
-        myfageNavProfileImgTag.setAttribute('src', `./css/img/profile-test.gif`)
+        myfageNavProfileImgTag.setAttribute('src', `./css/icon/default-profile-img.png`)
       } else {
         myfageNavProfileImgTag.setAttribute('src', `${baseUrl}/${data.profileImg}`)
       }

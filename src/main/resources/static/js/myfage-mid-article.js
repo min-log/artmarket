@@ -2,6 +2,12 @@
 
 function myfageArticleMidAddTag() {
 
+  if (myfageMid.childNodes) {
+    for (myfageMidTag of myfageMid.childNodes) {
+      myfageMidTag.remove()
+    }
+  }
+
   myfageMid.insertAdjacentHTML('beforeend', `<div class="myfage-mid-article-box">
       <div class="myfage-mid-article-box-top">
         <div class="myfage-mid-article-box-top-filter">
@@ -27,7 +33,6 @@ function myfageArticleMidAddTag() {
       </div>`)
 
   const myfageMidArticleBoxBot = document.querySelector('.myfage-mid-article-box-bot')
-  let articleGetStatus
 
   fetch(`${baseUrl}/mypage-articles/${sessionStorage.getItem('id')}`, {
     method: 'GET',
@@ -38,8 +43,14 @@ function myfageArticleMidAddTag() {
     articleGetStatus = respone.status
     return respone.json()
   }).then((data) => {
-    console.log(data)
     for (var i = 0; i < data.length; i++) {
+
+      data[i].articleCategory = data[i].articleCategory.toUpperCase()
+
+      if (data[i].articleCategory === 'LIVE') {
+        data[i].articleCategory = 'LIVE2D•3D'
+      }
+
       myfageMidArticleBoxBot.insertAdjacentHTML('beforeend', `<div class="myfage-mid-article-box-bot-list" id="${data[i].articleDate}">
         <div class="myfage-mid-article-box-bot-list-thumb">
           <img class="myfage-mid-article-box-bot-list-thumb-img" src="data:image/jpeg;base64,${data[i].articleImgs[0]}"/>

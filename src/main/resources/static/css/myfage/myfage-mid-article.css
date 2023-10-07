@@ -79,11 +79,10 @@ input[type="date"] {
 .myfage-mid-article-box-bot-list-thumb-img {
   width: 10rem;
   height: 7.2rem;
-  justify-content: center;
-  align-items: center;
+  object-fit: cover;
+  border-radius: 0.7rem;
   border: solid 0.1rem rgba(88, 88, 88, 0.2);
   box-shadow: 2px 2px 0.2rem rgba(88, 88, 88, 0.1);
-  border-radius: 1rem;
 }
 
 .myfage-mid-article-box-bot-list-content {
