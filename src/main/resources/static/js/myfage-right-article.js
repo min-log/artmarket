@@ -1,6 +1,18 @@
 // ------------------------------ myfage-right-article ------------------------------
 
 function myfageArticleRightAddTag() {
+
+  if (myfageRight.childNodes) {
+    for (myfageRightTag of myfageRight.childNodes) {
+      myfageRightTag.remove()
+    }
+  }
+
+  const myfageRightChatBox = document.querySelector('.myfage-right-chat-box')
+  if (myfageRightChatBox) {
+    myfageRightChatBox.remove()
+  }
+
   myfageRight.insertAdjacentHTML('beforeend', `<div class="myfage-right-article-manage-box">
     <div class="myfage-right-article-manage-title">작품 등록하기</div>
     <div class="myfage-right-article-manage-category">

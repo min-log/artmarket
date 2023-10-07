@@ -1,18 +1,6 @@
-.swal-text {
-  background-color: #fefae3;
-  padding: 17px;
-  border: 1px solid #f0e1a1;
-  display: block;
-  margin: 22px;
-  text-align: center;
-  color: #61534e;
-}
-
 nav {
   display: flex;
   justify-content: space-between;
-  padding: 0.3rem 1rem;
-  margin: 1rem 0;
 }
 
 .nav-menu {
@@ -20,13 +8,13 @@ nav {
   align-items: center;
   flex-direction: row-reverse;
 }
-.nav-menu > * {
+.nav-menu > *:not(.login-profile) {
   margin-left: 1.3rem;
   font-size: 0.7rem;
   cursor: pointer;
 }
 
-.nav-menu > *:hover {
+.nav-menu > *:hover:not(.login-profile) {
   font-weight: bold;
 }
 
@@ -59,4 +47,26 @@ nav {
 .nav-category > *:hover {
   font-size: 0.9rem;
   transition: 0.3s;
+}
+
+.login-profile {
+  align-items: center;
+  padding: 0.1rem;
+  margin: 0.1rem;
+  cursor: auto;
+  margin-top: 0.1rem;
+  margin-right: -0.2rem;
+}
+
+.login-profile-img {
+  scale: 65%;
+  margin-right: -0.2rem;
+}
+
+.login-profile-intro {
+  font-size: 0.8rem;
+  background-color: rgba(49, 49, 49, 0.9);
+  color: white;
+  border-radius: 1rem;
+  padding: 0 0.5rem;
 }

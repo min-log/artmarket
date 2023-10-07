@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -41,10 +42,8 @@ public class KakaoUserService {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
         log.info("accessToken = {}", accessToken);
-
         // 2. 토큰으로 카카오 API 호출
         KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
-
         // 3. response Header에 JWT 토큰 추가
         kakaoUsersAuthorizationInput(kakaoUserInfo, response);
     }
@@ -113,7 +112,7 @@ public class KakaoUserService {
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
 
-        return new KakaoUserInfoDto(id, nickname, email);
+        return new KakaoUserInfoDto(id, nickname, Objects.requireNonNullElse(email, ""));
     }
 
     // 3. 카카오ID로 회원가입 처리

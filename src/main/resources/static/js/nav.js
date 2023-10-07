@@ -2,10 +2,32 @@
 
 const nav = document.querySelector('nav')
 
-const navMenu = document.createElement('div')
-navMenu.setAttribute("class", "nav-menu")
+nav.insertAdjacentHTML('beforeend', `
+<div class="nav-logo">
+    <img src="./css/img/ARTMARKET.png">
+</div>
+<div class="nav-category">
+    <div class="illust">ILLUST</div>
+    <div class="live">LIVE2D•3D</div>
+    <div class="character">CHARACTER</div>
+    <div class="design">DESIGN</div>
+    <div class="video">VIDEO</div>
+</div>
+<div class="nav-menu">
+    <div class="login">LOGIN</div>
+    <div class="myfage">MYPAGE</div>
+    <div class="alram">ALRAM</div>
+    <div class="center">CENTER</div>
+    <div class="home">HOME</div>
+    <div class="login-profile">
+        <img class="login-profile-img" />
+        <div class="login-profile-intro">
+        </div>
+    </div>
+</div>`)
 
-const login = document.createElement('div')
+
+const login = document.querySelector('.login')
 
 if (sessionStorage.getItem("id") !== null) {
     login.textContent = 'LOGOUT'
@@ -15,93 +37,63 @@ if (sessionStorage.getItem("id") !== null) {
     login.setAttribute("class", "login")
 }
 
-const myfage = document.createElement('div')
-myfage.textContent = 'MYFAGE'
-myfage.setAttribute("class", "myfage")
+if (login) {
+    login.addEventListener('click', function () {
+        location.href = 'login.html'
+    })
+}
 
-const alram = document.createElement('div')
-alram.textContent = 'ALRAM'
-alram.setAttribute("class", "alram")
 
-const home = document.createElement('div')
-home.textContent = 'HOME'
-home.setAttribute("class", "home")
 
-const center = document.createElement('div')
-center.textContent = 'CENTER'
-center.setAttribute("class", "center")
-
-navMenu.appendChild(login)
-navMenu.appendChild(myfage)
-navMenu.appendChild(alram)
-navMenu.appendChild(center)
-navMenu.appendChild(home)
-
-const navLogo = document.createElement('div')
-navLogo.setAttribute("class", "nav-logo")
-
-const navLogoImg = document.createElement('img')
-navLogoImg.setAttribute("src", "./css/img/ARTMARKET.png")
-
-navLogo.appendChild(navLogoImg)
-
-const navCategory = document.createElement('div')
-navCategory.setAttribute("class", "nav-category")
-
-const illust = document.createElement('div')
-illust.setAttribute("class", "illust")
-illust.textContent = "ILLUST"
+const illust = document.querySelector('.illust')
 
 illust.addEventListener('click', function () {
-    location.href = 'detail.html'
+    location.href = 'category.html'
+    sessionStorage.setItem('selectcategory', 'illust')
 })
 
-const live = document.createElement('div')
-live.setAttribute("class", "live")
-live.textContent = "LIVE2D•3D"
 
+const live = document.querySelector('.live')
 live.addEventListener('click', function () {
     location.href = 'category.html'
     sessionStorage.setItem('selectcategory', 'live')
 })
 
-const character = document.createElement('div')
-character.setAttribute("class", "character")
-character.textContent = "CHARACTER"
 
-const design = document.createElement('div')
-design.setAttribute("class", "design")
-design.textContent = "DESIGN"
+const character = document.querySelector('.character')
 
-const video = document.createElement('div')
-video.setAttribute("class", "video")
-video.textContent = "VIDEO"
+character.addEventListener('click', function () {
+    location.href = 'category.html'
+    sessionStorage.setItem('selectcategory', 'character')
+})
 
-navCategory.appendChild(illust)
-navCategory.appendChild(live)
-navCategory.appendChild(character)
-navCategory.appendChild(design)
-navCategory.appendChild(video)
 
-nav.appendChild(navLogo)
-nav.appendChild(navCategory)
-nav.appendChild(navMenu)
+const design = document.querySelector('.design')
+
+design.addEventListener('click', function () {
+    location.href = 'category.html'
+    sessionStorage.setItem('selectcategory', 'design')
+})
+
+
+const video = document.querySelector('.video')
+video.addEventListener('click', function () {
+    location.href = 'category.html'
+    sessionStorage.setItem('selectcategory', 'video')
+})
+
 
 /*------------------------이동------------------------- */
 
-function notAcessMyfage() {
-    Swal.fire({
-        text: '로그인 후 접근 가능한 페이지입니다.',
-        icon: 'error'
-    })
-    setTimeout(function () {
-        location.href = "login.html"
-    }, 2000)
-}
-
+const navLogo = document.querySelector('.nav-logo')
 navLogo.addEventListener("click", function () {
     location.href = "index.html"
 })
+
+
+
+const myfage = document.querySelector('.myfage')
+const alram = document.querySelector('.alram')
 
 if (sessionStorage.getItem('id') === null) {
     myfage.style.display = 'none'
@@ -112,16 +104,43 @@ if (sessionStorage.getItem('id') === null) {
     })
 }
 
+const loginProfile = document.querySelector('.login-profile')
+const loginProfileImg = document.querySelector('.login-profile-img')
+const loginProfileIntro = document.querySelector('.login-profile-intro')
+const navCategory = document.querySelector('.nav-category')
+
+if (sessionStorage.getItem('id') === null) {
+    loginProfile.style.display = 'none'
+    nav.style.padding = '0.4rem 1rem'
+    nav.style.margin = '0.5rem'
+    navCategory.style.paddingRight = '10rem'
+} else {
+    nav.style.padding = '0.4rem 1rem'
+    nav.style.marginBottom = '0.3rem'
+    loginProfile.style.display = 'flex'
+    navCategory.style.paddingLeft = '7.5rem'
+    loginProfileImg.setAttribute('src', sessionStorage.getItem('login-profile-img'))
+    loginProfileIntro.textContent = sessionStorage.getItem('login-profile-intro')
+}
+
+const home = document.querySelector('.home')
 home.addEventListener("click", function () {
     location.href = "index.html"
 })
 
-login.addEventListener("click", function () {
-    if (sessionStorage.getItem("id") !== null) {
-        sessionStorage.removeItem("id")
-        sessionStorage.removeItem("identity")
-        login.textContent = 'LOGIN'
-    } else {
-        location.href = "login.html"
-    }
-})
+const logout = document.querySelector('.logout')
+if (logout) {
+    logout.addEventListener("click", function () {
+        if (sessionStorage.getItem("id") !== null) {
+            sessionStorage.removeItem("id")
+            sessionStorage.removeItem("identity")
+            sessionStorage.removeItem('login-profile-img')
+            sessionStorage.removeItem('login-profile-intro')
+            login.textContent = 'LOGIN'
+            alert('로그아웃 되었습니다.')
+            location.href = 'index.html'
+        } else {
+            location.href = "login.html"
+        }
+    })
+}

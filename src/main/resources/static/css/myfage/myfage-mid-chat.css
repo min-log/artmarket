@@ -87,14 +87,17 @@
 }
 
 .myfage-chat-profile-img {
-  scale: 90%;
-  border-radius: 5rem;
-  width: 3.5rem;
-  height: 3.5rem;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.myfage-chat-profile-img-tag {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 5rem;
+  object-fit: cover;
 }
 
 .myfage-chat-content {
