@@ -193,11 +193,26 @@ socialGoogleBox.addEventListener('click', function () {
 
 })
 
-// 백에서 아직 소셜 구현 x
+const kakaoCode = 'b78977a50a13ce81576485688bc20490'
+const kakaoRedirect = 'http://localhost:8070/kakao-login'
+
+const kakaoRequestUrl = `https://kauth.kakao.com/oauth/authorize
+?client_id=${kakaoCode}
+&redirect_uri=${kakaoRedirect}
+&response_type=code`
+
+// 카카오 가입
 socialKaKaoBox.addEventListener('click', function () {
 
+    fetch(`kakaoRequestUrl`, {
+        method: 'GET',
+        mode: 'no-cors'
+    }).then(() => {
+        location.href = 'https://kauth.kakao.com/oauth/authorize?client_id=b78977a50a13ce81576485688bc20490&redirect_uri=http://localhost:8070/kakao-login&response_type=code'
+    })
 })
 
+// 자사 가입 
 siteBox.addEventListener('click', function () {
     socialOrSiteBox.remove()
     emailConfirmAlert(agreeCotent)
@@ -284,6 +299,7 @@ function emailConfirmAlert(parentTag) {
     emailConfirmTitle.append(emailConfirmError)
     emailConfirmError.style.display = 'hidden'
 
+
     emailConfirmLater.addEventListener('click', function () {
         AgreeBtn.style.backgroundColor = 'rgba(27, 27, 27, 0.4)'
         AgreeBtn.style.cursor = 'not-allowed'
@@ -305,7 +321,10 @@ function emailConfirmAlert(parentTag) {
             emailConfirmError.textContent = `${errConfirmTag}을 입력해주세요.`
             emailConfirmError.style.display = 'block'
         } else if (commonEmailReg.test(emailConfirmInput.value) === false) {
-            emailConfirmError.textContent = `올바른 ${errConfirmTag}의 형식이 아닙니다.`
+            emailConfirmError.textContent = `올바른 ${errConfirmTag} 형식이 아닙니다.`
+            emailConfirmError.style.display = 'block'
+        } else if (confrimIdValue == '409') {
+            emailConfirmError.textContent = `이미 가입된 이메일입니다.`
             emailConfirmError.style.display = 'block'
         } else {
             emailConfirmError.textContent = null
@@ -318,7 +337,7 @@ function emailConfirmAlert(parentTag) {
 
     function tokenComfirmAlert(statusCodeValue) {
 
-        localStorage.setItem("email", `${emailConfirmInput.value}`)
+        sessionStorage.setItem("email", `${emailConfirmInput.value}`)
         emailConfirmInput.value = null
 
         if (typeof statusCodeValue === 'number') {
@@ -331,6 +350,7 @@ function emailConfirmAlert(parentTag) {
     }
 
     function tokentConfirm() {
+
         fetch(`${baseUrl}/join-confirm/${emailConfirmInput.value}`, {
             method: 'GET',
             headers: {
@@ -360,6 +380,9 @@ function emailConfirmAlert(parentTag) {
         }).then(response => {
             if (response.status === 201) {
                 tokenComfirmAlert(response.status)
+            } else if (response.status === 409) {
+                comfirmErrMsg(response.status)
+                emailConfirmInput.value = ''
             } else {
                 tokenComfirmAlert('알수 없는 오류로 메일 발송에 실패했습니다.')
             }
@@ -375,6 +398,33 @@ function emailConfirmAlert(parentTag) {
 
         if (emailConfirmBox.getAttribute('id') === 'email') {
             emailConfirm()
+
+            emailConfirmBtn.insertAdjacentHTML('afterend', `
+            <div class="email-confirm-wait">
+            <div><img class="email-confirm-wait-img" src="./css/icon/send-email.png" /></div>
+            <div>이메일 전송중에 있습니다.</div>
+            <div class="email-confirm-wait-2">잠시만 기다려주세요.</div>
+            </div>
+            `)
+
+            const emailConfirmWait = document.querySelector('.email-confirm-wait')
+            emailConfirmWait.style.display = 'flex'
+            emailConfirmWait.style.position = 'absolute'
+            emailConfirmWait.style.flexDirection = 'column'
+            emailConfirmWait.style.alignItems = 'center'
+            emailConfirmWait.style.padding = '3rem 5rem'
+            emailConfirmWait.style.backgroundColor = 'white'
+            emailConfirmWait.style.boxShadow = '2px 2px 0.5rem rgba(88, 88, 88, 0.3)'
+            emailConfirmWait.style.borderRadius = '1rem'
+            emailConfirmWait.style.marginTop = '-0.1rem'
+
+            const emailConfirmWaitSecond = document.querySelector('.email-confirm-wait-2')
+            emailConfirmWaitSecond.style.fontSize = '0.9rem'
+
+            setTimeout(function () {
+                emailConfirmWait.remove()
+            }, 4000)
+
         } else {
             tokentConfirm()
         }
