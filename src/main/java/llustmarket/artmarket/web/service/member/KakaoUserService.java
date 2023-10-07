@@ -37,14 +37,16 @@ public class KakaoUserService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String client_id;
 
-    public void kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public ResponseEntity<Object> kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
         log.info("accessToken = {}", accessToken);
         // 2. 토큰으로 카카오 API 호출
         KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
         // 3. response Header에 JWT 토큰 추가
-        kakaoUsersAuthorizationInput(kakaoUserInfo, response);
+        ResponseEntity<Object> objectResponseEntity = kakaoUsersAuthorizationInput(kakaoUserInfo, response);
+
+        return objectResponseEntity;
     }
 
     // 1. "인가 코드"로 "액세스 토큰" 요청
@@ -153,7 +155,7 @@ public class KakaoUserService {
 //             response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
             } else {
                 Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("JoinType", "SOCIAL");
+                responseBody.put("joinType", "SOCIAL");
                 responseBody.put("email", kakaoUserInfo.getEmail());
                 response.setHeader("Authorization", "BEARER " + token);
                 response.setHeader("Content-type", "application/json;charset=UTF-8");

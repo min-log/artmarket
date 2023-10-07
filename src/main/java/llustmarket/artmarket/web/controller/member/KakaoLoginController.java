@@ -98,9 +98,9 @@ public class KakaoLoginController {
 
     // 카카오 로그인
     @GetMapping("/kakao-login")
-    public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    public ResponseEntity<Object> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         log.info("code={}", code);
-        kakaoUserService.kakaoLogin(code, response);
+        return kakaoUserService.kakaoLogin(code, response);
     }
 
     @PostMapping("/join-kakao")
