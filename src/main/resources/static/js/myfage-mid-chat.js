@@ -5,6 +5,12 @@ myfageChatMidAddTag()
 
 function myfageChatMidAddTag() {
 
+  if (myfageMid.childNodes) {
+    for (myfageMidTag of myfageMid.childNodes) {
+      myfageMidTag.remove()
+    }
+  }
+
   let resStatusCode
 
   myfageMid.insertAdjacentHTML('afterbegin', `<div class="myfage-chat-box">
@@ -39,14 +45,14 @@ function myfageChatMidAddTag() {
 
     const myfageChatLists = document.querySelectorAll('.myfage-chat-list')
 
-    for (myfageChatList of myfageChatLists) {
+    for (const myfageChatList of myfageChatLists) {
       myfageChatList.addEventListener('click', function () {
         myfageChatListClick(myfageChatList.getAttribute('id'), myfageChatList.getAttribute('name'))
       })
     }
   }
 
-  fetch(`${baseUrl}/myfage/${sessionStorage.getItem('id')}`, {
+  fetch(`/myfage/${sessionStorage.getItem('id')}`, {
     method: 'GET',
     headers: {
       'content-type': 'application/json'
@@ -60,7 +66,7 @@ function myfageChatMidAddTag() {
       let chatListCheck = true
       for (var i = 0; i < data.myChatRooms.length; i++) {
         if (data.myChatRooms[i].chatMsg !== null) {
-          let defaultProfile = (data.myChatRooms[i].chatSenderProfile === null ? './css/icon/myfage-profile-default.png' : `data:image/jpeg;base64,${data.myChatRooms[i].chatSenderProfile}`)
+          let defaultProfile = (data.myChatRooms[i].chatSenderProfile === null ? './css/icon/default-profile-img.png' : `data:image/jpeg;base64,${data.myChatRooms[i].chatSenderProfile}`)
           myfageChatListBring(data.myChatRooms[i].chatRoomId,
             data.myChatRooms[i].chatMsg,
             data.myChatRooms[i].chatDate,
@@ -123,9 +129,7 @@ function myfageChatListClick(chatRoomId, chatSender) {
   </div>
   </div>`)
 
-  const myfageRightChatBox = document.querySelector('.myfage-right-chat-box')
   sessionStorage.setItem('chatcurrenttag', `myfage-right-chat-box-mid`)
-
 
   fetch(`${baseUrl}/myfage`, {
     method: 'POST',
@@ -139,26 +143,32 @@ function myfageChatListClick(chatRoomId, chatSender) {
   }).then(response => {
     return response.json()
   }).then(data => {
+    const myfageRightChatBoxMid = document.querySelector('.myfage-right-chat-box-mid')
 
-    console.log(data)
-    // const myfageRightChatBoxMid = document.querySelector('.myfage-right-chat-box-mid')
+    const myfageRightChatBoxTopShowArticle = document.querySelector('.myfage-right-chat-box-top-show-article')
+    myfageRightChatBoxTopShowArticle.setAttribute('id', `${data.chatProudct}`)
 
-    // if (data.chatList.length > 0) {
-    //   for (var i = 0; i < data.chatList.length; i++) {
+    for (chatList of data.chatList) {
 
-    //     let chatWhoTag = (data.chatList[i].chatSender === sessionStorage.getItem('id') ? 'me' : 'other')
+      let chatWhoTag = (chatList.chatSender == sessionStorage.getItem('id') ? 'me' : 'other')
 
-    //     myfageRightChatBoxMid.insertAdjacentHTML('beforeend', `
-    //     <div class="${sessionStorage.getItem('chatcurrenttag')}-msg-${chatWhoTag}">
-    //       <div class="${sessionStorage.getItem('chatcurrenttag')}-msg-${chatWhoTag}-time">${data.chatList[0].chatDate}</div>
-    //       <div class="${sessionStorage.getItem('chatcurrenttag')}-msg-${chatWhoTag}-text">${data.chatList[0].chatMsg}</div>
-    //     </div>`)
-    //   }
-    // }
-
-    // const myfageRightChatBoxTopShowArticle = document.querySelector('.myfage-right-chat-box-top-show-article')
-    // myfageRightChatBoxTopShowArticle.setAttribute('id', `${data.chatProudct}`)
+      myfageRightChatBoxMid.insertAdjacentHTML('beforeend', `
+        <div class="${sessionStorage.getItem('chatcurrenttag')}-msg-${chatWhoTag}">
+          <div class="${sessionStorage.getItem('chatcurrenttag')}-msg-${chatWhoTag}-time">${chatList.chatDate}</div>
+          <div class="${sessionStorage.getItem('chatcurrenttag')}-msg-${chatWhoTag}-text">${chatList.chatMsg}</div>
+        </div>`)
+    }
   })
+
+  const myfageRightChatBoxTopShowArticle = document.querySelector('.myfage-right-chat-box-top-show-article')
+
+
+  myfageRightChatBoxTopShowArticle.addEventListener('click', function () {
+    sessionStorage.setItem('detailproduct', `${myfageRightChatBoxTopShowArticle.getAttribute('id')}`)
+    location.href = "detail.html"
+  })
+
+
 
   const myfageChatRoomBoxBotSendAttach = document.querySelector('.myfage-right-chat-box-bot-send-attach')
   const myfageChatRoomBoxBotSendAttachFile = document.createElement('input')

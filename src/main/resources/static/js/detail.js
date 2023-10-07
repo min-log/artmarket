@@ -6,9 +6,10 @@ const detailMidLeftProfileInfoNickname = document.querySelector('.detail-mid-lef
 const detailMidLeftProfileInfoIntro = document.querySelector('.detail-mid-left-profile-info-intro')
 
 const detailBotIntroValue = document.querySelector('.detail-bot-intro-value')
-const detailBotImgLists = document.querySelector('.detail-bot-img-lists')
+const detailBotIntroLabel = document.querySelector('.detail-bot-intro-label')
 
-const productId = 20
+
+const detailBotImgLists = document.querySelector('.detail-bot-img-lists')
 
 const productChatRoom = document.querySelector('.product-chat-room')
 productChatRoom.style.display = 'none'
@@ -17,7 +18,7 @@ productDetailShow()
 
 // product 정보 get
 function productDetailShow() {
-  fetch(`${baseUrl}/product/${productId}`, {
+  fetch(`/product/${sessionStorage.getItem('detailproduct')}`, {
     method: 'GET',
     headers: {
       'content-type': 'application/json'
@@ -25,13 +26,28 @@ function productDetailShow() {
   }).then(response => {
     return response.json()
   }).then(data => {
-    detailTopArticleNumValue.textContent = `${productId}`
-    detailTopArticleNumValue.setAttribute('name', `${productId}`)
+    detailTopArticleNumValue.textContent = `${sessionStorage.getItem('detailproduct')}`
+    detailTopArticleNumValue.setAttribute('name', `${sessionStorage.getItem('detailproduct')}`)
     detailTopTitleValue.textContent = `${data.productDetail.title}`
-    detailMidLeftProfileImgValue.setAttribute('src', `${data.author.authorPofile}`)
+
+    if (data.author.authorPofile == '') {
+      detailMidLeftProfileImgValue.setAttribute('src', './css/icon/default-profile-img.png')
+    } else {
+      detailMidLeftProfileImgValue.setAttribute('src', `${data.author.authorPofile}`)
+    }
+
     detailMidLeftProfileInfoNickname.textContent = `${data.author.authorNickname}`
     detailMidLeftProfileInfoNickname.setAttribute('value', `${data.author.authorNickname}`)
-    detailBotIntroValue.textContent = `${data.productDetail.productDetail}`
+
+    const detailBotIntroValues = data.productDetail.productDetail.split('\\n')
+
+    for (var i = 0; i < detailBotIntroValues.length; i++) {
+      let detailBotIntroText = document.createElement('div')
+      detailBotIntroText.setAttribute('class', 'detail-bot-intro-value')
+      detailBotIntroText.textContent = `${detailBotIntroValues[i]}`
+      detailBotIntroLabel.after(detailBotIntroText)
+    }
+
     for (var i = 0; i < data.productDetail.productDetailImgs.length; i++) {
       detailBotImgLists.insertAdjacentHTML('beforeend', `
             <img
@@ -53,26 +69,39 @@ const detailMidRightChatBtn = document.querySelector('.detail-mid-right-chat-btn
 const productChatRoomBoxMid = document.querySelector('.product-chat-room-box-mid')
 sessionStorage.setItem('chatcurrenttag', `${productChatRoomBoxMid.getAttribute('class')}`)
 
+// product id
+
 detailMidRightChatBtn.addEventListener('click', function () {
+
+  const detailTopArticleNumValue = document.querySelector('.detail-top-article-num-value')
 
   productChatRoom.style.display = 'block'
 
-  fetch(`/product`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      askProduct: `${productId}`,
-      askMember: `${sessionStorage.getItem('id')}`
+  const detailMidLeftProfileInfoNickname = document.querySelector('.detail-mid-left-profile-info-nickname')
+  if (sessionStorage.getItem('id') === null) {
+    alert('로그인 후 채팅 가능합니다.')
+    productChatRoom.style.display = 'none'
+  } else if (sessionStorage.getItem('nickname') === detailMidLeftProfileInfoNickname.getAttribute('value')) {
+    alert('본인 작품에는 문의할 수 없습니다.')
+    productChatRoom.style.display = 'none'
+  } else {
+    fetch(`/product`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        askProduct: `${detailTopArticleNumValue.getAttribute('name')}`,
+        askMember: `${sessionStorage.getItem('id')}`
+      })
+    }).then(response => {
+      if (response.status === 200) {
+        return response.json()
+      }
+    }).then(data => {
+      chatRoomClick(productChatRoomBoxMid, data.chatRoomId, data.chatList)
     })
-  }).then(response => {
-    if (response.status === 200) {
-      return response.json()
-    }
-  }).then(data => {
-    chatRoomClick(productChatRoomBoxMid, data.chatRoomId, data.chatList)
-  })
+  }
 })
 
 
@@ -85,7 +114,6 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
       chatMsgGet(chatList[i], detailMidLeftProfileInfoNickname.textContent)
     }
   }
-
 
   // chat 파일 관련 태그 추가
   const productChatRoomBoxBotSendAttach = document.querySelector('.product-chat-room-box-bot-send-attach')
@@ -130,7 +158,7 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
 
         chatFileReader.onload = function (e) {
 
-          const fileObject = e.target.result
+          const fileObject = e.target.result;
           productChatRoomBoxBotSendAttachFile.setAttribute('id', `${Array.from(new Uint8Array(fileObject))}`)
           productChatRoomBoxBotSendAttachFile.setAttribute('name', `${chatFileName}`)
         }
