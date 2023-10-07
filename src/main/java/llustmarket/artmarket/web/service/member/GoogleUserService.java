@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Log4j2
@@ -115,7 +116,8 @@ public class GoogleUserService {
         String id = jsonNode.get("id").asText();
         String email = jsonNode.get("email").asText();
 
-        return new GoogleLoginResponse(id, email);
+        return new GoogleLoginResponse(id, Objects.requireNonNullElse(email, ""));
+
     }
 
     public Member registerGoogle(JoinSocialDTO request) {

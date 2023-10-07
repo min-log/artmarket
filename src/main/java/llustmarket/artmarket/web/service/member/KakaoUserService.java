@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -111,10 +112,7 @@ public class KakaoUserService {
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
 
-        if (email != null) {
-            return new KakaoUserInfoDto(id, nickname, email);
-        } else
-            return new KakaoUserInfoDto(id, nickname, "");
+        return new KakaoUserInfoDto(id, nickname, Objects.requireNonNullElse(email, ""));
     }
 
     // 3. 카카오ID로 회원가입 처리
