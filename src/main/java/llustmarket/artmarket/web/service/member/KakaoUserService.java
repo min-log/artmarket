@@ -1,16 +1,17 @@
 package llustmarket.artmarket.web.service.member;
 
-import java.io.IOException;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import llustmarket.artmarket.domain.member.Member;
+import llustmarket.artmarket.web.dto.member.JoinSocialDTO;
+import llustmarket.artmarket.web.dto.member.KakaoUserInfoDto;
+import llustmarket.artmarket.web.mapper.member.MemberMapper;
+import llustmarket.artmarket.web.utils.member.JwtTokenUtils;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,17 +21,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import llustmarket.artmarket.domain.member.Member;
-import llustmarket.artmarket.web.dto.member.JoinSocialDTO;
-import llustmarket.artmarket.web.dto.member.KakaoUserInfoDto;
-import llustmarket.artmarket.web.mapper.member.MemberMapper;
-import llustmarket.artmarket.web.utils.member.JwtTokenUtils;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -111,12 +106,8 @@ public class KakaoUserService {
 
         Long id = jsonNode.get("id").asLong();
         // String email = jsonNode.get("kakao_account").get("email").asText();
-        String nickname = jsonNode.get("properties")
-                .get("nickname").asText();
 
-        return new KakaoUserInfoDto(id, nickname);
-
-        // Objects.requireNonNullElse(email, "테스트")
+        return new KakaoUserInfoDto(id, String.valueOf(id));
     }
 
     // 3. 카카오ID로 회원가입 처리
@@ -147,27 +138,27 @@ public class KakaoUserService {
         try {
             JwtTokenUtils jwtTokenUtils = new JwtTokenUtils();
             token = jwtTokenUtils.generateKakaoJwtToken(kakaoUserInfo);
-            // Optional<Member> member =
-            // memberMapper.findByUserEmail(kakaoUserInfo.getEmail());
+            Optional<Member> member =
+                    memberMapper.findByUserEmail(kakaoUserInfo.getEmail());
 
-            // if (member.isPresent()) {
-            // // memberMapper.updatePasswordByEmail(token, kakaoUserInfo.getEmail());
-            // Map<String, Object> responseBody = new HashMap<>();
-            // responseBody.put("loginTrueIdentity", member.get().getIdentity());
-            // responseBody.put("loginTrueId", member.get().getMemberId());
-            // responseBody.put("loginTrueName", member.get().getName());
-            // response.setHeader("Authorization", "BEARER " + token);
-            // response.setHeader("Content-type", "application/json;charset=UTF-8");
-            // response.getWriter().write(new
-            // ObjectMapper().writeValueAsString(responseBody));
-            // } else {
-            // Map<String, Object> responseBody = new HashMap<>();
-            // // responseBody.put("email", kakaoUserInfo.getEmail());
-            // response.setHeader("Authorization", "BEARER " + token);
-            // response.setHeader("Content-type", "application/json;charset=UTF-8");
-            // response.getWriter().write(new
-            // ObjectMapper().writeValueAsString(responseBody));
-            // }
+            if (member.isPresent()) {
+                memberMapper.updatePasswordByEmail(token, kakaoUserInfo.getEmail());
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("loginTrueIdentity", member.get().getIdentity());
+                responseBody.put("loginTrueId", member.get().getMemberId());
+                responseBody.put("loginTrueName", member.get().getName());
+                response.setHeader("Authorization", "BEARER " + token);
+                response.setHeader("Content-type", "application/json;charset=UTF-8");
+//             response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
+            } else {
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("JoinType", "SOCIAL");
+                responseBody.put("email", kakaoUserInfo.getEmail());
+                response.setHeader("Authorization", "BEARER " + token);
+                response.setHeader("Content-type", "application/json;charset=UTF-8");
+//             response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

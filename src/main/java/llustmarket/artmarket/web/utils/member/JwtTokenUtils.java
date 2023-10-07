@@ -1,17 +1,16 @@
 package llustmarket.artmarket.web.utils.member;
 
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import llustmarket.artmarket.web.dto.member.GoogleLoginResponse;
 import llustmarket.artmarket.web.dto.member.KakaoUserInfoDto;
+import org.springframework.stereotype.Component;
+
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtTokenUtils {
@@ -29,7 +28,7 @@ public class JwtTokenUtils {
 
     public String generateGoogleJwtToken(GoogleLoginResponse googleUserInfo) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, googleUserInfo.getEmail());
+        return createToken(claims, googleUserInfo.getId());
     }
 
     // 토큰 생성 및 유효성 검증
