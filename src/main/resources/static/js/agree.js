@@ -96,7 +96,7 @@ function agreeBtnOnOff() {
     }
 }
 
-// div style 설정 
+// div style 설정
 function agreeDivStyle(divTag) {
     divTag.style.borderRadius = '0.3rem'
     divTag.style.display = 'flex'
@@ -123,7 +123,7 @@ siteBox.setAttribute('class', 'site-box')
 
 const laterJoin = document.createElement('div')
 
-// 소셜 or 사이트 회원가입 alert 창 구현 
+// 소셜 or 사이트 회원가입 alert 창 구현
 function socialOrSite(parentTag) {
 
     socialOrSiteBox.style.position = 'absolute'
@@ -203,16 +203,34 @@ const kakaoRequestUrl = `https://kauth.kakao.com/oauth/authorize
 
 // 카카오 가입
 socialKaKaoBox.addEventListener('click', function () {
+    location.href = `${kakaoRequestUrl}`;
+});
 
-    fetch(`kakaoRequestUrl`, {
+// URL에서 코드 추출 및 요청 보내기
+const urlParams = new URLSearchParams(window.location.search);
+const receivedCode = urlParams.get('code');
+
+if (receivedCode) {
+    const url = `http://localhost:8070/kakao-login?code=${receivedCode}`;
+    const requestOptions = {
         method: 'GET',
-        mode: 'no-cors'
-    }).then(() => {
-        location.href = 'https://kauth.kakao.com/oauth/authorize?client_id=b78977a50a13ce81576485688bc20490&redirect_uri=http://localhost:8070/kakao-login&response_type=code'
-    })
-})
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    };
 
-// 자사 가입 
+    fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // 여기서 프론트엔드에서 필요한 작업을 수행하세요.
+        })
+        .catch(error => console.error('Error:', error));
+} else {
+    console.error("코드가 없습니다.");
+}
+
+// 자사 가입
 siteBox.addEventListener('click', function () {
     socialOrSiteBox.remove()
     emailConfirmAlert(agreeCotent)
@@ -228,8 +246,6 @@ emailConfirmInput.setAttribute('class', 'email-confirm-input')
 
 const emailConfirmBtn = document.createElement('input')
 const emailConfirmLater = document.createElement('div')
-
-
 
 
 // 이메일 인증 alert 창 구현

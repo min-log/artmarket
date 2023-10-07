@@ -22,9 +22,8 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -37,16 +36,16 @@ public class KakaoUserService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String client_id;
 
-    public ResponseEntity<Object> kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public String kakaoLogin(String code, HttpServletResponse response, HttpSession session) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
         log.info("accessToken = {}", accessToken);
         // 2. 토큰으로 카카오 API 호출
         KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
         // 3. response Header에 JWT 토큰 추가
-        ResponseEntity<Object> objectResponseEntity = kakaoUsersAuthorizationInput(kakaoUserInfo, response);
+        String redirectURL = kakaoUsersAuthorizationInput(kakaoUserInfo, response, session);
 
-        return objectResponseEntity;
+        return redirectURL;
     }
 
     // 1. "인가 코드"로 "액세스 토큰" 요청
@@ -135,7 +134,7 @@ public class KakaoUserService {
     }
 
     // 5. response Header에 JWT 토큰 추가
-    private ResponseEntity<Object> kakaoUsersAuthorizationInput(KakaoUserInfoDto kakaoUserInfo, HttpServletResponse response) {
+    private String kakaoUsersAuthorizationInput(KakaoUserInfoDto kakaoUserInfo, HttpServletResponse response, HttpSession session) {
         String token = null;
         try {
             JwtTokenUtils jwtTokenUtils = new JwtTokenUtils();
@@ -145,27 +144,23 @@ public class KakaoUserService {
 
             if (member.isPresent()) {
                 memberMapper.updatePasswordByEmail(token, kakaoUserInfo.getEmail());
-                Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("loginTrueIdentity", member.get().getIdentity());
-                responseBody.put("loginTrueId", member.get().getMemberId());
-                responseBody.put("loginTrueName", member.get().getName());
-                response.setHeader("Authorization", "BEARER " + token);
-                response.setHeader("Content-type", "application/json;charset=UTF-8");
-                return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+                session.setAttribute("loginTrueIdentity", member.get().getIdentity());
+                session.setAttribute("loginTrueId", member.get().getMemberId());
+                session.setAttribute("loginTrueName", member.get().getName());
+                return "redirect:/index.html";
 //             response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
             } else {
-                Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("joinType", "SOCIAL");
-                responseBody.put("email", kakaoUserInfo.getEmail());
-                response.setHeader("Authorization", "BEARER " + token);
-                response.setHeader("Content-type", "application/json;charset=UTF-8");
+                session.setAttribute("joinType", "SOCIAL");
+                session.setAttribute("email", kakaoUserInfo.getEmail());
+//                response.setHeader("Authorization", "BEARER " + token);
+//                response.setHeader("Content-type", "application/json;charset=UTF-8");
                 log.info("token = {}", token);
-                return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+                return "redirect:/join.html";
 //             response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("여기가 오류");
+            return "여기가 오류";
         }
     }
 }

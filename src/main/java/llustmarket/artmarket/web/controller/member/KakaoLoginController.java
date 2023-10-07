@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,12 +23,13 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class KakaoLoginController {
     private final MemberService memberService;
     private final KakaoUserService kakaoUserService;
 
+    @ResponseBody
     @PostMapping("/agree-kakao")
     public ResponseEntity<Object> confirmDuplicateKakao(@RequestBody @Valid JoinSocialDTO request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -98,11 +101,13 @@ public class KakaoLoginController {
 
     // 카카오 로그인
     @GetMapping("/kakao-login")
-    public ResponseEntity<Object> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    public String kakaoLogin(@RequestParam String code, HttpServletResponse response, HttpSession session) throws JsonProcessingException {
         log.info("code={}", code);
-        return kakaoUserService.kakaoLogin(code, response);
+        String redirectURL = kakaoUserService.kakaoLogin(code, response, session);
+        return redirectURL;
     }
 
+    @ResponseBody
     @PostMapping("/join-kakao")
     public ResponseEntity<Object> joinKakao(@RequestBody JoinSocialDTO request) {
         try {
