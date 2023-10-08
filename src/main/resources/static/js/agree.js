@@ -96,7 +96,7 @@ function agreeBtnOnOff() {
     }
 }
 
-// div style 설정 
+// div style 설정
 function agreeDivStyle(divTag) {
     divTag.style.borderRadius = '0.3rem'
     divTag.style.display = 'flex'
@@ -123,7 +123,7 @@ siteBox.setAttribute('class', 'site-box')
 
 const laterJoin = document.createElement('div')
 
-// 소셜 or 사이트 회원가입 alert 창 구현 
+// 소셜 or 사이트 회원가입 alert 창 구현
 function socialOrSite(parentTag) {
 
     socialOrSiteBox.style.position = 'absolute'
@@ -190,9 +190,10 @@ AgreeBtn.addEventListener('click', function () {
 
 // 백에서 아직 소셜 구현 x
 socialGoogleBox.addEventListener('click', function () {
-
+    window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=242939801101-svnsms546a27mk3i9mhfisb7fd0ge7l9.apps.googleusercontent.com&redirect_uri=http://localhost:8070/google-login&response_type=code&scope=email profile'
 })
 
+// 카카오 가입
 const kakaoCode = 'b78977a50a13ce81576485688bc20490'
 const kakaoRedirect = 'http://localhost:8070/kakao-login'
 
@@ -201,12 +202,12 @@ let kakaoRequestUrl = `https://kauth.kakao.com/oauth/authorize
 &redirect_uri=${kakaoRedirect}
 &response_type=code`
 
-// 카카오 가입
+
 socialKaKaoBox.addEventListener('click', function () {
     window.location.href = kakaoRequestUrl
 })
 
-// 자사 가입 
+// 자사 가입
 siteBox.addEventListener('click', function () {
     socialOrSiteBox.remove()
     emailConfirmAlert(agreeCotent)
@@ -222,8 +223,6 @@ emailConfirmInput.setAttribute('class', 'email-confirm-input')
 
 const emailConfirmBtn = document.createElement('input')
 const emailConfirmLater = document.createElement('div')
-
-
 
 
 // 이메일 인증 alert 창 구현

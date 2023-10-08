@@ -121,7 +121,7 @@ public class KakaoUserService {
             if (highestMemberIdMember.isPresent()) {
                 highestMembrId = highestMemberIdMember.get().getMemberId() + 1;
             }
-            String loginId = "art" + highestMembrId + "@kakao";
+            String loginId = "art" + highestMembrId + "@social";
 
             String password = request.getJwtToken();
             Member kakaoUser = new Member(request.getJoinName(), request.getJoinNickname(), loginId, passwordEncoder.encode(password),

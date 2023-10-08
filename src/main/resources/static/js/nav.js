@@ -17,7 +17,6 @@ nav.insertAdjacentHTML('beforeend', `
     <div class="login">LOGIN</div>
     <div class="myfage">MYPAGE</div>
     <div class="alram">ALRAM</div>
-    <div class="center">CENTER</div>
     <div class="home">HOME</div>
     <div class="login-profile">
         <img class="login-profile-img" />
