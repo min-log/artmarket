@@ -147,6 +147,8 @@ loginBtn.addEventListener("click", function () {
 
     if (btnModCheckList[0] && btnModCheckList[1]) {
 
+        sessionStorage.setItem('loginId', `${loginId.value}`)
+
         fetch(`${baseUrl}/login`, {
             method: 'POST',
             headers: {
@@ -171,10 +173,11 @@ loginBtn.addEventListener("click", function () {
                     sessionStorage.setItem('login-profile-img', './css/icon/login-author.png')
                 }
                 sessionStorage.setItem('login-profile-intro', `${data.loginTrueName}님, 어서오세요`)
-
+                sessionStorage.setItem('name', `${data.loginTrueName}`)
                 location.href = 'index.html'
 
             } else if (resStatus === 401) {
+                sessionStorage.removeItem('loginId')
                 const parentTag = document.querySelector('.login-content')
                 noticeAlert(parentTag, data.loginNoMatchMsg)
             }
@@ -184,4 +187,9 @@ loginBtn.addEventListener("click", function () {
     loginId.value = null
     loginPassword.value = null
 
+})
+
+const loginInfoReq = document.querySelector('.login-info-req')
+loginInfoReq.addEventListener('click', function () {
+    location.href = 'find-info.html'
 })
