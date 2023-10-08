@@ -26,4 +26,17 @@ public class MyPageUpdateController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/mypage-update-intro")
+    public ResponseEntity<Object> changeIntro(@RequestBody Map<String, String> requestMap) {
+        Long id = Long.valueOf(requestMap.get("id"));
+        String intro = String.valueOf(requestMap.get("memberIntro"));
+        try {
+            memberService.updateIntro(intro, id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

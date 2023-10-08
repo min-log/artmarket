@@ -32,6 +32,11 @@ public class MemberService {
     }
 
     @Transactional
+    public void updateIntro(String memberIntro, Long id) {
+        memberMapper.updateIntro(memberIntro, id);
+    }
+
+    @Transactional
     public void updatePasswordByMemberId(Long memberId, String password) {
         memberMapper.updatePasswordByMemberId(password, memberId);
     }

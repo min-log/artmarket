@@ -44,7 +44,6 @@ if (login) {
 }
 
 
-
 const illust = document.querySelector('.illust')
 
 illust.addEventListener('click', function () {
@@ -89,7 +88,6 @@ const navLogo = document.querySelector('.nav-logo')
 navLogo.addEventListener("click", function () {
     location.href = "index.html"
 })
-
 
 
 const myfage = document.querySelector('.myfage')

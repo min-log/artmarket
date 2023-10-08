@@ -19,4 +19,8 @@ public class AuthorDTO {
     @JsonProperty(value = "authorNickname")
     private String nickname;
 
+    @JsonProperty(value = "authorIntro")
+    private String memberIntro;
+
+
 }

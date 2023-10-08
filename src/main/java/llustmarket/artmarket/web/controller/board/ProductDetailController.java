@@ -90,7 +90,8 @@ public class ProductDetailController {
 
             AuthorDTO authorDTO = new AuthorDTO(
                     profileDataList,
-                    authors.getNickname()
+                    authors.getNickname(),
+                    authors.getMemberIntro()
             );
 
             Map<Object, Object> result = new LinkedHashMap<>();

@@ -18,46 +18,47 @@ productDetailShow()
 
 // product 정보 get
 function productDetailShow() {
-  fetch(`/product/${sessionStorage.getItem('detailproduct')}`, {
-    method: 'GET',
-    headers: {
-      'content-type': 'application/json'
-    }
-  }).then(response => {
-    return response.json()
-  }).then(data => {
-    //console.log(data);
-    detailTopArticleNumValue.textContent = `${sessionStorage.getItem('detailproduct')}`
-    detailTopArticleNumValue.setAttribute('name', `${sessionStorage.getItem('detailproduct')}`)
-    detailTopTitleValue.textContent = `${data.productDetail.title}`
+    fetch(`/product/${sessionStorage.getItem('detailproduct')}`, {
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json'
+        }
+    }).then(response => {
+        return response.json()
+    }).then(data => {
+        //console.log(data);
+        detailTopArticleNumValue.textContent = `${sessionStorage.getItem('detailproduct')}`
+        detailTopArticleNumValue.setAttribute('name', `${sessionStorage.getItem('detailproduct')}`)
+        detailTopTitleValue.textContent = `${data.productDetail.title}`
 
-    if (data.author.authorPofile == '') {
-      detailMidLeftProfileImgValue.setAttribute('src', './css/icon/default-profile-img.png')
-    } else {
-      detailMidLeftProfileImgValue.setAttribute('src', `${data.author.authorPofile}`)
-    }
+        if (data.author.authorPofile == '') {
+            detailMidLeftProfileImgValue.setAttribute('src', './css/icon/default-profile-img.png')
+        } else {
+            detailMidLeftProfileImgValue.setAttribute('src', `${data.author.authorPofile}`)
+        }
 
-    detailMidLeftProfileInfoNickname.textContent = `${data.author.authorNickname}`
-    detailMidLeftProfileInfoNickname.setAttribute('value', `${data.author.authorNickname}`)
+        detailMidLeftProfileInfoNickname.textContent = `${data.author.authorNickname}`
+        detailMidLeftProfileInfoNickname.setAttribute('value', `${data.author.authorNickname}`)
+        detailMidLeftProfileInfoIntro.textContent = `${data.author.authorIntro}`
+        detailMidLeftProfileInfoIntro.setAttribute('value', `${data.author.authorIntro}`)
+        const detailBotIntroValues = data.productDetail.productDetail.split('\\n')
 
-    const detailBotIntroValues = data.productDetail.productDetail.split('\\n')
+        for (var i = 0; i < detailBotIntroValues.length; i++) {
+            let detailBotIntroText = document.createElement('div')
+            detailBotIntroText.setAttribute('class', 'detail-bot-intro-value')
+            detailBotIntroText.textContent = `${detailBotIntroValues[i]}`
+            detailBotIntroLabel.after(detailBotIntroText)
+        }
 
-    for (var i = 0; i < detailBotIntroValues.length; i++) {
-      let detailBotIntroText = document.createElement('div')
-      detailBotIntroText.setAttribute('class', 'detail-bot-intro-value')
-      detailBotIntroText.textContent = `${detailBotIntroValues[i]}`
-      detailBotIntroLabel.after(detailBotIntroText)
-    }
-
-    for (var i = 0; i < data.productDetail.productDetailImgs.length; i++) {
-      detailBotImgLists.insertAdjacentHTML('beforeend', `
+        for (var i = 0; i < data.productDetail.productDetailImgs.length; i++) {
+            detailBotImgLists.insertAdjacentHTML('beforeend', `
             <img
             class="detail-bot-img-lists-value"
             src="data:image/jpeg;base64,${data.productDetail.productDetailImgs[i]}"
           />
             `)
-    }
-  })
+        }
+    })
 }
 
 
@@ -74,137 +75,137 @@ sessionStorage.setItem('chatcurrenttag', `${productChatRoomBoxMid.getAttribute('
 
 detailMidRightChatBtn.addEventListener('click', function () {
 
-  const detailTopArticleNumValue = document.querySelector('.detail-top-article-num-value')
+    const detailTopArticleNumValue = document.querySelector('.detail-top-article-num-value')
 
-  productChatRoom.style.display = 'block'
+    productChatRoom.style.display = 'block'
 
-  const detailMidLeftProfileInfoNickname = document.querySelector('.detail-mid-left-profile-info-nickname')
-  if (sessionStorage.getItem('id') === null) {
-    alert('로그인 후 채팅 가능합니다.')
-    productChatRoom.style.display = 'none'
-  } else if (sessionStorage.getItem('nickname') === detailMidLeftProfileInfoNickname.getAttribute('value')) {
-    alert('본인 작품에는 문의할 수 없습니다.')
-    productChatRoom.style.display = 'none'
-  } else {
-    fetch(`/product`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        askProduct: `${detailTopArticleNumValue.getAttribute('name')}`,
-        askMember: `${sessionStorage.getItem('id')}`
-      })
-    }).then(response => {
-      if (response.status === 200) {
-        return response.json()
-      }
-    }).then(data => {
-      chatRoomClick(productChatRoomBoxMid, data.chatRoomId, data.chatList)
-    })
-  }
+    const detailMidLeftProfileInfoNickname = document.querySelector('.detail-mid-left-profile-info-nickname')
+    if (sessionStorage.getItem('id') === null) {
+        alert('로그인 후 채팅 가능합니다.')
+        productChatRoom.style.display = 'none'
+    } else if (sessionStorage.getItem('nickname') === detailMidLeftProfileInfoNickname.getAttribute('value')) {
+        alert('본인 작품에는 문의할 수 없습니다.')
+        productChatRoom.style.display = 'none'
+    } else {
+        fetch(`/product`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                askProduct: `${detailTopArticleNumValue.getAttribute('name')}`,
+                askMember: `${sessionStorage.getItem('id')}`
+            })
+        }).then(response => {
+            if (response.status === 200) {
+                return response.json()
+            }
+        }).then(data => {
+            chatRoomClick(productChatRoomBoxMid, data.chatRoomId, data.chatList)
+        })
+    }
 })
 
 
 function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
 
-  productChatRoomBoxMid.setAttribute('id', `${chatRoomId}`)
+    productChatRoomBoxMid.setAttribute('id', `${chatRoomId}`)
 
-  if (chatList !== null) {
-    for (var i = 0; i < chatList.length; i++) {
-      chatMsgGet(chatList[i], detailMidLeftProfileInfoNickname.textContent)
+    if (chatList !== null) {
+        for (var i = 0; i < chatList.length; i++) {
+            chatMsgGet(chatList[i], detailMidLeftProfileInfoNickname.textContent)
+        }
     }
-  }
 
-  // chat 파일 관련 태그 추가
-  const productChatRoomBoxBotSendAttach = document.querySelector('.product-chat-room-box-bot-send-attach')
-  const productChatRoomBoxBotSendAttachFile = document.createElement('input')
-  productChatRoomBoxBotSendAttachFile.setAttribute('class', 'product-chat-room-box-bot-send-attach-file')
-  productChatRoomBoxBotSendAttachFile.setAttribute('type', 'file')
-  productChatRoomBoxBotSendAttachFile.style.display = 'none'
-  productChatRoomBoxBotSendAttach.after(productChatRoomBoxBotSendAttachFile)
+    // chat 파일 관련 태그 추가
+    const productChatRoomBoxBotSendAttach = document.querySelector('.product-chat-room-box-bot-send-attach')
+    const productChatRoomBoxBotSendAttachFile = document.createElement('input')
+    productChatRoomBoxBotSendAttachFile.setAttribute('class', 'product-chat-room-box-bot-send-attach-file')
+    productChatRoomBoxBotSendAttachFile.setAttribute('type', 'file')
+    productChatRoomBoxBotSendAttachFile.style.display = 'none'
+    productChatRoomBoxBotSendAttach.after(productChatRoomBoxBotSendAttachFile)
 
-  // chat send btn
-  const productChatRoomBoxBotSendBtn = document.querySelector('.product-chat-room-box-bot-send-btn')
+    // chat send btn
+    const productChatRoomBoxBotSendBtn = document.querySelector('.product-chat-room-box-bot-send-btn')
 
-  // chat exit btn
-  const productChatRoomBoxTopShowExit = document.querySelector('.product-chat-room-box-top-show-exit')
+    // chat exit btn
+    const productChatRoomBoxTopShowExit = document.querySelector('.product-chat-room-box-top-show-exit')
 
-  let socket = new SockJS(`/stomp/chat`)
-  stompClient = Stomp.over(socket)
+    let socket = new SockJS(`/stomp/chat`)
+    stompClient = Stomp.over(socket)
 
-  stompClient.connect({}, function () {
+    stompClient.connect({}, function () {
 
-    stompClient.subscribe(`/sub/chat-room/get/${productChatRoomBoxMid.getAttribute('id')}`, (message) => {
-      chatMsgGet(JSON.parse(message.body), detailMidLeftProfileInfoNickname.getAttribute('value'))
-    })
+            stompClient.subscribe(`/sub/chat-room/get/${productChatRoomBoxMid.getAttribute('id')}`, (message) => {
+                chatMsgGet(JSON.parse(message.body), detailMidLeftProfileInfoNickname.getAttribute('value'))
+            })
 
-    //파일 업로드 구현
-    productChatRoomBoxBotSendAttach.addEventListener('click', function () {
+            //파일 업로드 구현
+            productChatRoomBoxBotSendAttach.addEventListener('click', function () {
 
-      productChatRoomBoxBotSendAttachFile.click()
+                productChatRoomBoxBotSendAttachFile.click()
 
-      productChatRoomBoxBotSendAttachFile.addEventListener('change', (e) => {
+                productChatRoomBoxBotSendAttachFile.addEventListener('change', (e) => {
 
-        let chatFileName
+                    let chatFileName
 
-        const file = e.target.files[0]
-        chatFileName = file.name
+                    const file = e.target.files[0]
+                    chatFileName = file.name
 
-        const chatFileReader = new FileReader();
+                    const chatFileReader = new FileReader();
 
-        if (file !== undefined) {
-          chatFileReader.readAsArrayBuffer(file)
-        }
+                    if (file !== undefined) {
+                        chatFileReader.readAsArrayBuffer(file)
+                    }
 
-        chatFileReader.onload = function (e) {
+                    chatFileReader.onload = function (e) {
 
-          const fileObject = e.target.result;
-          productChatRoomBoxBotSendAttachFile.setAttribute('id', `${Array.from(new Uint8Array(fileObject))}`)
-          productChatRoomBoxBotSendAttachFile.setAttribute('name', `${chatFileName}`)
-        }
+                        const fileObject = e.target.result;
+                        productChatRoomBoxBotSendAttachFile.setAttribute('id', `${Array.from(new Uint8Array(fileObject))}`)
+                        productChatRoomBoxBotSendAttachFile.setAttribute('name', `${chatFileName}`)
+                    }
 
-      })
-    })
+                })
+            })
 
-    productChatRoomBoxBotSendBtn.addEventListener('click', function () {
+            productChatRoomBoxBotSendBtn.addEventListener('click', function () {
 
-      const productChatRoomBoxBotSendText = document.querySelector('.product-chat-room-box-bot-send-text')
+                const productChatRoomBoxBotSendText = document.querySelector('.product-chat-room-box-bot-send-text')
 
-      if (productChatRoomBoxBotSendText.value === '') {
-        alert('메세지를 입력해주세요.')
-      } else {
-        chatDataObject = {
-          sendChatRoomId: productChatRoomBoxMid.getAttribute('id'),
-          sendChatSender: sessionStorage.getItem('id'),
-          sendChatMsg: productChatRoomBoxBotSendText.value,
-          sendChatFile: null
-        }
+                if (productChatRoomBoxBotSendText.value === '') {
+                    alert('메세지를 입력해주세요.')
+                } else {
+                    chatDataObject = {
+                        sendChatRoomId: productChatRoomBoxMid.getAttribute('id'),
+                        sendChatSender: sessionStorage.getItem('id'),
+                        sendChatMsg: productChatRoomBoxBotSendText.value,
+                        sendChatFile: null
+                    }
 
-        if (productChatRoomBoxBotSendAttachFile.getAttribute('id') !== null) {
+                    if (productChatRoomBoxBotSendAttachFile.getAttribute('id') !== null) {
 
-          const chatFileType = productChatRoomBoxBotSendAttachFile.getAttribute('name').split('.')
-          chatDataObject.sendChatFile = {
-            chatFileName: productChatRoomBoxBotSendAttachFile.getAttribute('name'),
-            chatFileData: productChatRoomBoxBotSendAttachFile.getAttribute('id'),
-            chatFileType: chatFileType[chatFileType.length - 1]
-          }
-        }
+                        const chatFileType = productChatRoomBoxBotSendAttachFile.getAttribute('name').split('.')
+                        chatDataObject.sendChatFile = {
+                            chatFileName: productChatRoomBoxBotSendAttachFile.getAttribute('name'),
+                            chatFileData: productChatRoomBoxBotSendAttachFile.getAttribute('id'),
+                            chatFileType: chatFileType[chatFileType.length - 1]
+                        }
+                    }
 
-        stompClient.send(`/pub/chat-room/send`, {}, JSON.stringify(chatDataObject))
-        productChatRoomBoxBotSendText.value = ''
-      }
-    })
+                    stompClient.send(`/pub/chat-room/send`, {}, JSON.stringify(chatDataObject))
+                    productChatRoomBoxBotSendText.value = ''
+                }
+            })
 
-    // disconnect 구현
-    productChatRoomBoxTopShowExit.addEventListener('click', function () {
-      productChatRoom.style.display = 'none'
-      stompClient.disconnect()
-    })
+            // disconnect 구현
+            productChatRoomBoxTopShowExit.addEventListener('click', function () {
+                productChatRoom.style.display = 'none'
+                stompClient.disconnect()
+            })
 
-  },
-    function () {
-      alert('연결에 실패했습니다.')
-    })
+        },
+        function () {
+            alert('연결에 실패했습니다.')
+        })
 
 }

@@ -54,7 +54,7 @@
     </select>
 
     <select id="getAuthor" resultType="llustmarket.artmarket.web.dto.board.AuthorDTO">
-        SELECT m.nickname
+        SELECT m.nickname, m.member_intro
         FROM art_market_db.product p , art_market_db.member m
         WHERE p.product_id = #{productId}
         AND p.member_id = m.member_id

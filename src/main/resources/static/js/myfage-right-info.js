@@ -1,3 +1,4 @@
+/*
 
 
 // myfageInfoRightAddTag()
@@ -43,4 +44,4 @@ function myfageInfoRightAddTag() {
             <input class="myfage-right-info-content-btn" type="button" value="전환 신청하러 가기">
           </div>
         </div>`)
-}
+}*/

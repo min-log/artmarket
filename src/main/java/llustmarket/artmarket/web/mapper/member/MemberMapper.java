@@ -3,6 +3,7 @@ package llustmarket.artmarket.web.mapper.member;
 import llustmarket.artmarket.domain.member.Member;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -11,14 +12,22 @@ import java.util.Optional;
 public interface MemberMapper {
     void insertMember(Member member);
 
+    @Transactional
     void updateIdentity(Long memberId);
 
+    @Transactional
+    void updateIntro(@Param("memberIntro") String intro, @Param("memberId") Long memberId);
+
+    @Transactional
     void updatePasswordByMemberId(@Param("password") String password, @Param("memberId") Long memberId);
 
+    @Transactional
     void updatePasswordByEmail(@Param("password") String password, @Param("email") String email);
 
+    @Transactional
     void updatePhoneByMemberId(@Param("memberId") Long memberId, @Param("newPhone") String newPhone);
 
+    @Transactional
     void updateEmailByMemberId(@Param("memberId") Long memberId, @Param("newEmail") String newEmail);
 
     int isLoginIdDuplicate(String loginId);
