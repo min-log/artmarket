@@ -185,3 +185,31 @@ if (sessionStorage.getItem('identity') === 'AUTHOR') {
     myfageNavProfileIdentityMod.style.display = 'none';
 }
 //
+
+//회원탈퇴 및 로그아웃
+myfageNavExit.addEventListener("click", function () {
+    const id = sessionStorage.getItem('id');
+    const confirmation = confirm('정말 회원 탈퇴하시겠습니까?');
+
+    if (!confirmation) return; // 사용자가 취소를 누르면 함수 종료
+
+    fetch('http://localhost:8070/mypage-withdrawl', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({id: id})
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        sessionStorage.clear();
+        alert('회원 탈퇴되었습니다.');
+        location.href = 'http://localhost:8070/index.html';
+    })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            alert('회원 탈퇴에 실패했습니다.');
+        });
+})
+//

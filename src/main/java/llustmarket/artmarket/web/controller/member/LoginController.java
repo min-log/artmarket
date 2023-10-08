@@ -48,6 +48,11 @@ public class LoginController {
         }
         Member member = memberService.getMemberByLoginId(loginUser.getLoginId());
         if (member != null) {
+            if (member.getWithdrawl() == 1) {
+                Map<String, String> loginFail = new HashMap<>();
+                loginFail.put("loginNoMatchMsg", "탈퇴한 회원입니다.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginFail);
+            }
             if (passwordEncoder.matches(loginUser.getLoginPassword(), member.getPassword())) {
                 try {
                     session.setAttribute("login", member);

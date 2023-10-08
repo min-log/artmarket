@@ -52,4 +52,6 @@ public interface MemberMapper {
     void autoLogin(Map<String, Object> map);
 
     Member selectOneByMemberId(long memberId);
+
+    void withdrawl(long memberId);
 }

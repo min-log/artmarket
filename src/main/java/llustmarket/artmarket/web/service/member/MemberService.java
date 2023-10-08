@@ -96,4 +96,8 @@ public class MemberService {
         Member member = memberMapper.selectOneByMemberId(memberId);
         return modelMapper.map(member, MemberDTO.class);
     }
+
+    public void withdrawl(long memberId) {
+        memberMapper.withdrawl(memberId);
+    }
 }

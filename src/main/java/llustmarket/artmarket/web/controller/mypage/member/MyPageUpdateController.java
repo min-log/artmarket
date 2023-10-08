@@ -39,4 +39,16 @@ public class MyPageUpdateController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/mypage-withdrawl")
+    public ResponseEntity<Object> withdrawlMember(@RequestBody Map<String, Long> requestMap) {
+        Long id = requestMap.get("id");
+        try {
+            memberService.withdrawl(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
