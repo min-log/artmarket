@@ -61,7 +61,7 @@
     </select>
 
     <select id="getProductDetail" resultType="llustmarket.artmarket.web.dto.board.ProductDetailDTO">
-        SELECT product_title, product_detail
+        SELECT product_title, product_detail , category
         FROM art_market_db.product
         WHERE product_id = #{productId}
 

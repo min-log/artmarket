@@ -26,6 +26,7 @@ function productDetailShow() {
   }).then(response => {
     return response.json()
   }).then(data => {
+    //console.log(data);
     detailTopArticleNumValue.textContent = `${sessionStorage.getItem('detailproduct')}`
     detailTopArticleNumValue.setAttribute('name', `${sessionStorage.getItem('detailproduct')}`)
     detailTopTitleValue.textContent = `${data.productDetail.title}`
