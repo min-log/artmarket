@@ -196,20 +196,14 @@ socialGoogleBox.addEventListener('click', function () {
 const kakaoCode = 'b78977a50a13ce81576485688bc20490'
 const kakaoRedirect = 'http://localhost:8070/kakao-login'
 
-const kakaoRequestUrl = `https://kauth.kakao.com/oauth/authorize
+let kakaoRequestUrl = `https://kauth.kakao.com/oauth/authorize
 ?client_id=${kakaoCode}
 &redirect_uri=${kakaoRedirect}
 &response_type=code`
 
 // 카카오 가입
 socialKaKaoBox.addEventListener('click', function () {
-
-    fetch(`kakaoRequestUrl`, {
-        method: 'GET',
-        mode: 'no-cors'
-    }).then(() => {
-        location.href = 'https://kauth.kakao.com/oauth/authorize?client_id=b78977a50a13ce81576485688bc20490&redirect_uri=http://localhost:8070/kakao-login&response_type=code'
-    })
+    window.location.href = kakaoRequestUrl
 })
 
 // 자사 가입 
@@ -389,6 +383,33 @@ function emailConfirmAlert(parentTag) {
         })
     }
 
+    function emailConfrimIng() {
+        emailConfirmBtn.insertAdjacentHTML('afterend', `
+        <div class="email-confirm-wait">
+        <div><img class="email-confirm-wait-img" src="./css/icon/send-email.png" /></div>
+        <div>이메일 전송중에 있습니다.</div>
+        <div class="email-confirm-wait-2">잠시만 기다려주세요.</div>
+        </div>
+        `)
+
+        const emailConfirmWait = document.querySelector('.email-confirm-wait')
+        emailConfirmWait.style.display = 'flex'
+        emailConfirmWait.style.position = 'absolute'
+        emailConfirmWait.style.flexDirection = 'column'
+        emailConfirmWait.style.alignItems = 'center'
+        emailConfirmWait.style.padding = '3rem 5rem'
+        emailConfirmWait.style.backgroundColor = 'white'
+        emailConfirmWait.style.boxShadow = '2px 2px 0.5rem rgba(88, 88, 88, 0.3)'
+        emailConfirmWait.style.borderRadius = '1rem'
+        emailConfirmWait.style.marginTop = '-0.1rem'
+
+        const emailConfirmWaitSecond = document.querySelector('.email-confirm-wait-2')
+        emailConfirmWaitSecond.style.fontSize = '0.9rem'
+
+        setTimeout(function () {
+            emailConfirmWait.remove()
+        }, 4000)
+    }
 
     emailConfirmInput.addEventListener('focusout', function () {
         comfirmErrMsg(emailConfirmBox.getAttribute('id'))
@@ -398,33 +419,6 @@ function emailConfirmAlert(parentTag) {
 
         if (emailConfirmBox.getAttribute('id') === 'email') {
             emailConfirm()
-
-            emailConfirmBtn.insertAdjacentHTML('afterend', `
-            <div class="email-confirm-wait">
-            <div><img class="email-confirm-wait-img" src="./css/icon/send-email.png" /></div>
-            <div>이메일 전송중에 있습니다.</div>
-            <div class="email-confirm-wait-2">잠시만 기다려주세요.</div>
-            </div>
-            `)
-
-            const emailConfirmWait = document.querySelector('.email-confirm-wait')
-            emailConfirmWait.style.display = 'flex'
-            emailConfirmWait.style.position = 'absolute'
-            emailConfirmWait.style.flexDirection = 'column'
-            emailConfirmWait.style.alignItems = 'center'
-            emailConfirmWait.style.padding = '3rem 5rem'
-            emailConfirmWait.style.backgroundColor = 'white'
-            emailConfirmWait.style.boxShadow = '2px 2px 0.5rem rgba(88, 88, 88, 0.3)'
-            emailConfirmWait.style.borderRadius = '1rem'
-            emailConfirmWait.style.marginTop = '-0.1rem'
-
-            const emailConfirmWaitSecond = document.querySelector('.email-confirm-wait-2')
-            emailConfirmWaitSecond.style.fontSize = '0.9rem'
-
-            setTimeout(function () {
-                emailConfirmWait.remove()
-            }, 4000)
-
         } else {
             tokentConfirm()
         }

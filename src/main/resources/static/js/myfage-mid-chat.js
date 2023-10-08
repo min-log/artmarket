@@ -1,5 +1,5 @@
-const myfageMid = document.querySelector('.myfage-mid')
-myfageChatMidAddTag()
+
+// myfageChatMidAddTag()
 
 // ------------------------------ myfage-mid-chat ------------------------------
 

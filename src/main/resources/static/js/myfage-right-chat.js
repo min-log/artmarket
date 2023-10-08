@@ -1,6 +1,6 @@
-const myfageRight = document.querySelector('.myfage-right')
 
-myfageChatRightAddTag()
+
+// myfageChatRightAddTag()
 
 function myfageChatRightAddTag() {
 

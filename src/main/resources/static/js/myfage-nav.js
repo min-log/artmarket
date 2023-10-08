@@ -76,3 +76,7 @@ const myfageNavInfo = document.querySelector('#myfage-info')
 const myfageNavOrder = document.querySelector('#myfage-order')
 const myfageNavArticle = document.querySelector('#myfage-article')
 const myfageNavExit = document.querySelector('#myfage-exit')
+
+if (sessionStorage.getItem('identity') === 'GENERAL') {
+  myfageNavArticle.style.display = 'none'
+}

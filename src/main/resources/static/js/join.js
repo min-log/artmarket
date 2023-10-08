@@ -356,7 +356,7 @@ function joinInfoShow() {
 
     joinIdentityBtn.addEventListener('click', function () {
 
-        let joinStatus = 0
+        let joinStatus
         let joinResponseData
 
         if (joinInfoSubmit() === 6) {
@@ -375,17 +375,19 @@ function joinInfoShow() {
                     JoinEmail: `${sessionStorage.getItem('email')}`,
                 })
             }).then(response => {
-                joinStatus = response.status
-                if (response.status === 409) {
-                    joinResponseData = response.json()
-                }
-            }).then(() => {
-                if (joinStatus === 201) {
+                if (response.status === 201) {
                     joinCompleteAction()
-                } else if (joinStatus === 409) {
-                    joinConflictJsonResult(joinResponseData)
+                } else if (response.status === 409) {
+                    return response.json()
                 }
+            }).then(data => {
+                joinConflictJsonResult(data)
             })
+
+            console.log(joinStatus)
+            console.log(joinResponseData)
+
+
         }
     })
 }
@@ -398,6 +400,43 @@ function joinInfoSubmit() {
     }
     return submit
 }
+
+
+
+// 가입정보 중복값 체크
+const joinConflictInputMap = new Map()
+joinConflictInputMap.set('아이디', joinIdInput)
+joinConflictInputMap.set('닉네임', joinNickNameInput)
+joinConflictInputMap.set('이메일', joinEmailInput)
+joinConflictInputMap.set('전화번호', joinPhoneInput)
+
+
+const joinConflictErrMsgMap = new Map()
+joinConflictErrMsgMap.set('아이디', joinIdErrMsg)
+joinConflictErrMsgMap.set('닉네임', joinNickNameErrMsg)
+joinConflictErrMsgMap.set('이메일', joinEmailErrMsg)
+joinConflictErrMsgMap.set('전화번호', joinPhoneErrMsg)
+
+function joinConflictJsonResult(jsonResult) {
+    const jsonResultArray = jsonResult
+    for (var i = 0; i < jsonResultArray.length; i++) {
+        joinConflictInputMap.get(jsonResultArray[i].duplicateParam).style.border = 'solid 0.1rem red'
+        joinConflictErrMsgMap.get(jsonResultArray[i].duplicateParam).style.color = 'red'
+        joinConflictErrMsgMap.get(jsonResultArray[i].duplicateParam).style.visibility = 'visible'
+        joinConflictErrMsgMap.get(jsonResultArray[i].duplicateParam).textContent = '이미 가입된 데이터로 다른값을 입력해주세요.'
+    }
+}
+
+// identity 입력 화면 버튼 클릭 시
+joinIdentityBtn.addEventListener('click', function () {
+    if (joinIdentityAuthor.getAttribute('value') === null && joinIdentityGeneral.getAttribute('value') === null) {
+        alert('회원 유형을 선택해주세요.')
+    } else if (joinIdentityAuthor.getAttribute('value') !== null && joinIdentityGeneral.getAttribute('value') !== null) {
+        joinInfoShow()
+    }
+})
+
+
 
 //가입완료 화면 구현
 function joinCompleteAction() {
@@ -472,36 +511,3 @@ function joinCompleteAction() {
         location.href = 'login.html'
     })
 }
-
-// 가입정보 중복값 체크
-const joinConflictInputMap = new Map()
-joinConflictInputMap.set('아이디', joinIdInput)
-joinConflictInputMap.set('닉네임', joinNickNameInput)
-joinConflictInputMap.set('이메일', joinEmailInput)
-joinConflictInputMap.set('전화번호', joinPhoneInput)
-
-
-const joinConflictErrMsgMap = new Map()
-joinConflictErrMsgMap.set('아이디', joinIdErrMsg)
-joinConflictErrMsgMap.set('닉네임', joinNickNameErrMsg)
-joinConflictErrMsgMap.set('이메일', joinEmailErrMsg)
-joinConflictErrMsgMap.set('전화번호', joinPhoneErrMsg)
-
-function joinConflictJsonResult(jsonResult) {
-    const jsonResultArray = jsonResult
-    for (var i = 0; i < jsonResultArray.length; i++) {
-        joinConflictInputMap.get(jsonResultArray[i].duplicateParam).style.border = 'solid 0.1rem red'
-        joinConflictErrMsgMap.get(jsonResultArray[i].duplicateParam).style.color = 'red'
-        joinConflictErrMsgMap.get(jsonResultArray[i].duplicateParam).style.visibility = 'visible'
-        joinConflictErrMsgMap.get(jsonResultArray[i].duplicateParam).textContent = '이미 가입된 데이터로 다른값을 입력해주세요.'
-    }
-}
-
-// identity 입력 화면 버튼 클릭 시
-joinIdentityBtn.addEventListener('click', function () {
-    if (joinIdentityAuthor.getAttribute('value') === null && joinIdentityGeneral.getAttribute('value') === null) {
-        alert('회원 유형을 선택해주세요.')
-    } else if (joinIdentityAuthor.getAttribute('value') !== null && joinIdentityGeneral.getAttribute('value') !== null) {
-        joinInfoShow()
-    }
-})
