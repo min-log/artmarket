@@ -9,7 +9,7 @@
 
     <update id="updateIdentity">
         UPDATE Member
-        SET identity = #{identity}
+        SET identity = 'AUTHOR'
         WHERE member_id = #{memberId}
     </update>
     <update id="updatePasswordByMemberId">

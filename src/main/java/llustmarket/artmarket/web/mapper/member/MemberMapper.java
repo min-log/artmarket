@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface MemberMapper {
     void insertMember(Member member);
 
-    void updateIdentity(Long memberId, String identity);
+    void updateIdentity(Long memberId);
 
     void updatePasswordByMemberId(@Param("password") String password, @Param("memberId") Long memberId);
 

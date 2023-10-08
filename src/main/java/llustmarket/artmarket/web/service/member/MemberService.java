@@ -26,12 +26,9 @@ public class MemberService {
         memberMapper.insertMember(member);
     }
 
-    public void insertNormalMember(Member member) {
-        // identity가 비어있을 경우 기본값인 "normal"로 설정
-        if (member.getIdentity() == null || member.getIdentity().isEmpty()) {
-            member.setIdentity("normal");
-        }
-        memberMapper.insertMember(member);
+    @Transactional
+    public void updateIdentity(Long id) {
+        memberMapper.updateIdentity(id);
     }
 
     @Transactional
