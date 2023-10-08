@@ -16,6 +16,7 @@ public class ProductDetailDTO {
 
     @JsonProperty(value = "title")
     private String productTitle;
+    private String category;
 
     private String productDetail;
 

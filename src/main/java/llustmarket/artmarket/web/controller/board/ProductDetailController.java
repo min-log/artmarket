@@ -80,8 +80,10 @@ public class ProductDetailController {
                 imageDataList.add(image);
             }
 
+
             ProductDetailDTO productDetailDTO = new ProductDetailDTO(
                     details.getProductTitle(),
+                    details.getCategory(),
                     details.getProductDetail(),
                     imageDataList
             );

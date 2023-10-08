@@ -1,5 +1,11 @@
 // ------------------------------ myfage-right-article ------------------------------
 
+/*modify 공통 사용 변수 */
+let articleCount = 0;
+const articleFileDataMap = new Map()
+let articleFileDataMapCount = 1
+
+
 function myfageArticleRightAddTag() {
 
   if (myfageRight.childNodes) {
@@ -99,6 +105,7 @@ function myfageArticleRightAddTag() {
     <div class="myfage-right-article-manage-btn-box">
       <div class="myfage-right-article-manage-btn-box-show">미리보기</div>
       <div class="myfage-right-article-manage-btn-box-add">등록하기</div>
+      <div class="myfage-right-article-manage-btn-box-modify" style="display:none">수정하기</div>
     </div>
     </div>
     <img
@@ -250,10 +257,7 @@ function myfageArticleRightAddTag() {
   const myfageRightArticleManageIntroFileValue = document.querySelector('.myfage-right-article-manage-intro-file-value')
   const myfageRightArticleManageIntroFileImg = document.querySelector('.myfage-right-article-manage-intro-file-img')
 
-  let articleCount = 0;
 
-  const articleFileDataMap = new Map()
-  let articleFileDataMapCount = 1
 
   function myfageArticleFileUpload() {
 
@@ -278,7 +282,7 @@ function myfageArticleRightAddTag() {
               <img
               class="myfage-right-article-manage-intro-file-suc"
               src="${e.target.result}"
-              /><img class="myfage-right-article-manage-intro-file-del-${articleCount + 1}" src="./css/icon/article-file-delete.png" id="${articleFileDataMapCount}"/>
+              /><img class="myfage-right-article-manage-intro-file-del myfage-right-article-manage-intro-file-del-${articleCount + 1}" src="./css/icon/article-file-delete.png" id="${articleFileDataMapCount}"/>
             </div>`)
 
         articleCount += 1
@@ -437,5 +441,17 @@ function myfageArticleRightAddTag() {
 
     }
   })
+
+
+
+
+
+
+
+
+
+
 }
+
+
 

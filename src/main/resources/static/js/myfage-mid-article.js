@@ -51,7 +51,7 @@ function myfageArticleMidAddTag() {
         data[i].articleCategory = 'LIVE2D•3D'
       }
 
-      myfageMidArticleBoxBot.insertAdjacentHTML('beforeend', `<div class="myfage-mid-article-box-bot-list" id="${data[i].articleDate}">
+      myfageMidArticleBoxBot.insertAdjacentHTML('beforeend', `<div class="myfage-mid-article-box-bot-list" data-index="${i}" id="${data[i].articleDate}">
         <div class="myfage-mid-article-box-bot-list-thumb">
           <img class="myfage-mid-article-box-bot-list-thumb-img" src="data:image/jpeg;base64,${data[i].articleImgs[0]}"/>
           <img class="myfage-mid-article-box-bot-list-thumb-img" src="data:image/jpeg;base64,${data[i].articleImgs[1]}"/>
@@ -77,13 +77,14 @@ function myfageArticleMidAddTag() {
             <div class="myfage-mid-article-box-bot-list-order-value">${data[i].articleTotalOrder}</div>
           </div>
           <div class="myfage-mid-article-box-bot-list-mod-del">
-            <div class="myfage-mid-article-box-bot-list-mod">수정하기</div>
-            <div class="myfage-mid-article-box-bot-list-del">삭제하기</div>
+            <div class="myfage-mid-article-box-bot-list-mod" data-art="${data[i].articleId}" data-index="${i}">수정하기</div>
+            <div class="myfage-mid-article-box-bot-list-del" data-art="${data[i].articleId}">삭제하기</div>
           </div>
         </div>
     </div>`)
-
     }
+    myfageDeleteArticle();
+    myfageModifyArticle();
   })
 
 }
