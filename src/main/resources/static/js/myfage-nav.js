@@ -9,7 +9,7 @@ myfageNav.insertAdjacentHTML('afterend', `<div class="myfage-nav-content">
   <div class="myfage-nav-profile-greeting"></div>
 </div>
 <div class="myfage-nav-profile-menu">
-  <div id="myfage-nav-profile-img-mod">프로필이미지 수정하기</div>
+  <div id="myfage-nav-profile-img-mod">프로필 이미지 수정하기</div>
   <div id="myfage-nav-profile-intro-mod">소개글 수정하기</div>
   <div id="myfage-nav-profile-identity-mod">작가로 전환하기</div>
 </div>
