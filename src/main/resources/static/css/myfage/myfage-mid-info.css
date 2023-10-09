@@ -1,47 +1,48 @@
 input {
-  font-family: "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 0.9rem;
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
 }
 
 .myfage-info-mid-content {
-  margin: 3rem 0;
-  padding: 3.7rem 1rem 3rem 2.5rem;
-  box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
-  border-radius: 1rem;
-  height: 50rem;
+    margin: 3rem 0;
+    padding: 3.7rem 1rem 3rem 2.5rem;
+    box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
+    border-radius: 1rem;
+    height: 50rem;
+    width: 60rem;
 }
 
 .myfage-info-mid-content-normal-title,
 .myfage-info-mid-content-account-title {
-  display: inline-block;
-  font-size: 1.3rem;
-  font-weight: 700;
-  background-color: rgba(41, 45, 50, 1);
-  color: white;
-  padding: 0.4rem 2rem;
-  border-radius: 1rem;
-  box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.5);
-  margin-bottom: 1rem;
+    display: inline-block;
+    font-size: 1.3rem;
+    font-weight: 700;
+    background-color: rgba(41, 45, 50, 1);
+    color: white;
+    padding: 0.4rem 2rem;
+    border-radius: 1rem;
+    box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.5);
+    margin-bottom: 1rem;
 }
 
 .myfage-info-mid-content-normal-content,
 .myfage-info-mid-content-account-content {
-  padding: 1rem 3rem;
+    padding: 1rem 3rem;
 }
 
 .myfage-info-mid-content-normal-content-top,
 .myfage-info-mid-content-normal-content-mid,
 .myfage-info-mid-content-normal-content-bot,
 .myfage-info-mid-content-account-box {
-  display: flex;
+    display: flex;
 }
 
 .myfage-info-mid-content-normal-content-top > *,
 .myfage-info-mid-content-normal-content-mid > *,
 .myfage-info-mid-content-normal-content-bot > *,
 .myfage-info-mid-content-account-box > * {
-  margin-right: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .myfage-info-mid-content-normal-nickname-label,
@@ -52,16 +53,16 @@ input {
 .myfage-info-mid-content-normal-email-label,
 .myfage-info-mid-content-account-bank-label,
 .myfage-info-mid-content-account-bank-num-label {
-  font-weight: 800;
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-  margin-left: 0.4rem;
-  color: rgba(41, 45, 50, 1);
+    font-weight: 800;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.4rem;
+    color: rgba(41, 45, 50, 1);
 }
 
 .myfage-info-mid-content-normal-nickname-value,
 .myfage-info-mid-content-normal-id-value {
-  cursor: not-allowed;
+    cursor: not-allowed;
 }
 
 .myfage-info-mid-content-normal-nickname-value,
@@ -72,110 +73,111 @@ input {
 .myfage-info-mid-content-normal-new-password-value,
 .myfage-info-mid-content-account-bank-value,
 .myfage-info-mid-content-account-bank-num-value {
-  outline: none;
-  border: none;
-  padding: 0.5rem 0.8rem;
-  border: solid 0.1rem rgba(88, 88, 88, 0.3);
-  border-radius: 1rem;
-  box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.1);
+    outline: none;
+    border: none;
+    padding: 0.5rem 0.8rem;
+    border: solid 0.1rem rgba(88, 88, 88, 0.3);
+    border-radius: 1rem;
+    box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.1);
 }
 
 .myfage-info-mid-content-normal-content-bot-token {
-  padding-left: 0.5rem;
-  margin-top: -0.7rem;
+    padding-left: 0.5rem;
+    margin-top: -0.7rem;
 }
 
 label {
-  font-size: 0.9rem;
-  font-weight: 700;
+    font-size: 0.9rem;
+    font-weight: 700;
 }
 
 .myfage-info-mid-content-normal-content-bot-token-value {
-  outline: none;
-  border: none;
-  padding: 0.2rem 0.8rem;
-  width: 8rem;
-  border: solid 0.1rem rgba(88, 88, 88, 0.3);
-  border-radius: 1rem;
-  box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.1);
-  margin-left: 0.5rem;
+    outline: none;
+    border: none;
+    padding: 0.2rem 0.8rem;
+    width: 8rem;
+    border: solid 0.1rem rgba(88, 88, 88, 0.3);
+    border-radius: 1rem;
+    box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.1);
+    margin-left: 0.5rem;
 }
 
 .myfage-info-mid-content-normal-content-bot-token-btn {
-  outline: none;
-  border: none;
-  margin-top: 2rem;
-  padding: 0.2rem 1rem;
-  border: solid 0.1rem rgba(88, 88, 88, 0.3);
-  border-radius: 2rem;
-  color: white;
-  background-color: rgba(41, 45, 50, 1);
-  font-size: 0.8rem;
-  cursor: pointer;
+    outline: none;
+    border: none;
+    margin-top: 2rem;
+    padding: 0.2rem 1rem;
+    border: solid 0.1rem rgba(88, 88, 88, 0.3);
+    border-radius: 2rem;
+    color: white;
+    background-color: rgba(41, 45, 50, 1);
+    font-size: 0.8rem;
+    cursor: pointer;
 }
 
 .myfage-info-mid-content-account-bank-value {
-  width: 7rem;
+    width: 7rem;
 }
 
 .myfage-info-mid-content-account-bank-num-value {
-  width: 20rem;
+    width: 20rem;
 }
 
 .myfage-info-pass-token,
 .myfage-info-email-token {
-  outline: none;
-  border: none;
-  padding: 0rem 1.3rem;
-  margin-top: 2rem;
-  border: solid 0.1rem rgba(88, 88, 88, 0.3);
-  border-radius: 2rem;
-  color: white;
-  background-color: rgba(41, 45, 50, 1);
-  font-size: 0.95rem;
-  cursor: pointer;
+    outline: none;
+    border: none;
+    padding: 0rem 1.3rem;
+    margin-top: 2rem;
+    border: solid 0.1rem rgba(88, 88, 88, 0.3);
+    border-radius: 2rem;
+    color: white;
+    background-color: rgba(41, 45, 50, 1);
+    font-size: 0.95rem;
+    cursor: pointer;
 }
 
 .myfage-info-pass-token:hover,
 .myfage-info-email-token:hover {
-  scale: 102%;
-  transition-duration: 0.1s;
+    scale: 102%;
+    transition-duration: 0.1s;
 }
 
 .myfage-info-mid-content-normal-content-top-caution > img,
 .myfage-info-mid-content-normal-content-caution > img,
 .myfage-info-mid-content-account-cautio-list > img {
-  scale: 60%;
-  opacity: 0.4;
-  margin-right: -0.2rem;
+    scale: 60%;
+    opacity: 0.4;
+    margin-right: -0.2rem;
 }
 
 .myfage-info-mid-content-normal-content-top-caution,
 .myfage-info-mid-content-normal-content-caution,
 .myfage-info-mid-content-account-cautio-list {
-  display: flex;
-  align-items: center;
-  font-size: 0.85rem;
-  opacity: 0.5;
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    opacity: 0.5;
 }
 
 .myfage-info-mid-content-normal-content-top-caution,
 .myfage-info-mid-content-normal-content-caution {
-  margin-bottom: 0.8rem;
+    margin-bottom: 0.8rem;
 }
 
 .myfage-info-mid-content-account-title {
-  margin-top: 2rem;
+    margin-top: 2rem;
 }
 
 .myfage-info-mid-content-account-box {
-  margin-bottom: 0.3rem;
+    margin-bottom: 0.3rem;
 }
+
 .myfage-info-mid-content-account-cautio-list:not(:nth-child(1)) {
-  margin-left: 2.5rem;
-  margin-top: 0.1rem;
+    margin-left: 2.5rem;
+    margin-top: 0.1rem;
 }
 
 .myfage-info-mid-content-account-cautio-list:first-child {
-  margin-bottom: -0.5rem;
+    margin-bottom: -0.5rem;
 }

@@ -34,7 +34,7 @@ function productDetailShow() {
         if (data.author.authorPofile == '') {
             detailMidLeftProfileImgValue.setAttribute('src', './css/icon/default-profile-img.png')
         } else {
-            detailMidLeftProfileImgValue.setAttribute('src', `${data.author.authorPofile}`)
+            detailMidLeftProfileImgValue.setAttribute('src', `data:image/jpeg;base64,${data.author.authorPofile}`)
         }
 
         detailMidLeftProfileInfoNickname.textContent = `${data.author.authorNickname}`

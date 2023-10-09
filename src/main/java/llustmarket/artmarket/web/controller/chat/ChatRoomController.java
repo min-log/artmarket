@@ -6,6 +6,7 @@ import llustmarket.artmarket.web.dto.chat.*;
 import llustmarket.artmarket.web.service.alert.AlertService;
 import llustmarket.artmarket.web.service.chat.ChatRoomService;
 import llustmarket.artmarket.web.service.chat.ChatService;
+import llustmarket.artmarket.web.service.file.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -15,14 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Log4j2
 @RestController
 @RequiredArgsConstructor
 public class ChatRoomController {
     // 마이페이지
-
+    private final FileService fileService;
     private final ChatService chatService;
     private final ChatRoomService chatRoomService;
     private final AlertService alertService;
@@ -33,7 +33,7 @@ public class ChatRoomController {
         try {
             ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchChatRoomList(memberId);
             return ResponseEntity.status(HttpStatus.OK).body(chatRoomListResponseDTO);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             // 일치하는 회원 없음
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(null);
@@ -50,7 +50,7 @@ public class ChatRoomController {
         long clickMember = roomRequestDTO.getClickMember();
 
         ChatRoomDTO chatRoomDTO = chatRoomService.searchChatRoomId(clickChatId);
-        if(clickMember != chatRoomDTO.getChatFromId() && clickMember != chatRoomDTO.getChatToId()){
+        if (clickMember != chatRoomDTO.getChatFromId() && clickMember != chatRoomDTO.getChatToId()) {
             // 속하는 회원이 아닐 경우
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
@@ -59,7 +59,7 @@ public class ChatRoomController {
         httpSession.setAttribute("chatSession", ChatSessionDTO.builder().chatRoomID(clickChatId).memberId(clickMember).build());
 
         // 알림이 있었다면, 상태 변경
-        alertService.updateOneCheck(clickMember,clickChatId, AlertType.MESSAGE);
+        alertService.updateOneCheck(clickMember, clickChatId, AlertType.MESSAGE);
 
         // 존재하는 채팅방 룸 정보와 대화 내역 전송
         ChatRoomResponseDTO chatRoomResponseDTO = chatService.searchOneRoomId(clickChatId);
@@ -68,23 +68,20 @@ public class ChatRoomController {
 
 
     @DeleteMapping(value = "/myfage")
-    public ResponseEntity<Object> chatRoomDelete(@RequestBody ChatRoomRequestDTO roomRequestDTO){
+    public ResponseEntity<Object> chatRoomDelete(@RequestBody ChatRoomRequestDTO roomRequestDTO) {
         log.info("# 채팅룸 삭제");
         boolean result = false;
-        try{
+        try {
             result = chatService.removeStateChat(roomRequestDTO.getRemChatRoomId(), roomRequestDTO.getRemChatMember());
-            if(result == false){
+            if (result == false) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
             return ResponseEntity.status(HttpStatus.OK).body(null);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
-
-
-
 
 
 }
