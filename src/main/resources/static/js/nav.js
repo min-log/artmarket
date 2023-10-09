@@ -26,23 +26,6 @@ nav.insertAdjacentHTML('beforeend', `
 </div>`)
 
 
-const login = document.querySelector('.login')
-
-if (sessionStorage.getItem("id") !== null) {
-    login.textContent = 'LOGOUT'
-    login.setAttribute("class", "logout")
-} else {
-    login.textContent = 'LOGIN'
-    login.setAttribute("class", "login")
-}
-
-if (login) {
-    login.addEventListener('click', function () {
-        location.href = 'login.html'
-    })
-}
-
-
 const illust = document.querySelector('.illust')
 
 illust.addEventListener('click', function () {
@@ -160,7 +143,21 @@ const home = document.querySelector('.home')
 home.addEventListener("click", function () {
     location.href = "index.html"
 })
+const login = document.querySelector('.login')
 
+if (sessionStorage.getItem("id") !== null) {
+    login.textContent = 'LOGOUT'
+    login.setAttribute("class", "logout")
+} else {
+    login.textContent = 'LOGIN'
+    login.setAttribute("class", "login")
+}
+
+if (login) {
+    login.addEventListener('click', function () {
+        location.href = 'login.html'
+    })
+}
 const logout = document.querySelector('.logout')
 if (logout) {
     logout.addEventListener("click", function () {
@@ -182,3 +179,4 @@ if (logout) {
         }
     })
 }
+

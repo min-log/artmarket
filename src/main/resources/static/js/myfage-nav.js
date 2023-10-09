@@ -80,6 +80,18 @@ const myfageNavExit = document.querySelector('#myfage-exit')
 if (sessionStorage.getItem('identity') === 'GENERAL') {
     myfageNavArticle.style.display = 'none'
 }
+
+// 쿠키에서 값을 가져오는 함수
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null; // 해당 쿠키가 존재하지 않을 경우
+}
+
+if (getCookie('loginType') === 'SOCIAL') {
+    myfageNavExit.style.display = 'none';
+}
 //프로필 사진 변경하기
 const myfageNavProfileImgMod = document.querySelector('#myfage-nav-profile-img-mod');
 myfageNavProfileImgMod.addEventListener('click', function () {
