@@ -16,6 +16,9 @@ public interface MemberMapper {
     void updateIdentity(Long memberId);
 
     @Transactional
+    void updateAccount(@Param("accountBank") String accountBank, @Param("account") String account, @Param("memberId") Long memberId);
+
+    @Transactional
     void updateIntro(@Param("memberIntro") String intro, @Param("memberId") Long memberId);
 
     @Transactional

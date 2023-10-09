@@ -32,6 +32,11 @@ public class MemberService {
     }
 
     @Transactional
+    public void updateAccount(String accountBank, String account, Long memberId) {
+        memberMapper.updateAccount(accountBank, account, memberId);
+    }
+
+    @Transactional
     public void updateIntro(String memberIntro, Long id) {
         memberMapper.updateIntro(memberIntro, id);
     }

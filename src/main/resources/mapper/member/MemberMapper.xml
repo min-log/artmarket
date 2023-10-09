@@ -12,9 +12,10 @@
         SET identity = 'AUTHOR'
         WHERE member_id = #{memberId}
     </update>
-    <update id="updateIntro">
+
+    <update id="updateAccount">
         UPDATE Member
-        SET member_intro = #{memberIntro}
+        SET account_bank = #{accountBank}, account=#{account}
         WHERE member_id = #{memberId}
     </update>
     <update id="updatePasswordByMemberId">

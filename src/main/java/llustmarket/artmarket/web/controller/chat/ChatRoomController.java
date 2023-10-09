@@ -32,6 +32,7 @@ public class ChatRoomController {
         log.info("# 마이페이지 채팅 내역 조회");
         try {
             ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchChatRoomList(memberId);
+            chatRoomListResponseDTO.getProfileImg();
             return ResponseEntity.status(HttpStatus.OK).body(chatRoomListResponseDTO);
         } catch (Exception e) {
             e.printStackTrace();

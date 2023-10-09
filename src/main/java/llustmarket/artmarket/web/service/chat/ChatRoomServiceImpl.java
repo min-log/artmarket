@@ -1,13 +1,14 @@
 package llustmarket.artmarket.web.service.chat;
 
 
-
 import llustmarket.artmarket.domain.chat.ChatRoom;
 import llustmarket.artmarket.domain.chat.ChatRoomList;
 import llustmarket.artmarket.domain.file.FileType;
 import llustmarket.artmarket.domain.file.FileVO;
 import llustmarket.artmarket.domain.member.Member;
-import llustmarket.artmarket.web.dto.chat.*;
+import llustmarket.artmarket.web.dto.chat.ChatRoomDTO;
+import llustmarket.artmarket.web.dto.chat.ChatRoomListDTO;
+import llustmarket.artmarket.web.dto.chat.ChatRoomListResponseDTO;
 import llustmarket.artmarket.web.mapper.chat.ChatRoomMapper;
 import llustmarket.artmarket.web.mapper.file.FileMapper;
 import llustmarket.artmarket.web.mapper.member.MemberMapper;
@@ -71,7 +72,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         List<ChatRoomList> chatRoomLists = chatRoomMapper.selectListByRoomId(memberId);
         // 1. 전달될 룸 리스트
         List<ChatRoomListDTO> roomListDTO = new ArrayList<>();
-        chatRoomLists.forEach(item->{
+        chatRoomLists.forEach(item -> {
             // 1-3. ChatRoom 정보 가져오기
             //  1-4. 전달될 객체
             ChatRoomListDTO chatRoomDTO = ChatRoomListDTO.builder()
@@ -83,16 +84,17 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             //  1-5. 전달될 객체에 상대방의 회원정보 추가
             Member memberYou;
             // 1) 상대 회원 정보 찾기
-            if(item.getChatToId() == memberId){
+            if (item.getChatToId() == memberId) {
                 memberYou = memberMapper.selectOneByMemberId(item.getChatFromId());
-            }else{
+            } else {
                 memberYou = memberMapper.selectOneByMemberId(item.getChatToId());
             }
             // 2) 프로필 이미지 : 파일 객체가 존재할 시 추가
             // 파일의 경로, 경로 아이디
             FileVO fileProfile = FileVO.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberYou.getMemberId()).build();
             FileVO memberProfile = fileMapper.selectOnePathAndId(fileProfile);
-            if(memberProfile != null) chatRoomDTO.setChatSenderProfile("/file/find/" + memberProfile.getFilePath() + "/" + memberProfile.getFileTypeId());
+            if (memberProfile != null)
+                chatRoomDTO.setChatSenderProfile("/file/find/" + memberProfile.getFilePath() + "/" + memberProfile.getFileTypeId());
             chatRoomDTO.setChatSender(memberYou.getNickname());
             chatRoomDTO.setChatSenderIdtity(memberYou.getIdentity());
 
@@ -108,7 +110,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         // 2-1. 회원 프로필
         FileVO memberProfile = fileMapper.selectOnePathAndId(FileVO.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberMe.getMemberId()).build());
-        if(memberProfile != null) myPageDTO.setProfileImg("/file/find/" + memberProfile.getFilePath() + "/" + memberProfile.getFileTypeId());
+        if (memberProfile != null)
+            myPageDTO.setProfileImg("/upload/" + memberProfile.getFilePath() + "/" + memberProfile.getFileTypeId());
         myPageDTO.setMyChatRooms(roomListDTO); // 룸 리스트 추가
         return myPageDTO;
     }
