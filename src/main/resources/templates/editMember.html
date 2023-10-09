@@ -22,6 +22,14 @@
     <div>
         <input type="submit" value="변경">
     </div>
+    <div th:if="${successMessage}" class="success-message">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <!-- 실패 메시지 표시 -->
+    <div th:if="${errorMessage}" class="error-message">
+        <p th:text="${errorMessage}"></p>
+    </div>
 </form>
 </body>
 </html>
