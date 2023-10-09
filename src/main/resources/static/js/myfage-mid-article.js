@@ -11,7 +11,7 @@ function myfageArticleMidAddTag() {
 
     myfageMid.insertAdjacentHTML('beforeend', `<div class="myfage-mid-article-box">
       <div class="myfage-mid-article-box-top">
-        <div class="myfage-mid-article-box-top-filter">
+<!--        <div class="myfage-mid-article-box-top-filter">
           <select class="myfage-mid-article-box-top-filter-category">
             <option >카테고리</option>
             <option value="ILLUST">ILLUST</option>
@@ -22,7 +22,7 @@ function myfageArticleMidAddTag() {
           </select>
           <input type="date" date-placeholder="시작일" class="myfage-mid-article-box-top-start-date" />
           <input type="date" date-placeholder="종료일" class="myfage-mid-article-box-top-end-date" />
-        </div>
+        </div>-->
         <div class="myfage-mid-article-box-top-manage">
           <div class="myfage-mid-article-box-top-manage-onOff">
             <div class="myfage-mid-article-box-top-manage-onOff-label">의뢰</div>

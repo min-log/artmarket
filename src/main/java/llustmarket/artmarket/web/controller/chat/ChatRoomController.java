@@ -33,7 +33,9 @@ public class ChatRoomController {
         log.info("# 마이페이지 채팅 내역 조회");
         try {
             ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchChatRoomList(memberId);
-            chatRoomListResponseDTO.setProfileImg2(fileService.getAttachmentImage(chatRoomListResponseDTO.getProfileImg()));
+            if (chatRoomListResponseDTO.getProfileImg() != null) {
+                chatRoomListResponseDTO.setProfileImg2(fileService.getAttachmentImage(chatRoomListResponseDTO.getProfileImg()));
+            }
             return ResponseEntity.status(HttpStatus.OK).body(chatRoomListResponseDTO);
         } catch (Exception e) {
             e.printStackTrace();

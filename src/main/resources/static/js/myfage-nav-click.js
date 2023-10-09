@@ -26,5 +26,4 @@ myfageNavInfo.addEventListener('click', function () {
 
 myfageNavOrder.addEventListener('click', function () {
     myfageOrderMidAddTag()
-    // myfageOrderRightAddTag()
 })

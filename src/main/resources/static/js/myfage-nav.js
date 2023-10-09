@@ -80,6 +80,42 @@ const myfageNavExit = document.querySelector('#myfage-exit')
 if (sessionStorage.getItem('identity') === 'GENERAL') {
     myfageNavArticle.style.display = 'none'
 }
+//프로필 사진 변경하기
+const myfageNavProfileImgMod = document.querySelector('#myfage-nav-profile-img-mod');
+myfageNavProfileImgMod.addEventListener('click', function () {
+    // 사용자에게 파일 선택 다이얼로그 표시
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('profileImage', file);
+            formData.append('profileFileType', 'PROFILE');
+            formData.append('profileFileTypeId', sessionStorage.getItem('id'));
+
+            // 서버에 요청을 보내기
+            fetch('/mypage-profile', {
+                method: 'PUT',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.status === 201) {
+                        alert('프로필 사진 업데이트에 실패했습니다.');
+                        throw new Error('Network response was not ok');
+                    }
+                    alert('프로필 사진이 업데이트되었습니다.');
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('에러 발생:', error);
+                });
+        }
+    });
+    input.click();
+});
+
 // 소개글 수정하기
 const introModButton = document.querySelector('#myfage-nav-profile-intro-mod');
 
