@@ -16,5 +16,6 @@ public class ChatRoomListResponseDTO {
     private String nickname; //닉네임
     private String intro; // 회원 인트로 메시지
     private String profileImg; // 회원 프로필이미지
+    private byte[] profileImg2; // 회원 프로필이미지
     private List<ChatRoomListDTO> myChatRooms; // 채팅 룸 리스트
 }

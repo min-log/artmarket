@@ -19,7 +19,7 @@ public interface MemberMapper {
     void updateAccount(@Param("accountBank") String accountBank, @Param("account") String account, @Param("memberId") Long memberId);
 
     @Transactional
-    void updateIntro(@Param("memberIntro") String intro, @Param("memberId") Long memberId);
+    void updateIntro(@Param("memberIntro") String memberIntro, @Param("memberId") Long memberId);
 
     @Transactional
     void updatePasswordByMemberId(@Param("password") String password, @Param("memberId") Long memberId);

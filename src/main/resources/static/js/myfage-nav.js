@@ -63,7 +63,7 @@ function myfageNavSet() {
             if (data.profileImg === null) {
                 myfageNavProfileImgTag.setAttribute('src', `./css/icon/default-profile-img.png`)
             } else {
-                myfageNavProfileImgTag.setAttribute('src', `data:image/jpeg;base64,${baseUrl}/${data.profileImg}`)
+                myfageNavProfileImgTag.setAttribute('src', `data:image/jpeg;base64,${data.profileImg2}`)
             }
         }
     })

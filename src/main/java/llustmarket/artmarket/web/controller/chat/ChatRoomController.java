@@ -22,17 +22,18 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 public class ChatRoomController {
     // 마이페이지
-    private final FileService fileService;
+
     private final ChatService chatService;
     private final ChatRoomService chatRoomService;
     private final AlertService alertService;
+    private final FileService fileService;
 
     @GetMapping(value = "/myfage/{member_id}")
     public ResponseEntity<Object> roomList(@PathVariable(value = "member_id") long memberId) {
         log.info("# 마이페이지 채팅 내역 조회");
         try {
             ChatRoomListResponseDTO chatRoomListResponseDTO = chatRoomService.searchChatRoomList(memberId);
-            chatRoomListResponseDTO.getProfileImg();
+            chatRoomListResponseDTO.setProfileImg2(fileService.getAttachmentImage(chatRoomListResponseDTO.getProfileImg()));
             return ResponseEntity.status(HttpStatus.OK).body(chatRoomListResponseDTO);
         } catch (Exception e) {
             e.printStackTrace();
