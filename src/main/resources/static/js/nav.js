@@ -83,6 +83,40 @@ video.addEventListener('click', function () {
 
 /*------------------------이동------------------------- */
 
+// 여기서 변경된 부분입니다.
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+const loginType = getCookie('loginType'); // 쿠키에서 loginType 값을 가져오는 함수
+
+if (loginType === 'SOCIAL') {
+    const loginTrueId = getCookie('loginTrueId');
+    const loginTrueName = getCookie('loginTrueName');
+    const loginTrueIdentity = getCookie('loginTrueIdentity');
+    const loginId = getCookie('loginId');
+
+    if (loginTrueId && loginTrueName && loginTrueIdentity && loginId) {
+        sessionStorage.setItem('id', loginTrueId);
+        sessionStorage.setItem('identity', loginTrueIdentity);
+        sessionStorage.setItem('loginId', loginId);
+
+        if (loginTrueIdentity == 'GENERAL') {
+            sessionStorage.setItem('login-profile-img', './css/icon/login-general.png')
+        } else {
+            sessionStorage.setItem('login-profile-img', './css/icon/login-author.png')
+        }
+        sessionStorage.setItem('login-profile-intro', `${loginTrueName}님, 어서오세요`)
+        sessionStorage.setItem('name', loginTrueName)
+// 쿠키 삭제
+        document.cookie = 'loginTrueId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'loginTrueName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'loginTrueIdentity=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'loginId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    }
+}
 const navLogo = document.querySelector('.nav-logo')
 navLogo.addEventListener("click", function () {
     location.href = "index.html"
@@ -106,6 +140,7 @@ const loginProfileImg = document.querySelector('.login-profile-img')
 const loginProfileIntro = document.querySelector('.login-profile-intro')
 const navCategory = document.querySelector('.nav-category')
 
+
 if (sessionStorage.getItem('id') === null) {
     loginProfile.style.display = 'none'
     nav.style.padding = '0.4rem 1rem'
@@ -116,6 +151,7 @@ if (sessionStorage.getItem('id') === null) {
     nav.style.marginBottom = '0.3rem'
     loginProfile.style.display = 'flex'
     navCategory.style.paddingLeft = '7.5rem'
+
     loginProfileImg.setAttribute('src', sessionStorage.getItem('login-profile-img'))
     loginProfileIntro.textContent = sessionStorage.getItem('login-profile-intro')
 }
@@ -133,6 +169,11 @@ if (logout) {
             sessionStorage.removeItem("identity")
             sessionStorage.removeItem('login-profile-img')
             sessionStorage.removeItem('login-profile-intro')
+            sessionStorage.removeItem('loginId')
+            sessionStorage.removeItem('name')
+            sessionStorage.removeItem('intro')
+            sessionStorage.removeItem('nickname')
+            document.cookie = 'loginType=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             login.textContent = 'LOGIN'
             alert('로그아웃 되었습니다.')
             location.href = 'index.html'

@@ -151,6 +151,8 @@ public class GoogleUserService {
                 Cookie loginTrueIdentity = new Cookie("loginTrueIdentity", member.get().getIdentity());
                 Cookie loginTrueId = new Cookie("loginTrueId", String.valueOf(member.get().getMemberId()));
                 Cookie loginTrueName = new Cookie("loginTrueName", member.get().getName());
+                Cookie loginType = new Cookie("loginType", "SOCIAL");
+                Cookie loginId = new Cookie("loginId", member.get().getLoginId());
 
                 // 쿠키의 유효 시간 설정 (초 단위)
                 int maxAge = 1 * 60 * 60; // 예시로 1시간 유지
@@ -162,7 +164,8 @@ public class GoogleUserService {
                 response.addCookie(loginTrueIdentity);
                 response.addCookie(loginTrueId);
                 response.addCookie(loginTrueName);
-
+                response.addCookie(loginType);
+                response.addCookie(loginId);
                 return "redirect:/index.html";
             } else {
                 // 세션 대신 쿠키에 정보 저장
