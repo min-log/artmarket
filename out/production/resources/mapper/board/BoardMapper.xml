@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="llustmarket.artmarket.web.mapper.board.BoardMapper">
+    <select id="getCategoryList" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE p.category = #{category}
+        AND p.member_id = m.member_id
+        ORDER BY p.product_date DESC
+    </select>
+
+    <select id="getCategoryFile" resultMap="FileMap">
+        SELECT f.file_path, f.file_name, f.file_type_id
+        FROM art_market_db.file f, art_market_db.product p
+        WHERE p.category = #{category}
+        AND p.product_id = #{productId}
+        AND f.file_path = 'PRODUCT'
+        AND p.product_id = f.file_type_id
+        ORDER BY f.file_date ASC LIMIT 3
+    </select>
+
+    <select id="getArrayFile" resultMap="FileMap">
+        SELECT f.file_path, f.file_name, f.file_type_id
+        FROM art_market_db.file f, art_market_db.product p
+        WHERE p.product_id = #{productId}
+        AND f.file_path = 'PRODUCT'
+        AND p.product_id = f.file_type_id
+        ORDER BY f.file_date ASC LIMIT 3
+    </select>
+
+    <select id="getPopular" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m, art_market_db.order o
+        WHERE p.member_id = m.member_id AND p.product_id = o.product_id
+        GROUP BY product_id
+        ORDER BY count(o.product_id) DESC
+    </select>
+
+    <select id="getCurrent" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE p.member_id = m.member_id
+        ORDER BY p.product_date DESC
+    </select>
+
+    <select id="getSearch" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
+        SELECT p.product_id, p.product_title, m.nickname
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE p.member_id = m.member_id AND (p.product_title LIKE CONCAT('%', #{categoryKeyword}, '%')
+        OR m.nickname LIKE CONCAT('%', #{categoryKeyword}, '%')
+        OR p.category LIKE CONCAT('%', #{categoryKeyword}, '%'))
+        ORDER BY p.product_date DESC
+    </select>
+
+    <select id="getAuthor" resultType="llustmarket.artmarket.web.dto.board.AuthorDTO">
+        SELECT m.nickname, m.member_intro
+        FROM art_market_db.product p , art_market_db.member m
+        WHERE p.product_id = #{productId}
+        AND p.member_id = m.member_id
+    </select>
+
+    <select id="getProductDetail" resultType="llustmarket.artmarket.web.dto.board.ProductDetailDTO">
+        SELECT product_title, product_detail , category
+        FROM art_market_db.product
+        WHERE product_id = #{productId}
+
+    </select>
+
+    <select id="getProductFile" resultMap="FileMap">
+        SELECT f.file_path, f.file_name, f.file_type_id
+        FROM art_market_db.file f, art_market_db.product p
+        WHERE f.file_path = 'PRODUCT' AND p.product_id = #{productId}
+        AND p.product_id = f.file_type_id
+        ORDER BY f.file_date ASC
+    </select>
+
+    <resultMap type="map" id="FileMap">
+        <result column="file_path" property="filePath"></result>
+        <result column="file_name" property="fileName"></result>
+        <result column="file_type_id" property="fileTypeId"></result>
+    </resultMap>
+</mapper>

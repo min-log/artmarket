@@ -1,0 +1,138 @@
+.agree-content {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  opacity: 0.95;
+  box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
+}
+
+.agree-content-title1 {
+  font-size: 1.7rem;
+  margin: 0 0 0.25rem 0;
+  line-height: 2.5rem;
+  font-weight: 900;
+  color: rgba(31, 31, 31, 0.8);
+}
+
+.agree-content-title2 {
+  font-size: 1rem;
+  margin-left: 0.2rem;
+  margin-bottom: 1.8rem;
+  color: rgba(31, 31, 31, 0.8);
+  border-bottom: solid 0.1rem rgba(31, 31, 31, 0.5);
+  padding-bottom: 0.3rem;
+}
+
+span {
+  color: rgba(31, 31, 31, 0.8);
+}
+
+.all-agree-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-left: 0.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.all-agree-list1,
+.all-agree-list2,
+.all-agree-list3 {
+  margin: 0.1rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.all-agree-list1,
+.all-agree-list2 {
+  width: 361px;
+}
+.all-agree-list3 {
+  margin: 0.1rem 0.5rem;
+  margin-bottom: 2.4rem;
+}
+
+.agree-show1,
+.agree-show2 {
+  float: right;
+  margin-right: 0.3rem;
+  font-size: 0.8rem;
+  border-bottom: solid 0.1rem rgba(31, 31, 31, 0.5);
+  line-height: 1rem;
+  cursor: pointer;
+}
+
+.agree-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.agree-show-close1,
+.agree-show-close2 {
+  position: absolute;
+  margin-top: 0.8rem;
+  margin-left: 25rem;
+  font-size: 0.5rem;
+  color: rgb(255, 255, 255);
+  background-color: rgba(31, 31, 31, 0.5);
+  padding: 0 0.5rem;
+  border-radius: 0.8rem;
+  cursor: pointer;
+}
+
+.agree-btn {
+  margin: 0 auto;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.9rem 7rem;
+  border-radius: 1rem;
+  margin-left: 0.9rem;
+  border: none;
+  background-color: rgba(27, 27, 27, 0.4);
+  cursor: not-allowed;
+}
+
+textarea {
+  border: none;
+  outline: none;
+  box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
+  font-family: "Noto Sans KR", sans-serif;
+  border-radius: 0.3rem;
+  padding: 2rem;
+}
+
+textarea::-webkit-scrollbar {
+  width: 6px; /* 스크롤바의 너비 */
+}
+
+textarea::-webkit-scrollbar-thumb {
+  height: 15%; /* 스크롤바의 길이 */
+  background: rgba(31, 31, 31, 0.5);
+
+  border-radius: 10px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: white;
+}
+
+.social-google-box:hover,
+.social-kakao-box:hover,
+.site-box:hover,
+.email-confirm-input:hover {
+  scale: 102%;
+  transition-duration: 0.15s;
+}
+
+@keyframes updown-email {
+  0% {
+    margin-top: 0rem;
+  }
+
+  50% {
+    margin-top: -1rem;
+  }
+
+  100% {
+    margin-top: 0rem;
+  }
+}

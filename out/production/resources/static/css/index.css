@@ -1,0 +1,235 @@
+.main-top {
+  position: relative;
+}
+
+/*상단 이미지 텍스트*/
+
+.main-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-27.5rem);
+  color: rgb(31, 31, 31);
+  margin-left: 22rem;
+  padding: 0.8rem 3rem 2rem 2rem;
+}
+
+.main-content > * {
+  margin: 0.5rem;
+}
+
+.main-content-title {
+  font-size: 3.2rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  line-height: 4rem;
+}
+
+.main-content-text {
+  font-size: 1rem;
+}
+
+.main-content-btn {
+  display: flex;
+  margin-top: 0.8rem;
+  cursor: pointer;
+}
+
+.main-content-btn > * {
+  font-size: 0.9rem;
+  margin-right: 1rem;
+  color: rgba(31, 31, 31, 0.9);
+  padding: 0.5rem 1.3rem;
+  border: solid 0.1rem rgba(31, 31, 31, 0.5);
+  border-radius: 1rem;
+}
+
+.main-content-btn > *:hover {
+  background-color: rgb(31, 31, 31);
+  color: white;
+  transition-duration: 0.3s;
+}
+
+/*상단 이미지 */
+@keyframes move-img {
+  0% {
+    transform: translate(12rem, 0);
+  }
+  50% {
+    transform: translate(12rem, -2rem);
+  }
+  100% {
+    transform: translate(12rem, 0);
+  }
+}
+
+.main-img {
+  display: flex;
+  align-items: center;
+  height: 34rem;
+  overflow: hidden;
+  box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
+  background-color: rgba(249, 249, 249, 1);
+}
+
+.main-img-background {
+  background-repeat: repeat;
+  animation-name: move-img;
+  animation-duration: 4.4s;
+  animation-iteration-count: infinite;
+}
+
+/* 중간 타이틀 */
+
+.main-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-mid-title {
+  margin: 8.5rem 0 2.5rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-mid-title1 {
+  display: flex;
+  align-items: center;
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin-bottom: 2.5rem;
+  color: rgba(31, 31, 31, 0.8);
+  margin-right: 1.5rem;
+}
+
+.main-mid-title1::after {
+  content: "";
+  margin-left: 2rem;
+  padding: 0.05rem 26.5rem;
+  background-color: rgba(182, 176, 201, 1);
+  font-size: 0;
+}
+
+.main-mid-title > :not(:nth-child(1)) {
+  color: rgba(88, 88, 88, 0.8);
+  font-size: 0.9rem;
+}
+
+/* 중간 설명 */
+
+.main-mid-service {
+  margin-top: 2.2rem;
+  display: flex;
+}
+
+.main-mid-service > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18rem;
+  height: 25rem;
+  margin-right: 1rem;
+  overflow: hidden;
+}
+
+.main-mid-service > *:hover {
+  transform: translateY(-1rem);
+  transition-duration: 0.8s;
+}
+
+.main-mid-service > *:hover {
+  transform: translateY(-1rem);
+  transition-duration: 0.8s;
+}
+
+.main-mid-content > * {
+  position: relative;
+}
+
+.main-mid-content > * {
+  opacity: 0.92;
+  box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
+}
+
+.main-mid-service > .service > img {
+  height: 25rem;
+  border-radius: 0.5rem;
+}
+
+.main-mid-service > * > .service-content {
+  position: absolute;
+  width: 14rem;
+  padding: 1.3rem 2rem;
+  margin-top: 10rem;
+  color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(15, 15, 15, 0.35);
+}
+
+.main-mid-service > * > :nth-child(2) > :nth-child(1) {
+  font-weight: bold;
+  font-size: 1.6rem;
+  margin-bottom: 0.9rem;
+}
+
+.main-mid-service > * > :nth-child(2) > :nth-child(2) {
+  font-size: 0.8rem;
+  line-height: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  /* color: rgba(88, 88, 88, 0.7); */
+}
+
+.main-mid-service > :nth-child(2n + 1) {
+  margin-top: 1rem;
+}
+
+/* 중간 타이틀 2*/
+
+.main-mid-title4 {
+  display: flex;
+  align-items: center;
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin-bottom: 2.5rem;
+  color: rgba(31, 31, 31, 0.8);
+  margin-right: 1.5rem;
+}
+
+.main-mid-title4::before {
+  content: "";
+  margin-right: 2rem;
+  padding: 0.05rem 26.5rem;
+  background-color: rgba(182, 176, 201, 1);
+  font-size: 0;
+}
+
+.main-mid-title5,
+.main-mid-title6 {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-right: 1rem;
+}
+
+.main-mid-service > .content {
+  height: 28rem;
+}
+
+.main-mid-service > .content:last-child {
+  margin: auto 0;
+  margin-bottom: 2rem;
+}
+
+.main-mid-service > .content:first-child > img {
+  padding-top: 20rem;
+}
+
+.main-mid-service > .content:last-child > img {
+  padding-top: 20rem;
+}
+
+.main-mid-service > .content > div {
+  position: absolute;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+}
