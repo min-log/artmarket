@@ -149,6 +149,19 @@ findPwBtn.addEventListener('click', function (event) {
 		event.preventDefault();
 		return false;
 	} else {
+
+		let modalTitle = "인증번호 확인";
+		let modalMsg = '';
+		modalMsg = '<img class="email-confirm-wait-img" src="./css/icon/send-email.png" /><br />';
+		modalMsg += '<p>회원 확인하여 가입된 회원일 시 회원님의 이메일로 인증번호가 전송됩니다.</p>';
+		modalMsg += '<p>잠시만 기다려주세요.</p>';
+		modalShow(modalTitle,modalMsg);
+		setTimeout(function () {
+			modal.style = "display:none";
+			modalContent.innerHTML = "";
+		}, 4000);
+
+
 		console.log(findUserPwName.value);
 		let errCk = false;
 		fetch("/find-info", {
@@ -169,7 +182,7 @@ findPwBtn.addEventListener('click', function (event) {
 				errCk = true;
 				return response.json();
 			} else if (response.status == 200) {
-				console.log("성공");
+				return response.json();
 			}
 		}).then(data => {
 			// err start
@@ -207,8 +220,6 @@ findPwBtn.addEventListener('click', function (event) {
 				// err end
 			} else {
 				// 성공 시 암호 확인
-				console.log("/ 성공 시 암호 확인\n");
-				console.log(data);
 				let successContent = '<div class="con-title">회원 비밀번호 재설정</div>';
 				successContent += '<div class="" style="text-align: center">인증번호가 메일로 발송 되었습니다.<br />인증을 완료해주세요.</div>';
 				successContent += '<label style="margin: 2rem 0 0;display: block;">아 이 디 <input id="find-new-id"  value="' + findUserPwId.value + '" type="text" style="margin-left: 2.5rem; padding: 0.6rem 0.6rem 0.6rem 0.5rem; border-radius: 0.5rem; outline: none; border: 0.1rem solid rgba(41, 45, 50, 0.3);box-sizing:border-box;width:12rem" readonly></label>';
@@ -225,13 +236,11 @@ findPwBtn.addEventListener('click', function (event) {
 
 // 비밀번호 찾기 - 인증
 function findNewPw(pwId, userId) {
-	console.log("비밀번호 찾기 인증");
+	//console.log("비밀번호 찾기 인증");
 	const findNewPwBtn = document.getElementById("find-new-pw-btn");
 	const findNewPwCode = document.getElementById("find-new-pw-code");
-
 	findNewPwBtn.addEventListener('click', function () {
-		console.log(findNewPwCode.value);
-
+		let errCk = false;
 		fetch("/find-info", {
 			method: 'POST',
 			body: JSON.stringify({
@@ -249,7 +258,12 @@ function findNewPw(pwId, userId) {
 				errCk = true;
 				return response.json();
 			} else if (response.status == 200) {
-				console.log("인증 성공");
+				// let modalTitle = "비밀번호 찾기 회원 인증";
+				// let modalMsg = '';
+				// modalMsg = '<p>회원인증이 성공했습니다.</p>';
+				// modalMsg += '<p>새로운 비밀번호를 설정해주세요.</p>';
+				// modalShow(modalTitle,modalMsg);
+
 			}
 		}).then(data => {
 			// err start
@@ -271,9 +285,9 @@ function findNewPw(pwId, userId) {
 				}
 				// err end
 			} else {
-				// 성공 시 암호 확인
+				// 새로운 비밀번호 입력 폼
 				let successContent = '<div class="con-title">회원 비밀번호 재설정</div>';
-				successContent += '<div class="" style="text-align: center">새로운 비밀번호를 입력하세요.</div>';
+				successContent += '<div class="" style="text-align: center">인증에 성공했습니다.<br />새로운 비밀번호를 입력하세요.</div>';
 				successContent += '<label style="margin: 2rem 0 0;display: block;">아 이 디 <input id="pw-new-id"  value="' + pwId + '" type="text" style="margin-left: 2.5rem; padding: 0.6rem 0.6rem 0.6rem 0.5rem; border-radius: 0.5rem; outline: none; border: 0.1rem solid rgba(41, 45, 50, 0.3);box-sizing:border-box;width:12rem" readonly></label>';
 				successContent += '<label style="margin: 2rem 0 0;display: block;">비밀번호 <input id="pw-new" type="text" style="margin-left: 2.5rem; padding: 0.6rem 0.6rem 0.6rem 0.5rem; border-radius: 0.5rem; outline: none; border: 0.1rem solid rgba(41, 45, 50, 0.3);box-sizing:border-box;width:12rem"></label>';
 				successContent += '<div style="margin-top:3rem;display: flex;justify-content:center;"><button id="pw-new-btn" class="btn-type01">비밀번호 변경하기</button></div>';
@@ -288,52 +302,65 @@ function findNewPw(pwId, userId) {
 
 //비밀번호 변경
 function ReplacePw(pwId, userId) {
-	console.log("비밀번호 변경");
+	//console.log("비밀번호 변경");
 	const newPwBtn = document.getElementById("pw-new-btn");
 	const newPw = document.getElementById("pw-new");
-	fetch("/update-password", {
-		method: 'PATCH',
-		body: JSON.stringify({
-			updatePassId: userId,
-			updatePassword: newPw.value
-		}),
-		headers: {
-			'content-type': 'application/json'
-		}
-	}).then(response => {
-		if (response.status == 400) {
-			errCk = true;
-			return response.json();
-		} else if (response.status == 401) {
-			errCk = true;
-			return response.json();
-		} else if (response.status == 200) {
-			console.log("변경성공");
-		}
-	}).then(data => {
-		// err start
-		if (errCk == true) {
-			if (data.passwordMatchMsg == null) {
-				let errArray = [];
-				errArray = data;
-				console.log(errArray);
-				for (let i = 0; i < errArray.length; i++) {
-					switch (errArray[i].findIdErrorParam) {
-						default: {
-							alert(errArray[i].findPassErrorParam);
-							break;
+
+	let errCk = false;
+	newPwBtn.addEventListener('click',function (){
+		fetch("/update-password", {
+			method: 'PATCH',
+			body: JSON.stringify({
+				updatePassId: userId,
+				updatePassword: newPw.value
+			}),
+			headers: {
+				'content-type': 'application/json'
+			}
+		}).then(response => {
+			if (response.status == 400) {
+				errCk = true;
+				return response.json();
+			} else if (response.status == 401) {
+				errCk = true;
+				return response.json();
+			} else if (response.status == 200) {
+			}
+		}).then(data => {
+			// err start
+			if (errCk == true) {
+				if (data.passwordMatchMsg == null) {
+					let errArray = [];
+					errArray = data;
+					console.log(errArray);
+					for (let i = 0; i < errArray.length; i++) {
+						switch (errArray[i].findIdErrorParam) {
+							default: {
+								alert(errArray[i].findPassErrorParam);
+								break;
+							}
 						}
 					}
+				} else {
+					alert(data.passwordMatchMsg);
 				}
+				// err end
 			} else {
-				alert(data.passwordMatchMsg);
+				//성공시 로그인페이지 이동
+				let modalTitle = "비밀번호 변경";
+				let modalMsg = '';
+				modalMsg = '<p>비밀번호 변경이 성공했습니다.</p>';
+				modalMsg += '<p>로그인페이지로 이동하시겠습니까?</p>';
+				modalMsg += '<div class="btn-wrap" style="margin-top:1em">';
+				modalMsg += '<a  class="btn-type01" href="/login.html">로그인페이지 이동</a>';
+				modalMsg += '</div>';
+				modalShow(modalTitle,modalMsg);
+				modalCloseBtn.addEventListener('click',function () {
+					modal.style ="display:none;";
+					location.reload();
+				});
+
 			}
-			// err end
-		} else {
-			//성공시 로그인페이지 이동
-			alert("비밀번호 변경 성공");
-
-		}
+		});
 	});
-
 }

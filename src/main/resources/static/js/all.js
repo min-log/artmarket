@@ -58,3 +58,22 @@ if (tabBtnWrap != null) {
 		});
 	});
 }
+
+
+const modal = document.querySelector(".modal");
+const modalTitle = modal.querySelector(".modal-title");
+const modalContent = modal.querySelector(".modal-content");
+const modalCloseBtn = modal.querySelector(".modal-close");
+
+if (modal != null) {
+	function modalShow(msgTitle, msgCont) {
+		modal.style = "display:block";
+		modalTitle.innerText = msgTitle;
+		modalContent.innerHTML = msgCont;
+	}
+
+	modalCloseBtn.addEventListener('click',function (){
+		modal.style = "display:none";
+		modalContent.innerHTML = "";
+	});
+}
