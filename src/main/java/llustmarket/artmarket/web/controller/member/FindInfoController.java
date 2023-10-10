@@ -99,7 +99,9 @@ public class FindInfoController {
                         Token saveToken = new Token(member.getMemberId(), uuid, expirationTime.getTime());
 
                         tokenService.saveToken(saveToken);
-                        return ResponseEntity.status(HttpStatus.OK).build();
+                        Map<String, Long> map = new HashMap<>();
+                        map.put("memberId", member.getMemberId());
+                        return ResponseEntity.status(HttpStatus.OK).body(map);
                     } else {
                         List<Map<String, String>> findPasswordErrors = new ArrayList<>();
 

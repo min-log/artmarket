@@ -25,9 +25,6 @@ container {
 
 .myfage-nav-profile {
     margin-top: 3rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
 }
 
 .myfage-nav-profile-greeting {
@@ -40,31 +37,28 @@ container {
 }
 
 .myfage-nav-profile-img {
-    background-size: cover;
-    object-fit: contain;
     width: 8rem;
     height: 8rem;
     border-radius: 50%;
-    overflow: hidden; /* 이미지가 경계를 벗어나지 않도록 함 */
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
-    transform-origin: center center;
 }
-
 
 .myfage-nav-profile-img-tag {
     width: 8rem;
     height: 8rem;
     border-radius: 50%;
+    display: flex;
+    object-fit: cover;
 }
-
 
 .myfage-nav-profile-identity {
     background-color: white;
     color: rgba(41, 45, 50, 1);
-    /* border: solid 0.1rem rgba(41, 45, 50, 1); */
+    border: solid 0.1rem rgba(41, 45, 50, 1);
     border-radius: 1rem;
     font-size: 0.8rem;
     font-weight: 700;

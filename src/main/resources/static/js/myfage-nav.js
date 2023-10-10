@@ -9,7 +9,7 @@ myfageNav.insertAdjacentHTML('afterend', `<div class="myfage-nav-content">
   <div class="myfage-nav-profile-greeting"></div>
 </div>
 <div class="myfage-nav-profile-menu">
-  <div id="myfage-nav-profile-img-mod">프로필 이미지 수정하기</div>
+  <div id="myfage-nav-profile-img-mod">프로필이미지 수정하기</div>
   <div id="myfage-nav-profile-intro-mod">소개글 수정하기</div>
   <div id="myfage-nav-profile-identity-mod">작가로 전환하기</div>
 </div>
@@ -80,6 +80,54 @@ const myfageNavExit = document.querySelector('#myfage-exit')
 if (sessionStorage.getItem('identity') === 'GENERAL') {
     myfageNavArticle.style.display = 'none'
 }
+
+// 쿠키에서 값을 가져오는 함수
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null; // 해당 쿠키가 존재하지 않을 경우
+}
+
+if (getCookie('loginType') === 'SOCIAL') {
+    myfageNavExit.style.display = 'none';
+}
+//프로필 사진 변경하기
+const myfageNavProfileImgMod = document.querySelector('#myfage-nav-profile-img-mod');
+myfageNavProfileImgMod.addEventListener('click', function () {
+    // 사용자에게 파일 선택 다이얼로그 표시
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('profileImage', file);
+            formData.append('profileFileType', 'PROFILE');
+            formData.append('profileFileTypeId', sessionStorage.getItem('id'));
+
+            // 서버에 요청을 보내기
+            fetch('/mypage-profile', {
+                method: 'PUT',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.status === 201) {
+                        alert('프로필 사진 업데이트에 실패했습니다.');
+                        throw new Error('Network response was not ok');
+                    }
+                    alert('프로필 사진이 업데이트되었습니다.');
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('에러 발생:', error);
+                });
+        }
+    });
+    input.click();
+});
+
 // 소개글 수정하기
 const introModButton = document.querySelector('#myfage-nav-profile-intro-mod');
 

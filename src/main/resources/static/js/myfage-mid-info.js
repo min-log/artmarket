@@ -192,19 +192,49 @@ function myfageInfoMidAddTag() {
     })
 
     const myfageInfoPassToken = document.querySelector('.myfage-info-pass-token')
+    const myfageInfoMidContentNormalBeforePasswordValue = document.querySelector('.myfage-info-mid-content-normal-before-password-value')
+    const myfageInfoMidContentNormalNewPasswordValue = document.querySelector('.myfage-info-mid-content-normal-new-password-value')
+    const myfageInfoPassCautionMsg = document.querySelector('.myfage-info-pass-caution-msg')
+    const myfageInfoPassCautionImg = document.querySelector('.myfage-info-pass-caution-img')
+    const myfageInfoEmailCautionMsg = document.querySelector('.myfage-info-email-caution-msg')
+    const myfageInfoEmailCautionImg = document.querySelector('.myfage-info-email-caution-img')
+    const myfageInfoEmailToken = document.querySelector('.myfage-info-email-token')
 
+// 쿠키에서 값을 가져오는 함수
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    // 만약 loginType이 SOCIAL이라면 비밀번호 변경 기능을 비활성화한다.
+    if (loginType === 'SOCIAL') {
+        myfageInfoMidContentNormalBeforePasswordValue.disabled = true;
+        myfageInfoMidContentNormalNewPasswordValue.disabled = true;
+        myfageInfoMidContentNormalPhoneValue.disabled = true;
+        myfageInfoMidContentNormalEmailValue.disabled = true;
+        myfageInfoPassToken.style.display = 'none';
+        myfageInfoEmailToken.style.display = 'none';
+        myfageInfoPassCautionMsg.textContent = '소셜 로그인 사용자는 비밀번호를 변경할 수 없습니다.';
+        myfageInfoEmailCautionMsg.textContent = '소셜 로그인 사용자는 번호와 이메일을 변경할 수 없습니다.';
+        myfageInfoPassCautionMsg.style.color = 'red';
+        myfageInfoEmailCautionMsg.style.color = 'red';
+        myfageInfoPassCautionImg.setAttribute('src', './css/icon/mypage-caution-r.png');
+        myfageInfoEmailCautionImg.setAttribute('src', './css/icon/mypage-caution-r.png');
+        myfageInfoPassCautionImg.style.opacity = '0.7';
+        myfageInfoEmailCautionImg.style.opacity = '0.7';
+        return; // 함수 종료
+    }
     // ---------------------
     myfageInfoPassToken.addEventListener('click', function () {
 
         let afterModPass
-        const myfageInfoMidContentNormalBeforePasswordValue = document.querySelector('.myfage-info-mid-content-normal-before-password-value')
-        const myfageInfoMidContentNormalNewPasswordValue = document.querySelector('.myfage-info-mid-content-normal-new-password-value')
-        const myfageInfoPassCautionMsg = document.querySelector('.myfage-info-pass-caution-msg')
-        const myfageInfoPassCautionImg = document.querySelector('.myfage-info-pass-caution-img')
+
 
         function myfagePassConfirm(beforePassVal, afterPassVal, cautionMsgTag, cautionImgTag) {
 
             let checkPassValue = false
+            const loginType = getCookie('loginType');
 
             if (beforePassVal.value == afterPassVal.value) {
                 cautionMsgTag.textContent = '동일한 비밀번호로 변경 불가능합니다.'
@@ -270,10 +300,6 @@ function myfageInfoMidAddTag() {
         }
     })
     // ---------------------
-
-    const myfageInfoEmailToken = document.querySelector('.myfage-info-email-token')
-    const myfageInfoEmailCautionMsg = document.querySelector('.myfage-info-email-caution-msg')
-    const myfageInfoEmailCautionImg = document.querySelector('.myfage-info-email-caution-img')
 
     let sendModObject = new Object()
 
@@ -357,6 +383,7 @@ function myfageInfoMidAddTag() {
 
 
     // --------------
+
 
     myfageInfoEmailToken.addEventListener('click', function () {
 
