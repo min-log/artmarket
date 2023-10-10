@@ -61,11 +61,15 @@ if (tabBtnWrap != null) {
 
 
 const modal = document.querySelector(".modal");
-const modalTitle = modal.querySelector(".modal-title");
-const modalContent = modal.querySelector(".modal-content");
-const modalCloseBtn = modal.querySelector(".modal-close");
+let modalTitle = null;
+let modalContent = null;
+let modalCloseBtn = null;
 
 if (modal != null) {
+	modalTitle = modal.querySelector(".modal-title");
+	modalContent = modal.querySelector(".modal-content")
+	modalCloseBtn = modal.querySelector(".modal-close");
+
 	function modalShow(msgTitle, msgCont) {
 		modal.style = "display:block";
 		modalTitle.innerText = msgTitle;

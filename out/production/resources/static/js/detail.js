@@ -144,26 +144,24 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
             productChatRoomBoxBotSendAttach.addEventListener('click', function () {
 
                 productChatRoomBoxBotSendAttachFile.click()
-
                 productChatRoomBoxBotSendAttachFile.addEventListener('change', (e) => {
-
-                    let chatFileName
-
                     const file = e.target.files[0]
-                    chatFileName = file.name
+                    let chatFileName = file.name
 
                     const chatFileReader = new FileReader();
 
                     if (file !== undefined) {
+                        console.log("파일있음")
+                        chatFileReader.onload = function (event) {
+                            let fileObject = event.target.result;
+                            console.log("fileObject : " +fileObject)
+                            productChatRoomBoxBotSendAttachFile.setAttribute('id', `${Array.from(new Uint8Array(fileObject))}`)
+                            productChatRoomBoxBotSendAttachFile.setAttribute('name', `${chatFileName}`)
+                            productChatRoomBoxBotSendAttachFile.setAttribute('type', file.type)
+                        }
                         chatFileReader.readAsArrayBuffer(file)
                     }
 
-                    chatFileReader.onload = function (e) {
-
-                        const fileObject = e.target.result;
-                        productChatRoomBoxBotSendAttachFile.setAttribute('id', `${Array.from(new Uint8Array(fileObject))}`)
-                        productChatRoomBoxBotSendAttachFile.setAttribute('name', `${chatFileName}`)
-                    }
 
                 })
             })
@@ -175,7 +173,7 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
                 if (productChatRoomBoxBotSendText.value === '') {
                     alert('메세지를 입력해주세요.')
                 } else {
-                    chatDataObject = {
+                    let chatDataObject = {
                         sendChatRoomId: productChatRoomBoxMid.getAttribute('id'),
                         sendChatSender: sessionStorage.getItem('id'),
                         sendChatMsg: productChatRoomBoxBotSendText.value,
@@ -183,12 +181,13 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
                     }
 
                     if (productChatRoomBoxBotSendAttachFile.getAttribute('id') !== null) {
+                        console.log(productChatRoomBoxBotSendAttachFile.getAttribute('name'))
+                        //const chatFileType = productChatRoomBoxBotSendAttachFile.getAttribute('name').split('.')
 
-                        const chatFileType = productChatRoomBoxBotSendAttachFile.getAttribute('name').split('.')
                         chatDataObject.sendChatFile = {
                             chatFileName: productChatRoomBoxBotSendAttachFile.getAttribute('name'),
                             chatFileData: productChatRoomBoxBotSendAttachFile.getAttribute('id'),
-                            chatFileType: chatFileType[chatFileType.length - 1]
+                            chatFileType: productChatRoomBoxBotSendAttachFile.getAttribute('type')
                         }
                     }
 
