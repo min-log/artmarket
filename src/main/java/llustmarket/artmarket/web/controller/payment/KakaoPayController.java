@@ -24,7 +24,6 @@ public class KakaoPayController {
      */
     @PostMapping("/ready")
     public KakaoReadyResponse readyToKakaoPay() {
-
         return kakaoPayService.kakaoPayReady();
     }
 

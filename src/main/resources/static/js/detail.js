@@ -63,8 +63,38 @@ function productDetailShow() {
 
 
 // 카카오페이 결제 btn
-const detailMidRightPaymentBtn = document.querySelector('.detail-mid-right-payment-btn')
+const detailMidRightPaymentBtn = document.querySelector('.detail-mid-right-payment-btn');
 
+detailMidRightPaymentBtn.addEventListener('click', function () {
+    const deadline = document.querySelector('.detail-mid-right-deadline-btn').value;
+    const amount = document.querySelector('.detail-mid-right-payment-cost').value;
+    const requestData = {
+        memberId: sessionStorage.getItem('id'),
+        productId: sessionStorage.getItem('detailproduct'),
+        nickname: sessionStorage.getItem('nickname'),
+        productName: sessionStorage.getItem('detailproduct'),
+        quantity: 1,
+        totalAmount: amount,
+        deadline: deadline,
+        orderStatus: '결제 대기'
+    };
+
+    fetch('http://localhost:8070/ready', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert('결제 창으로 이동합니다.');
+
+            const popupUrl = data.next_redirect_pc_url;
+            const popupWindow = window.open(popupUrl, '_blank', 'width=600,height=600');
+        })
+        .catch(error => console.error('에러:', error));
+});
 // chat 문의하기
 const detailMidRightChatBtn = document.querySelector('.detail-mid-right-chat-btn')
 // chat room 변수
