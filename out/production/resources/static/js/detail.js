@@ -118,12 +118,20 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
     }
 
     // chat 파일 관련 태그 추가
-    const productChatRoomBoxBotSendAttach = document.querySelector('.product-chat-room-box-bot-send-attach')
-    const productChatRoomBoxBotSendAttachFile = document.createElement('input')
-    productChatRoomBoxBotSendAttachFile.setAttribute('class', 'product-chat-room-box-bot-send-attach-file')
-    productChatRoomBoxBotSendAttachFile.setAttribute('type', 'file')
-    productChatRoomBoxBotSendAttachFile.style.display = 'none'
-    productChatRoomBoxBotSendAttach.after(productChatRoomBoxBotSendAttachFile)
+    //const myfageChatRoomBoxBotSendAttach = document.querySelector('.myfage-right-chat-box-bot-send-attach')
+    const ChatRoomBoxBotSendAttachFile = document.getElementById('fileMsg');
+    let chatFileBox = document.querySelector("#fileBox");
+    let chatTxtFrom = document.querySelector(".myfage-right-chat-box-bot-send-text")
+
+
+
+    // const productChatRoomBoxBotSendAttach = document.querySelector('.product-chat-room-box-bot-send-attach')
+    // const productChatRoomBoxBotSendAttachFile = document.createElement('input')
+    // productChatRoomBoxBotSendAttachFile.setAttribute('class', 'product-chat-room-box-bot-send-attach-file')
+    // productChatRoomBoxBotSendAttachFile.setAttribute('type', 'file')
+    // productChatRoomBoxBotSendAttachFile.style.display = 'none'
+    // productChatRoomBoxBotSendAttach.after(productChatRoomBoxBotSendAttachFile)
+
 
     // chat send btn
     const productChatRoomBoxBotSendBtn = document.querySelector('.product-chat-room-box-bot-send-btn')
@@ -140,31 +148,55 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
                 chatMsgGet(JSON.parse(message.body), detailMidLeftProfileInfoNickname.getAttribute('value'))
             })
 
+
             //파일 업로드 구현
-            productChatRoomBoxBotSendAttach.addEventListener('click', function () {
-
-                productChatRoomBoxBotSendAttachFile.click()
-                productChatRoomBoxBotSendAttachFile.addEventListener('change', (e) => {
-                    const file = e.target.files[0]
-                    let chatFileName = file.name
-
-                    const chatFileReader = new FileReader();
-
-                    if (file !== undefined) {
-                        console.log("파일있음")
-                        chatFileReader.onload = function (event) {
-                            let fileObject = event.target.result;
-                            console.log("fileObject : " +fileObject)
-                            productChatRoomBoxBotSendAttachFile.setAttribute('id', `${Array.from(new Uint8Array(fileObject))}`)
-                            productChatRoomBoxBotSendAttachFile.setAttribute('name', `${chatFileName}`)
-                            productChatRoomBoxBotSendAttachFile.setAttribute('type', file.type)
+            ChatRoomBoxBotSendAttachFile.addEventListener('click', function () {
+                ChatRoomBoxBotSendAttachFile.addEventListener('change',function(){
+                    var fileList = ChatRoomBoxBotSendAttachFile.files ;
+                    // 읽기
+                    var reader = new FileReader();
+                    reader.readAsDataURL(fileList[0]);
+                    //로드 한 후
+                    reader.onload = function  () {
+                        let fileType = fileList.type;
+                        if(fileList[0].type == "image/png" || fileList[0].type == "image/jpeg"){
+                            chatFileBox.style.display = 'block';
+                            chatTxtFrom.style = 'padding-left:4rem';
+                            chatFileBox.src=  reader.result;
                         }
-                        chatFileReader.readAsArrayBuffer(file)
-                    }
+                    };
+                });
+            });
 
 
-                })
-            })
+
+            // //파일 업로드 구현
+            // productChatRoomBoxBotSendAttach.addEventListener('click', function () {
+            //
+            //     productChatRoomBoxBotSendAttachFile.click()
+            //
+            //     productChatRoomBoxBotSendAttachFile.addEventListener('change', (e) => {
+            //
+            //         let chatFileName
+            //
+            //         const file = e.target.files[0]
+            //         chatFileName = file.name
+            //
+            //         const chatFileReader = new FileReader();
+            //
+            //         if (file !== undefined) {
+            //             chatFileReader.readAsArrayBuffer(file)
+            //         }
+            //
+            //         chatFileReader.onload = function (e) {
+            //
+            //             const fileObject = e.target.result;
+            //             productChatRoomBoxBotSendAttachFile.setAttribute('id', `${Array.from(new Uint8Array(fileObject))}`)
+            //             productChatRoomBoxBotSendAttachFile.setAttribute('name', `${chatFileName}`)
+            //         }
+            //
+            //     })
+            // })
 
             productChatRoomBoxBotSendBtn.addEventListener('click', function () {
 
@@ -173,7 +205,7 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
                 if (productChatRoomBoxBotSendText.value === '') {
                     alert('메세지를 입력해주세요.')
                 } else {
-                    let chatDataObject = {
+                    chatDataObject = {
                         sendChatRoomId: productChatRoomBoxMid.getAttribute('id'),
                         sendChatSender: sessionStorage.getItem('id'),
                         sendChatMsg: productChatRoomBoxBotSendText.value,
@@ -181,13 +213,12 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
                     }
 
                     if (productChatRoomBoxBotSendAttachFile.getAttribute('id') !== null) {
-                        console.log(productChatRoomBoxBotSendAttachFile.getAttribute('name'))
-                        //const chatFileType = productChatRoomBoxBotSendAttachFile.getAttribute('name').split('.')
 
+                        const chatFileType = productChatRoomBoxBotSendAttachFile.getAttribute('name').split('.')
                         chatDataObject.sendChatFile = {
                             chatFileName: productChatRoomBoxBotSendAttachFile.getAttribute('name'),
                             chatFileData: productChatRoomBoxBotSendAttachFile.getAttribute('id'),
-                            chatFileType: productChatRoomBoxBotSendAttachFile.getAttribute('type')
+                            chatFileType: chatFileType[chatFileType.length - 1]
                         }
                     }
 

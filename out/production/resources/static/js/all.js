@@ -81,3 +81,15 @@ if (modal != null) {
 		modalContent.innerHTML = "";
 	});
 }
+
+
+
+
+function getExtensionOfFilename(filename) {
+	var _fileLen = filename.length;
+	var _lastDot = filename.lastIndexOf('.');
+
+	// 확장자 명만 추출한 후 소문자로 변경
+	var _fileExt = filename.substring(_lastDot, _fileLen).toLowerCase();
+	return _fileExt;
+}

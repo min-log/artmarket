@@ -167,7 +167,9 @@ nav {
 	margin-right: 0.5rem;
 	box-sizing: border-box;
 	font-size: 0.1rem;
-	font-weight: bold;
+	/*font-weight: bold;*/
+	background: rgba(41, 45, 50, 1);
+	color:#fff;
 }
 
 .alram-date {

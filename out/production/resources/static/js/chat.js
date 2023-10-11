@@ -1,6 +1,7 @@
 // addEndpoint("/stomp/chat")
 
 function chatMsgGet(chatData, chatOtherType) {
+  console.log(chatData);
   let chatWho = (chatData.chatSender == sessionStorage.getItem('id') ? 'me' : 'other')
   let chatWhoType = (chatData.chatSender == sessionStorage.getItem('id') ? sessionStorage.getItem('nickname') : chatOtherType)
 
@@ -13,7 +14,7 @@ function chatMsgGet(chatData, chatOtherType) {
   if (chatData.chatType === 'TALK') {
     myfageRightChatTalk(curentBoxTag, chatWho, chatData.chatMsg, chatData.chatDate)
   } else if (chatData.chatType === 'FILE') {
-    myfageRightChatFile(curentBoxTag, chatWho, chatData.chatFile, chatData.chatFileName, chatData.chatFileDownload)
+    myfageRightChatFile(curentBoxTag, chatWho, chatData.chatFile, chatData.chatFileName, chatData.chatFileDownload,chatData.chatMsg, chatData.chatDate)
   } else if (chatData.chatType === 'ENTER') {
     myfageRightChatEnterLeave(curentTag, chatWho, chatWhoType, '입장')
   }
@@ -30,23 +31,33 @@ function chatMsgGet(chatData, chatOtherType) {
   }
 
   // 채팅 타입에 따른 함수(FILE)
-  function myfageRightChatFile(curentBoxTag, chatWhoTag, chatFile, chatFileName, chatFileDownload) {
+  function myfageRightChatFile(curentBoxTag, chatWhoTag, chatFile, chatFileName, chatFileDownload,chatMsg,chatDate) {
+    console.log("myfageRightChatFile " + curentBoxTag + "/ "+chatWhoTag )
+    console.log( chatFileName + "/" + chatFileDownload)
+    console.log( chatFile )
+    let fileExtention =  getExtensionOfFilename(chatFileName);
 
-    let fileExtention = chatFileName.split('.')
-
-    chatParentBoxTag.insertAdjacentHTML('beforeend', `
-    <div class="${curentBoxTag}-msg-${chatWhoTag}"></div>`)
+    // chatParentBoxTag.insertAdjacentHTML('beforeend', `
+    // <div class="${curentBoxTag}-msg-${chatWhoTag}"></div>`);
 
     const productChatRoomBoxMid = document.querySelector(`.${curentBoxTag}-msg-${chatWhoTag}`)
 
-    if (fileExtention[fileExtention.length - 1] === 'txt') {
+    if (fileExtention === '.png' || fileExtention === '.jpg' || fileExtention === '.gif') {
       chatParentBoxTag.insertAdjacentHTML('beforeend', `
-        <a href="data:image/jpeg;base64,${chatFile}" download="${chatFileDownload}">
+         <div class="${curentBoxTag}-msg-${chatWhoTag}">
+            <div class="${curentBoxTag}-msg-${chatWhoTag}-time">${chatDate}</div>
+            <div class="${curentBoxTag}-msg-${chatWhoTag}-text">${chatMsg}</div>
+            <img class="myfage-right-chat-box-mid-img" src="${chatFile}">
+            <a class="myfage-right-chat-box-mid-download" href="/file/download/${chatFileDownload}" download="${chatFileName}" target='_blank'><img src="../css/img/icon-downloads.png">${chatFileName}</a>
+         </div>
       `)
     } else {
       chatParentBoxTag.insertAdjacentHTML('beforeend', `
-        <img src="data:image/jpeg;base64,${chatFile}">
-        <a href="data:image/jpeg;base64,${chatFile}" download="${chatFileDownload}">
+          <div class="${curentBoxTag}-msg-${chatWhoTag}">
+            <div class="${curentBoxTag}-msg-${chatWhoTag}-time">${chatDate}</div>
+            <div class="${curentBoxTag}-msg-${chatWhoTag}-text">${chatMsg}</div>
+            <a class="myfage-right-chat-box-mid-download" href="/file/download/${chatFileDownload}" download="${chatFileName}" target='_blank'><img src="../css/img/icon-downloads.png">${chatFileName}</a>
+          </div>
       `)
     }
   }
@@ -58,6 +69,10 @@ function chatMsgGet(chatData, chatOtherType) {
   }
 
 }
+
+
+
+
 
 
 

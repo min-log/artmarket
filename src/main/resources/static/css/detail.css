@@ -409,11 +409,12 @@ input[type="date"] {
     padding-right: 3rem;
     border-radius: 1rem;
 }
-
-.product-chat-room-box-bot-send-attach {
+.product-chat-room-box-bot-send-attach-btn {
     margin-left: -3.3rem;
+    display: flex;
+}
+.product-chat-room-box-bot-send-attach {
     scale: 70%;
-    cursor: pointer;
 }
 
 .product-chat-room-box-bot-send-btn {
