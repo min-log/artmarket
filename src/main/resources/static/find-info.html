@@ -1,51 +1,112 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>로그인</title>
-    <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script async src="./js/nav.js"></script>
-    <script async src="./js/footer.js"></script>
-    <script async src="./js/login.js"></script>
-    <script async src="./js/all.js"></script>
-    <link rel="stylesheet" href="./css/default/nav.css"/>
-    <link rel="stylesheet" href="./css/default/footer.css"/>
-    <link rel="stylesheet" href="./css/default/all.css"/>
-    <link rel="stylesheet" href="./css/login-to-join-backimg.css"/>
-    <link rel="stylesheet" href="./css/login.css"/>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>로그인</title>
+	<script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script async src="./js/nav.js"></script>
+	<script async src="./js/footer.js"></script>
+	<script async src="./js/all.js"></script>
+	<script async src="./js/find-info.js"></script>
+	<link rel="stylesheet" href="./css/default/nav.css" />
+	<link rel="stylesheet" href="./css/default/footer.css" />
+	<link rel="stylesheet" href="./css/default/all.css" />
+	<link rel="stylesheet" href="./css/login-to-join-backimg.css" />
+	<link rel="stylesheet" href="./css/login.css" />
 </head>
+
 <body>
-<nav></nav>
-<container class="login-to-join-container">
-    <div class="login-to-join-background">
-        <img
-                class="login-to-join-background-img"
-                src="./css/img/test1.jpg"
-                style="opacity: 0.95"
-        />
-        <div class="login-content">
-            <div class="login-title"><img src="./css/img/ARTMARKET.png"/></div>
-            <div class="login-sub">
-                <input type="text" id="loginId" placeholder="ID"/>
-                <input type="password" id="loginPassword" placeholder="PASSWORD"/>
-                <input class="login-btn" type="button" value="LOGIN"/>
-                <div class="login-serv">
-                    <label><input class="login-auto" type="checkbox"/>자동로그인</label
-                    >
-                </div>
-            </div>
-            <div class="social-login">
-                <img src="./css/icon/google.png"/>
-                <img src="./css/icon/kakao.png"/>
-                <div class="login-info-req">아이디, 비밀번호 찾기</div>
-                <div class="login-info-join">
-                    아직 아트마켓에 계정이 없으신가요?
-                </div>
-            </div>
-        </div>
-    </div>
-</container>
-<footer></footer>
+	<nav></nav>
+	<container class="login-to-join-container">
+		<div class="login-to-join-background">
+			<img class="login-to-join-background-img" src="./css/img/test1.jpg" style="opacity: 0.95" />
+			<div class="login-content">
+				<div id="tab-btn-wrap" class="btn-wrap">
+					<button class="tab-btn tab-active " style="width: 10rem">아이디</button>
+					<button class="tab-btn" style="width: 10rem">비밀번호</button>
+				</div>
+				<div id="tab-content-wrap">
+					<!-- 아이디 찾기-->
+					<div class="tab-content tab-active">
+						<div id="find-id-info" class="login-sub">
+							<div class="con-title">회원 아이디 찾기</div>
+							<div class="" style="text-align: center">회원가입 시 입력한 정보를 입력해주세요.</div>
+							<form style="margin-top: 2rem">
+								<label style="margin: 0.2rem;">
+									이&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;름
+									<input placeholder="한글 2~5자" type="text" id="find-id-name"
+										style="margin-left: 2.5rem; padding: 0.6rem 0.6rem 0.6rem 0.5rem; border-radius: 0.5rem; outline: none; border: 0.1rem solid rgba(41, 45, 50, 0.3);box-sizing:border-box;width:12rem">
+									<div style="visibility: hidden; margin-left: 6.5rem; font-size: 0.8rem;">값을 입력해주세요.
+									</div>
+								</label>
+								<label style="margin: 0.2rem;">
+									휴 대 폰
+									<input placeholder="010-1234-5678" id="find-id-phone" type="text"
+										style="margin-left: 2.5rem; padding: 0.6rem 0.6rem 0.6rem 0.5rem; border-radius: 0.5rem; outline: none; border: 0.1rem solid rgba(41, 45, 50, 0.3);box-sizing:border-box;width:12rem">
+									<div style="visibility: hidden; margin-left: 6.5rem; font-size: 0.8rem;">값을 입력해주세요.
+									</div>
+								</label>
+								<label style="margin: 0.2rem;">
+									이 메 일
+									<input placeholder="이메일" type="text" id="find-id-email"
+										style="margin-left: 2.5rem; padding: 0.6rem 0.6rem 0.6rem 0.5rem; border-radius: 0.5rem; outline: none; border: 0.1rem solid rgba(41, 45, 50, 0.3);box-sizing:border-box;width:12rem">
+									<div style="visibility: hidden; margin-left: 6.5rem; font-size: 0.8rem;">값을 입력해주세요.
+									</div>
+								</label>
+							</form>
+							<div style="display: flex;justify-content:center;">
+								<button type="button" class="btn-type01 find-info-btn" id="find-info-id-btn">다음</button>
+							</div>
+						</div>
+					</div>
+					<!-- 비밀번호 찾기-->
+					<div class="tab-content">
+						<div id="find-pw-info" class="login-sub">
+							<div class="con-title">회원 비밀번호 찾기</div>
+							<div class="" style="text-align: center">회원가입 시 입력한 정보를 입력해주세요.</div>
+							<form style="margin-top: 2rem">
+								<label style="margin: 0.2rem;">
+									이&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;름
+									<input placeholder="한글 2~5자" type="text" id="find-pw-name"
+										style="margin-left: 2.5rem; padding: 0.6rem 0.6rem 0.6rem 0.5rem; border-radius: 0.5rem; outline: none; border: 0.1rem solid rgba(41, 45, 50, 0.3);box-sizing:border-box;width:12rem">
+									<div style="visibility: hidden; margin-left: 6.5rem; font-size: 0.8rem;">값을 입력해주세요.
+									</div>
+								</label>
+								<label style="margin: 0.2rem;">
+									아 이 디
+									<input placeholder="영문,숫자 6~20자" id="find-pw-id" type="text"
+										style="margin-left: 2.5rem; padding: 0.6rem 0.6rem 0.6rem 0.5rem; border-radius: 0.5rem; outline: none; border: 0.1rem solid rgba(41, 45, 50, 0.3);box-sizing:border-box;width:12rem">
+									<div style="visibility: hidden; margin-left: 6.5rem; font-size: 0.8rem;">값을 입력해주세요.
+									</div>
+								</label>
+								<label style="margin: 0.2rem;">
+									이 메 일
+									<input placeholder="이메일" type="text" id="find-pw-email"
+										style="margin-left: 2.5rem; padding: 0.6rem 0.6rem 0.6rem 0.5rem; border-radius: 0.5rem; outline: none; border: 0.1rem solid rgba(41, 45, 50, 0.3);box-sizing:border-box;width:12rem">
+									<div style="visibility: hidden; margin-left: 6.5rem; font-size: 0.8rem;">값을 입력해주세요.
+									</div>
+								</label>
+							</form>
+							<div style="display: flex;justify-content:center;">
+								<button type="button" class="btn-type01 find-info-btn" id="find-info-pw-btn">다음</button>
+							</div>
+						</div>
+					</div>
+					<!--tab-content-->
+				</div>
+				<!--tab-content-wrap-->
+			</div>
+		</div>
+		<div class="modal" style="display: none">
+				<h5 class="modal-top">
+					<span class="modal-title"></span>
+					<input class="modal-close" type="button" value="X">
+				</h5>
+				<div class="modal-content"></div>
+		</div>
+	<footer></footer>
 </body>
+
 </html>

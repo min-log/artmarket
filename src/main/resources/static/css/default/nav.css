@@ -1,72 +1,184 @@
 nav {
-  display: flex;
-  justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 
 .nav-menu {
-  display: flex;
-  align-items: center;
-  flex-direction: row-reverse;
-}
-.nav-menu > *:not(.login-profile) {
-  margin-left: 1.3rem;
-  font-size: 0.7rem;
-  cursor: pointer;
+	display: flex;
+	align-items: center;
+	flex-direction: row-reverse;
 }
 
-.nav-menu > *:hover:not(.login-profile) {
-  font-weight: bold;
+.nav-menu>*:not(.login-profile) {
+	margin-left: 1.3rem;
+	font-size: 0.7rem;
+	cursor: pointer;
+}
+
+.nav-menu>*:hover:not(.login-profile) {
+	font-weight: bold;
 }
 
 .nav-logo {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transform: translateY(-0.1rem);
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	transform: translateY(-0.1rem);
 }
 
-.nav-logo > * {
-  width: 10rem;
+.nav-logo>* {
+	width: 10rem;
 }
 
 .nav-category {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 0.1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding-bottom: 0.1rem;
 }
 
-.nav-category > * {
-  margin-left: 4rem;
-  font-size: 0.8rem;
-  color: rgba(49, 49, 49, 0.9);
-  font-weight: 600;
-  cursor: pointer;
+.nav-category>* {
+	margin-left: 4rem;
+	font-size: 0.8rem;
+	color: rgba(49, 49, 49, 0.9);
+	font-weight: 600;
+	cursor: pointer;
 }
 
-.nav-category > *:hover {
-  font-size: 0.9rem;
-  transition: 0.3s;
+.nav-category>*:hover {
+	font-size: 0.9rem;
+	transition: 0.3s;
 }
 
 .login-profile {
-  align-items: center;
-  padding: 0.1rem;
-  margin: 0.1rem;
-  cursor: auto;
-  margin-top: 0.1rem;
-  margin-right: -0.2rem;
+	align-items: center;
+	padding: 0.1rem;
+	margin: 0.1rem;
+	cursor: auto;
+	margin-top: 0.1rem;
+	margin-right: -0.2rem;
 }
 
 .login-profile-img {
-  scale: 65%;
-  margin-right: -0.2rem;
+	scale: 65%;
+	margin-right: -0.2rem;
 }
 
 .login-profile-intro {
-  font-size: 0.8rem;
-  background-color: rgba(49, 49, 49, 0.9);
-  color: white;
-  border-radius: 1rem;
-  padding: 0 0.5rem;
+	font-size: 0.8rem;
+	background-color: rgba(49, 49, 49, 0.9);
+	color: white;
+	border-radius: 1rem;
+	padding: 0 0.5rem;
+}
+
+.alram {
+	position: relative;
+}
+
+.alram.active {
+	font-weight: bold;
+}
+
+.alram .alram-num {
+	font-size: 0.8rem;
+	background-color: rgba(49, 49, 49, 0.9);
+	color: white;
+	border-radius: 1rem;
+	width: 1.2rem;
+	height: 1.2rem;
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+	line-height: 1.2rem;
+	font-size: 0.2rem;
+	margin-top: -0.2rem;
+}
+
+.alram-con {
+	z-index: 1000;
+	font-weight: normal !important;
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	display: block;
+	/* background: #000; */
+	width: 20px;
+	min-height: 20px;
+	height: auto;
+	z-index: 100;
+	width: 278px;
+	transform: translate(-50%, 2rem);
+	box-sizing: border-box;
+	border: 1px solid #000;
+	border-radius: 5px;
+	background: #fff;
+	cursor: inherit;
+}
+
+.alram-con .title {
+	border-bottom: 1px solid #000;
+	padding: 0.5rem;
+	margin: 0;
+}
+
+.alram-con .title button {
+	width: auto;
+	float: right;
+	height: 1.25rem;
+	flex-shrink: 0;
+	border-radius: 0.3125rem;
+	background: #D9D9D9;
+	color: #000;
+	text-align: center;
+	font-family: NanumGothic;
+	font-size: 0.5625rem;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 1.25rem;
+	/* 244.444% */
+	letter-spacing: -0.01125rem;
+	border: 0;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+
+.alram-con ul {
+	margin: 0;
+	padding: 0;
+	padding: 0.5rem 0.8rem;
+}
+
+.alram-con ul li {
+	list-style: none;
+	align-items: center;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+.alram-con ul li+li {
+	margin-top: 0.5rem;
+}
+
+.alram-type {
+	border: 2px solid #000;
+	border-radius: 50px;
+	line-height: 2rem;
+	padding: 0 0.3rem;
+	height: 2rem;
+	margin-right: 0.5rem;
+	box-sizing: border-box;
+	font-size: 0.1rem;
+	/*font-weight: bold;*/
+	background: rgba(41, 45, 50, 1);
+	color:#fff;
+}
+
+.alram-date {
+	color: #555555;
+}
+
+.alram-sender {
+	font-weight: bold;
+	margin-right: 0.3rem;
 }

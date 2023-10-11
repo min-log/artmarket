@@ -37,6 +37,7 @@ public class WebSocketConnectHandler implements HandshakeInterceptor {
             // WebSocket 세션에 사용자 정보 저장
             if(userDTO != null){
                 if(null ==  attributes.get("chatSessionList")){
+                    log.info("첫진입");
                     // 첫 진입
                     chatSessionList.add(userDTO);
                     attributes.put("chatSessionList", chatSessionList);

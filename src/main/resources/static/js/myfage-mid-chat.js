@@ -1,8 +1,8 @@
 // myfageChatMidAddTag()
-
 // ------------------------------ myfage-mid-chat ------------------------------
-
 function myfageChatMidAddTag() {
+
+
 
     if (myfageMid.childNodes) {
         const childNodesArray = Array.from(myfageMid.childNodes);
@@ -23,34 +23,44 @@ function myfageChatMidAddTag() {
         const myfageChatBox = document.querySelector('.myfage-chat-box')
 
         myfageChatBox.insertAdjacentHTML('beforeend', `<div class="myfage-chat-list" id="${chatRoomId}" name="${chatSender}">
-      <div class="myfage-chat-content">
-          <div class="myfage-chat-profile">
-              <div class="myfage-chat-profile-identity">${chatSenderIdtity}</div>
-              <div class="myfage-chat-profile-img">
-                  <img class="myfage-chat-profile-img-tag" src="${chatSenderProfile}" />
+          <div class="myfage-chat-content">
+              <div class="myfage-chat-profile">
+                  <div class="myfage-chat-profile-identity">${chatSenderIdtity}</div>
+                  <div class="myfage-chat-profile-img">
+                      <img class="myfage-chat-profile-img-tag" src="${chatSenderProfile}" />
+                  </div>
+              </div>
+              <div class="myafge-chat-info">
+                  <div class="myfage-chat-info-top">
+                      <div class="myfage-chat-info-top-nickname" id="${chatSender}">${chatSender}</div>
+                      <div class="myfage-chat-info-top-send-time">${chatRoomLastDate}</div>
+                  </div>
+                  <div class="myfage-chat-info-msg">${chatRoomMsg}</div>
               </div>
           </div>
-          <div class="myafge-chat-info">
-              <div class="myfage-chat-info-top">
-                  <div class="myfage-chat-info-top-nickname" id="${chatSender}">${chatSender}</div>
-                  <div class="myfage-chat-info-top-send-time">${chatRoomLastDate}</div>
-              </div>
-              <div class="myfage-chat-info-msg">${chatRoomMsg}</div>
+          <div class="myfage-chat-delete">
+              <img class="myfage-chat-delete-img" src="./css/icon/chat-exit.png" />
           </div>
-      </div>
-      <div class="myfage-chat-delete">
-          <img class="myfage-chat-delete-img" src="./css/icon/chat-exit.png" />
-      </div>
-  </div>`)
+      </div>`)
 
-        const myfageChatLists = document.querySelectorAll('.myfage-chat-list')
-
-        for (const myfageChatList of myfageChatLists) {
-            myfageChatList.addEventListener('click', function () {
-                myfageChatListClick(myfageChatList.getAttribute('id'), myfageChatList.getAttribute('name'))
-            })
-        }
     }
+
+
+    function myfageChatListClickEventFun(){
+        const myfageChatLists = document.querySelectorAll('.myfage-chat-list');
+        myfageChatLists.forEach((item,index)=>{
+            // 상세 내용
+            item.querySelector(".myfage-chat-content").addEventListener('click', function () {
+                myfageChatListClick(item.getAttribute('id'), item.getAttribute('name'));
+            });
+            // 삭제
+            item.querySelector(".myfage-chat-delete").addEventListener('click', function () {
+                myfageChatListDelete(item.getAttribute('id'),item);
+            });
+
+        });
+    }
+
 
     fetch(`/myfage/${sessionStorage.getItem('id')}`, {
         method: 'GET',
@@ -64,19 +74,23 @@ function myfageChatMidAddTag() {
         if (resStatusCode === 200) {
 
             let chatListCheck = true
+            // 채팅 리스트 출력
             for (var i = 0; i < data.myChatRooms.length; i++) {
                 if (data.myChatRooms[i].chatMsg !== null) {
-                    let defaultProfile = (data.myChatRooms[i].chatSenderProfile === null ? './css/icon/default-profile-img.png' : `data:image/jpeg;base64,${data.myChatRooms[i].chatSenderProfile}`)
+                    let defaultProfile = (data.myChatRooms[i].chatSenderProfile === null ? './css/icon/default-profile-img.png' : `${data.myChatRooms[i].chatSenderProfile}`)
                     myfageChatListBring(data.myChatRooms[i].chatRoomId,
                         data.myChatRooms[i].chatMsg,
                         data.myChatRooms[i].chatDate,
                         data.myChatRooms[i].chatSender,
                         data.myChatRooms[i].chatSenderIdtity,
                         defaultProfile)
-
                     chatListCheck = false
                 }
             }
+
+
+            // 채팅 클릭 이벤트
+            myfageChatListClickEventFun();
 
             if (!chatListCheck) {
                 const myfageChatBoxDefaultTitle = document.querySelector('.myfage-chat-box-default-title')
@@ -94,11 +108,11 @@ function myfageChatMidAddTag() {
 }
 
 // ------------------------------ myfage-right-chat ------------------------------
-
+var isDisabled = false;
 function myfageChatListClick(chatRoomId, chatSender) {
 
-    const myfageRightChatNotDefault = document.querySelector('.myfage-right-chat-not-default')
-    myfageRightChatNotDefault.remove()
+    let  myfageRightChatNotDefault = document.querySelector('.myfage-right-chat-not-default');
+    myfageRightChatNotDefault.remove();
 
     myfageRight.insertAdjacentHTML('beforeend', `
     <div class="myfage-right-chat-box" id="${chatRoomId}">
@@ -117,20 +131,16 @@ function myfageChatListClick(chatRoomId, chatSender) {
   </div>
   <div class="myfage-right-chat-box-mid"></div>
   <div class="myfage-right-chat-box-bot">
+    <img id="fileBox" src=""  />
     <input class="myfage-right-chat-box-bot-send-text" type="text" />
-    <img
-      class="myfage-right-chat-box-bot-send-attach"
-      src="./css/icon/chat-attach.png"
-    />
-    <img
-      class="myfage-right-chat-box-bot-send-btn"
-      src="./css/icon/chat-send-btn.png"
-    />
+    <label for="fileMsg" class="myfage-right-chat-box-bot-send-attach-btn"><img class="myfage-right-chat-box-bot-send-attach" src="./css/icon/chat-attach.png" /></label>
+    <input class="myfage-right-chat-box-bot-send-attach-file" id="fileMsg" type="file" multiple="multiple" style="display:none;">
+    <img class="myfage-right-chat-box-bot-send-btn"src="./css/icon/chat-send-btn.png"/>
   </div>
   </div>`)
 
     sessionStorage.setItem('chatcurrenttag', `myfage-right-chat-box-mid`)
-
+    const myfageRightChatBoxMid = document.querySelector('.myfage-right-chat-box-mid')
     fetch(`${baseUrl}/myfage`, {
         method: 'POST',
         headers: {
@@ -143,21 +153,31 @@ function myfageChatListClick(chatRoomId, chatSender) {
     }).then(response => {
         return response.json()
     }).then(data => {
-        const myfageRightChatBoxMid = document.querySelector('.myfage-right-chat-box-mid')
+
 
         const myfageRightChatBoxTopShowArticle = document.querySelector('.myfage-right-chat-box-top-show-article')
         myfageRightChatBoxTopShowArticle.setAttribute('id', `${data.chatProudct}`)
-
+        let chatContent = '';
         for (chatList of data.chatList) {
 
             let chatWhoTag = (chatList.chatSender == sessionStorage.getItem('id') ? 'me' : 'other')
-
-            myfageRightChatBoxMid.insertAdjacentHTML('beforeend', `
-        <div class="${sessionStorage.getItem('chatcurrenttag')}-msg-${chatWhoTag}">
-          <div class="${sessionStorage.getItem('chatcurrenttag')}-msg-${chatWhoTag}-time">${chatList.chatDate}</div>
-          <div class="${sessionStorage.getItem('chatcurrenttag')}-msg-${chatWhoTag}-text">${chatList.chatMsg}</div>
-        </div>`)
+            chatContent += '<div class="' + sessionStorage.getItem('chatcurrenttag') +'-msg-'+ chatWhoTag + '">';
+            chatContent += '<div class="' + sessionStorage.getItem('chatcurrenttag') +'-msg-'+ chatWhoTag + '-time">' + chatList.chatDate +' </div>';
+            if(chatList.chatMsg != ''){
+                chatContent += '<div class="' + sessionStorage.getItem('chatcurrenttag') +'-msg-'+ chatWhoTag + '-text">' + chatList.chatMsg +' </div>';
+            }
+            if(chatList.chatType == "FILE"){
+                let  fileFix = getExtensionOfFilename(chatList.chatFileName);
+                if ( fileFix== '.jpg' || fileFix== '.png' || fileFix== '.gif') {
+                      chatContent += '<img class="myfage-right-chat-box-mid-img" src="' + chatList.chatFile +'" />';
+                }
+                chatContent += '<a class="myfage-right-chat-box-mid-download" href="/file/download/'+ chatList.chatFileDownload +'" download="'+ chatList.chatFileName +'"><img src="../css/img/icon-downloads.png">';
+                chatContent +=  chatList.chatFileName +' </a>';
+            }
+            chatContent += '</div>'
         }
+        myfageRightChatBoxMid.innerHTML = chatContent;
+        myfageRightChatBoxMid.scrollTop = myfageRightChatBoxMid.scrollHeight;
     })
 
     const myfageRightChatBoxTopShowArticle = document.querySelector('.myfage-right-chat-box-top-show-article')
@@ -169,12 +189,12 @@ function myfageChatListClick(chatRoomId, chatSender) {
     })
 
 
-    const myfageChatRoomBoxBotSendAttach = document.querySelector('.myfage-right-chat-box-bot-send-attach')
-    const myfageChatRoomBoxBotSendAttachFile = document.createElement('input')
-    myfageChatRoomBoxBotSendAttachFile.setAttribute('class', 'myfage-right-chat-box-bot-send-attach-file')
-    myfageChatRoomBoxBotSendAttachFile.setAttribute('type', 'file')
-    myfageChatRoomBoxBotSendAttachFile.style.display = 'none'
-    myfageChatRoomBoxBotSendAttach.after(myfageChatRoomBoxBotSendAttachFile)
+    //파일 관련
+    //const myfageChatRoomBoxBotSendAttach = document.querySelector('.myfage-right-chat-box-bot-send-attach')
+    const myfageChatRoomBoxBotSendAttachFile = document.getElementById('fileMsg');
+    let chatFileBox = document.querySelector("#fileBox");
+    let chatTxtFrom = document.querySelector(".myfage-right-chat-box-bot-send-text")
+
 
     // chat send btn
     const myfageRightChatBoxBotSendBtn = document.querySelector('.myfage-right-chat-box-bot-send-btn')
@@ -183,68 +203,92 @@ function myfageChatListClick(chatRoomId, chatSender) {
     const myfageRightChatBoxTopShowExit = document.querySelector('.myfage-right-chat-box-top-show-exit')
 
     let socket = new SockJS(`/stomp/chat`)
-    stompClient = Stomp.over(socket)
+    let stompClient = Stomp.over(socket)
+
+
+    // //초기화
+    // myfageRightChatBox.style.display = 'none'
+    // myfageChatRightAddTag()
+    // stompClient.disconnect()
 
     stompClient.connect({}, function () {
 
             stompClient.subscribe(`/sub/chat-room/get/${chatRoomId}`, (message) => {
-                chatMsgGet(JSON.parse(message.body), `${chatSender}`)
+                chatMsgGet(JSON.parse(message.body), `${chatSender}`);
+
+                myfageRightChatBoxMid.scrollTop = myfageRightChatBoxMid.scrollHeight;
             })
 
             //파일 업로드 구현
-            myfageChatRoomBoxBotSendAttach.addEventListener('click', function () {
+            myfageChatRoomBoxBotSendAttachFile.addEventListener('click', function () {
+                myfageChatRoomBoxBotSendAttachFile.addEventListener('change',function(){
+                    var fileList = myfageChatRoomBoxBotSendAttachFile.files ;
+                    // 읽기
+                    var reader = new FileReader();
+                    reader.readAsDataURL(fileList[0]);
+                    //로드 한 후
+                    reader.onload = function  () {
+                        let fileType = fileList.type;
+                        if(fileList[0].type == "image/png" || fileList[0].type == "image/jpeg"){
+                            chatFileBox.style.display = 'block';
+                            chatTxtFrom.style = 'padding-left:4rem';
+                            chatFileBox.src=  reader.result;
+                        }
+                    };
+                });
+            });
 
-                myfageChatRoomBoxBotSendAttachFile.click()
 
-                myfageChatRoomBoxBotSendAttachFile.addEventListener('change', (e) => {
-
-                    let chatFileName
-
-                    const file = e.target.files[0]
-                    chatFileName = file.name
-
-                    const chatFileReader = new FileReader();
-
-                    if (file !== undefined) {
-                        chatFileReader.readAsArrayBuffer(file)
-                    }
-
-                    chatFileReader.onload = function (e) {
-
-                        const fileObject = e.target.result
-                        myfageChatRoomBoxBotSendAttachFile.setAttribute('id', `${Array.from(new Uint8Array(fileObject))}`)
-                        myfageChatRoomBoxBotSendAttachFile.setAttribute('name', `${chatFileName}`)
-                    }
-
-                })
-            })
-
+            //메시지 전송
             myfageRightChatBoxBotSendBtn.addEventListener('click', function () {
-
+                let fileList = myfageChatRoomBoxBotSendAttachFile.files[0];
                 const myfageRightChatBoxBotSendText = document.querySelector('.myfage-right-chat-box-bot-send-text')
 
                 if (myfageRightChatBoxBotSendText.value === '') {
                     alert('메세지를 입력해주세요.')
                 } else {
-                    chatDataObject = {
-                        sendChatRoomId: `${chatRoomId}`,
-                        sendChatSender: sessionStorage.getItem('id'),
-                        sendChatMsg: myfageRightChatBoxBotSendText.value,
-                        sendChatFile: null
+                    //파일이 있을경우
+                    if (fileList != null) {
+                        // 웹소켓에서 파일객체는 직렬화 해서 전달 받아야한다.
+                        // 바이트 배열로 변환하여 전송
+                        let reader = new FileReader();
+                        reader.onload = function (event) {
+                            let fileContent = event.target.result; // 파일 내용
+                            stompClient.send(`/pub/chat-room/send`, {}, JSON.stringify({
+                                sendChatRoomId: `${chatRoomId}`,
+                                sendChatMsg: myfageRightChatBoxBotSendText.value,
+                                sendChatSender: sessionStorage.getItem('id'),
+                                sendChatFile: {
+                                            chatFileName: fileList.name,
+                                            chatFileData:  Array.from(new Uint8Array(fileContent)),
+                                            chatFileType: fileList.type
+                                    }
+                            }));
+
+                        };
+
+                        reader.readAsArrayBuffer(fileList); // 파일을 바이너리로 읽기
+                    }else{
+                        // 일반 메시지
+                        stompClient.send(`/pub/chat-room/send`, {}, JSON.stringify({
+                            sendChatRoomId: `${chatRoomId}`,
+                            sendChatMsg: myfageRightChatBoxBotSendText.value,
+                            sendChatSender: sessionStorage.getItem('id'),
+                            sendChatFile: null // 바이트 배열로 변환하여 전송
+                        }));
                     }
 
-                    if (myfageChatRoomBoxBotSendAttachFile.getAttribute('id') !== null) {
-
-                        const chatFileType = myfageChatRoomBoxBotSendAttachFile.getAttribute('name').split('.')
-                        chatDataObject.sendChatFile = {
-                            chatFileName: myfageChatRoomBoxBotSendAttachFile.getAttribute('name'),
-                            chatFileData: myfageChatRoomBoxBotSendAttachFile.getAttribute('id'),
-                            chatFileType: chatFileType[chatFileType.length - 1]
+                    setTimeout(function () {
+                        // 초기화
+                        myfageRightChatBoxBotSendText.value = '';
+                        if(chatFileBox != null){
+                            chatFileBox.style = "display:none";
+                            myfageRightChatBoxBotSendText.style = '';
+                            myfageChatRoomBoxBotSendAttachFile.value ='';
                         }
-                    }
+                    },100);
 
-                    stompClient.send(`/pub/chat-room/send`, {}, JSON.stringify(chatDataObject))
-                    myfageRightChatBoxBotSendText.value = ''
+
                 }
             })
 
@@ -259,5 +303,60 @@ function myfageChatListClick(chatRoomId, chatSender) {
         },
         function () {
             alert('연결에 실패했습니다.')
+        });
+}
+
+
+function myfageChatListDelete(chatRoomId,item){
+    console.log("삭제로직 ");
+    modal.style = "display:block";
+    modalTitle.innerHTML = "채팅방 삭제";
+    let modalMsg = '<p><b>채팅방의 모든 내용이 사라집니다</b></p>'
+        modalMsg += '<p><b>삭제를 원하시면 버튼을 눌러주세요^_^</b></p>'
+        modalMsg += '<p style="margin-top: 1rem">제거된 파일은 되돌릴 수 없습니다 </p>'
+        modalMsg += '<div class="btn-wrap" style="margin-top: 1rem"><button id="chatDeleteResult" class="btn-type01">삭제하기</button></div>'
+    modalContent.innerHTML = modalMsg;
+
+
+    let chatDeleteResult = document.getElementById("chatDeleteResult");
+
+    chatDeleteResult.addEventListener("click",function () {
+        modal.style ="display:none";
+
+        fetch('/mypage',{
+            method:"DELETE",
+            body:JSON.stringify({
+                remChatMember: sessionStorage.getItem('id'),
+                remChatRoomId: chatRoomId
+            }),
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(response =>{
+            if(response.status == 400){
+                modal.style = "display:block";
+                modalTitle.innerHTML = "채팅 방 삭제 실패";
+                modalContent.innerHTML = '<p>주문 진행 중인 상품이 있습니다. </p>' +
+                                        '<p>마감기한이 완료되어야 삭제 가능합니다.</p>';
+
+                setTimeout(function () {
+                    modal.style = "display:none";
+                },5000);
+
+            }
+            if(response.status == 200){
+                modal.style = "display:block";
+                modalTitle.innerHTML = "채팅 방 삭제 성공";
+                modalContent.innerHTML = "채팅 방 삭제가 성공했습니다.";
+                item.style = "display:none";
+                setTimeout(function () {
+                    modal.style = "display:none";
+                },5000);
+
+            }
+
         })
+    })
+
+
 }
