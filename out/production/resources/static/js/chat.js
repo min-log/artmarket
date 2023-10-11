@@ -1,7 +1,6 @@
 // addEndpoint("/stomp/chat")
 
 function chatMsgGet(chatData, chatOtherType) {
-  console.log(chatData);
   let chatWho = (chatData.chatSender == sessionStorage.getItem('id') ? 'me' : 'other')
   let chatWhoType = (chatData.chatSender == sessionStorage.getItem('id') ? sessionStorage.getItem('nickname') : chatOtherType)
 
@@ -32,9 +31,6 @@ function chatMsgGet(chatData, chatOtherType) {
 
   // 채팅 타입에 따른 함수(FILE)
   function myfageRightChatFile(curentBoxTag, chatWhoTag, chatFile, chatFileName, chatFileDownload,chatMsg,chatDate) {
-    console.log("myfageRightChatFile " + curentBoxTag + "/ "+chatWhoTag )
-    console.log( chatFileName + "/" + chatFileDownload)
-    console.log( chatFile )
     let fileExtention =  getExtensionOfFilename(chatFileName);
 
     // chatParentBoxTag.insertAdjacentHTML('beforeend', `

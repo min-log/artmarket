@@ -334,7 +334,12 @@ input[type="date"] {
     display: none;
 }
 
-.product-chat-room-box-mid-msg-me {
+
+.product-chat-room-box-mid > div {margin-bottom:1.2rem;overflow: hidden;display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;width:100%}
+
+.product-chat-room-box-mid > div.product-chat-room-box-mid-msg-me {
     float: right;
     clear: both;
     display: inline-flex;
@@ -392,6 +397,7 @@ input[type="date"] {
 }
 
 .product-chat-room-box-bot {
+    position: relative;
     clear: both;
     display: flex;
     justify-content: center;
@@ -403,11 +409,13 @@ input[type="date"] {
 .product-chat-room-box-bot-send-text {
     border: none;
     outline: none;
-    width: 25rem;
-    height: 0.7rem;
+    width: 17rem;
+    height: 2.7rem;
+    line-height: 2.7rem;
     padding: 1rem;
     padding-right: 3rem;
-    border-radius: 1rem;
+    border-radius: 0.8rem;
+    box-sizing:border-box;
 }
 .product-chat-room-box-bot-send-attach-btn {
     margin-left: -3.3rem;
@@ -426,3 +434,23 @@ input[type="date"] {
     scale: 90%;
     transition-duration: 0.4s;
 }
+
+
+.product-chat-room-box-mid img{max-width:50%;}
+.myfage-right-chat-box-mid-download {
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background: rgba(0,0,0,0.5);
+    text-decoration: inherit;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.8rem;
+    margin-top: 0.2rem;
+}
+.myfage-right-chat-box-mid-download img {width: 1.5rem;height:auto;filter: invert(1);margin-right: 0.5rem;}
+#fileBox {border: 1px solid rgb(204, 204, 204);height: 1.8rem;width: 1.8rem;position: absolute;top: 0.1rem;left: 0.4rem;border-radius: 0.3rem;overflow: hidden;margin: 0;padding: 0;margin: 1.1rem 0.6rem 0;display: none;z-index: 10}
+
+.product-chat-room-box-mid:after {content: '';display: block;clear: both;padding-top:10px}

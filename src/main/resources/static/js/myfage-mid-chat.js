@@ -81,6 +81,8 @@ function myfageChatMidAddTag() {
                     chatListCheck = false
                 }
             }
+
+
             // 채팅 클릭 이벤트
             myfageChatListClickEventFun();
 
@@ -132,7 +134,7 @@ function myfageChatListClick(chatRoomId, chatSender) {
   </div>`)
 
     sessionStorage.setItem('chatcurrenttag', `myfage-right-chat-box-mid`)
-
+    const myfageRightChatBoxMid = document.querySelector('.myfage-right-chat-box-mid')
     fetch(`${baseUrl}/myfage`, {
         method: 'POST',
         headers: {
@@ -145,8 +147,7 @@ function myfageChatListClick(chatRoomId, chatSender) {
     }).then(response => {
         return response.json()
     }).then(data => {
-        console.log(data);
-        const myfageRightChatBoxMid = document.querySelector('.myfage-right-chat-box-mid')
+
 
         const myfageRightChatBoxTopShowArticle = document.querySelector('.myfage-right-chat-box-top-show-article')
         myfageRightChatBoxTopShowArticle.setAttribute('id', `${data.chatProudct}`)
@@ -170,6 +171,7 @@ function myfageChatListClick(chatRoomId, chatSender) {
             chatContent += '</div>'
         }
         myfageRightChatBoxMid.innerHTML = chatContent;
+        myfageRightChatBoxMid.scrollTop = myfageRightChatBoxMid.scrollHeight;
     })
 
     const myfageRightChatBoxTopShowArticle = document.querySelector('.myfage-right-chat-box-top-show-article')
@@ -206,7 +208,9 @@ function myfageChatListClick(chatRoomId, chatSender) {
     stompClient.connect({}, function () {
 
             stompClient.subscribe(`/sub/chat-room/get/${chatRoomId}`, (message) => {
-                chatMsgGet(JSON.parse(message.body), `${chatSender}`)
+                chatMsgGet(JSON.parse(message.body), `${chatSender}`);
+
+                myfageRightChatBoxMid.scrollTop = myfageRightChatBoxMid.scrollHeight;
             })
 
             //파일 업로드 구현
@@ -238,14 +242,12 @@ function myfageChatListClick(chatRoomId, chatSender) {
                     alert('메세지를 입력해주세요.')
                 } else {
                     //파일이 있을경우
-                    console.log("텍스트 1: " + myfageRightChatBoxBotSendText.value);
                     if (fileList != null) {
                         // 웹소켓에서 파일객체는 직렬화 해서 전달 받아야한다.
                         // 바이트 배열로 변환하여 전송
                         let reader = new FileReader();
                         reader.onload = function (event) {
                             let fileContent = event.target.result; // 파일 내용
-                            console.log("텍스트 2: " + myfageRightChatBoxBotSendText.value);
                             stompClient.send(`/pub/chat-room/send`, {}, JSON.stringify({
                                 sendChatRoomId: `${chatRoomId}`,
                                 sendChatMsg: myfageRightChatBoxBotSendText.value,
@@ -278,7 +280,7 @@ function myfageChatListClick(chatRoomId, chatSender) {
                             myfageRightChatBoxBotSendText.style = '';
                             myfageChatRoomBoxBotSendAttachFile.value ='';
                         }
-                    },500);
+                    },100);
 
 
                 }

@@ -135,7 +135,7 @@
   align-items: flex-end;
 }
 
-
+.myfage-right-chat-box-mid:after {content: '';display: block;clear: both;padding-top:20px}
 
 .myfage-right-chat-box-mid-msg-me-time {
   color: white;
