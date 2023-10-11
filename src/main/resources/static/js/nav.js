@@ -59,7 +59,7 @@ if (login) {
 	})
 }
 
-
+const alramMsgList = new Map();
 
 function alramSet(id) {
 	let resStatus = 0;
@@ -76,15 +76,20 @@ function alramSet(id) {
 		return response.json()
 	}).then(data => {
 		let alramListCont = '';
+
+		alramMsgList.clear();
 		for (let i = 0; i < data.alrams.length; i++) {
-			alramListCont = '<li>';
+			alramListCont += '<li>';
 			alramListCont += '<span class="alram-type">' + data.alrams[i].alramType + '</span>';
 			alramListCont += '<span class="alram-sender">' + data.alrams[i].alramSender + '</span>';
 			alramListCont += '<span class="alram-date">' + data.alrams[i].alertDate + '</span>';
 			alramListCont += '</li>';
+			if(data.alrams[i].alramType == "MESSAGE") alramMsgList.set(i,data.alrams[i].alertPath);
+
 		}
 		alramSize = `${data.alrams.length}`
 		sessionStorage.setItem('alramList', alramListCont);
+
 		alramNumber.forEach((item, index) => {
 			item.textContent = alramSize;
 			item.style = "display:inline-block";
@@ -122,6 +127,7 @@ alramDeleteAllBtn.addEventListener('click', function () {
 				alert("모두 읽기가 성공했습니다.");
 				alramSet(sessionStorage.getItem("id"));
 				alramContent.style = "display:none";
+				alramMsgList.clear();
 			}
 		})
 });

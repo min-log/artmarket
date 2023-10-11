@@ -63,8 +63,38 @@ function productDetailShow() {
 
 
 // 카카오페이 결제 btn
-const detailMidRightPaymentBtn = document.querySelector('.detail-mid-right-payment-btn')
+const detailMidRightPaymentBtn = document.querySelector('.detail-mid-right-payment-btn');
 
+detailMidRightPaymentBtn.addEventListener('click', function () {
+    const deadline = document.querySelector('.detail-mid-right-deadline-btn').value;
+    const amount = document.querySelector('.detail-mid-right-payment-cost').value;
+    const requestData = {
+        memberId: sessionStorage.getItem('id'),
+        productId: sessionStorage.getItem('detailproduct'),
+        nickname: sessionStorage.getItem('nickname'),
+        productName: sessionStorage.getItem('detailproduct'),
+        quantity: 1,
+        totalAmount: amount,
+        deadline: deadline,
+        orderStatus: '결제 대기'
+    };
+
+    fetch('http://localhost:8070/ready', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert('결제 창으로 이동합니다.');
+
+            const popupUrl = data.next_redirect_pc_url;
+            const popupWindow = window.open(popupUrl, '_blank', 'width=600,height=600');
+        })
+        .catch(error => console.error('에러:', error));
+});
 // chat 문의하기
 const detailMidRightChatBtn = document.querySelector('.detail-mid-right-chat-btn')
 // chat room 변수
@@ -76,7 +106,6 @@ sessionStorage.setItem('chatcurrenttag', `${productChatRoomBoxMid.getAttribute('
 detailMidRightChatBtn.addEventListener('click', function () {
 
     const detailTopArticleNumValue = document.querySelector('.detail-top-article-num-value')
-
 
     productChatRoom.style.display = 'block'
 
@@ -117,16 +146,14 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
             chatMsgGet(chatList[i], detailMidLeftProfileInfoNickname.textContent)
         }
     }
-    productChatRoomBoxMid.scrollTop = productChatRoomBoxMid.scrollHeight;
-
 
     // chat 파일 관련 태그 추가
-    //const myfageChatRoomBoxBotSendAttach = document.querySelector('.myfage-right-chat-box-bot-send-attach')
-    const ChatRoomBoxBotSendAttachFile = document.getElementById('fileMsg');
-    let chatFileBox = document.querySelector("#fileBox");
-    let chatTxtFrom = document.querySelector(".product-chat-room-box-bot-send-text")
-
-
+    const productChatRoomBoxBotSendAttach = document.querySelector('.product-chat-room-box-bot-send-attach')
+    const productChatRoomBoxBotSendAttachFile = document.createElement('input')
+    productChatRoomBoxBotSendAttachFile.setAttribute('class', 'product-chat-room-box-bot-send-attach-file')
+    productChatRoomBoxBotSendAttachFile.setAttribute('type', 'file')
+    productChatRoomBoxBotSendAttachFile.style.display = 'none'
+    productChatRoomBoxBotSendAttach.after(productChatRoomBoxBotSendAttachFile)
 
     // chat send btn
     const productChatRoomBoxBotSendBtn = document.querySelector('.product-chat-room-box-bot-send-btn')
@@ -141,82 +168,62 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
 
             stompClient.subscribe(`/sub/chat-room/get/${productChatRoomBoxMid.getAttribute('id')}`, (message) => {
                 chatMsgGet(JSON.parse(message.body), detailMidLeftProfileInfoNickname.getAttribute('value'))
-                productChatRoomBoxMid.scrollTop = productChatRoomBoxMid.scrollHeight;
             })
 
-
             //파일 업로드 구현
-            ChatRoomBoxBotSendAttachFile.addEventListener('click', function () {
-                console.log("클릭");
-                ChatRoomBoxBotSendAttachFile.addEventListener('change',function(){
-                    var fileList = ChatRoomBoxBotSendAttachFile.files ;
-                    // 읽기
-                    var reader = new FileReader();
-                    reader.readAsDataURL(fileList[0]);
-                    //로드 한 후
-                    reader.onload = function  () {
-                        let fileType = fileList.type;
-                        if(fileList[0].type == "image/png" || fileList[0].type == "image/jpeg"){
-                            chatFileBox.style.display = 'block';
-                            chatTxtFrom.style = 'padding-left:3rem';
-                            chatFileBox.src=  reader.result;
-                        }
-                    };
-                });
-            });
+            productChatRoomBoxBotSendAttach.addEventListener('click', function () {
 
+                productChatRoomBoxBotSendAttachFile.click()
 
+                productChatRoomBoxBotSendAttachFile.addEventListener('change', (e) => {
 
+                    let chatFileName
+
+                    const file = e.target.files[0]
+                    chatFileName = file.name
+
+                    const chatFileReader = new FileReader();
+
+                    if (file !== undefined) {
+                        chatFileReader.readAsArrayBuffer(file)
+                    }
+
+                    chatFileReader.onload = function (e) {
+
+                        const fileObject = e.target.result;
+                        productChatRoomBoxBotSendAttachFile.setAttribute('id', `${Array.from(new Uint8Array(fileObject))}`)
+                        productChatRoomBoxBotSendAttachFile.setAttribute('name', `${chatFileName}`)
+                    }
+
+                })
+            })
 
             productChatRoomBoxBotSendBtn.addEventListener('click', function () {
-                let fileList = ChatRoomBoxBotSendAttachFile.files[0];
 
                 const productChatRoomBoxBotSendText = document.querySelector('.product-chat-room-box-bot-send-text')
 
                 if (productChatRoomBoxBotSendText.value === '') {
                     alert('메세지를 입력해주세요.')
                 } else {
-                    //파일이 있을경우
-                    if (fileList != null) {
-                        // 웹소켓에서 파일객체는 직렬화 해서 전달 받아야한다.
-                        // 바이트 배열로 변환하여 전송
-                        let reader = new FileReader();
-                        reader.onload = function (event) {
-                            let fileContent = event.target.result; // 파일 내용
-                            stompClient.send(`/pub/chat-room/send`, {}, JSON.stringify({
-                                sendChatRoomId: productChatRoomBoxMid.getAttribute('id'),
-                                sendChatSender: sessionStorage.getItem('id'),
-                                sendChatMsg: productChatRoomBoxBotSendText.value,
-                                sendChatFile: {
-                                    chatFileName: fileList.name,
-                                    chatFileData:  Array.from(new Uint8Array(fileContent)),
-                                    chatFileType: fileList.type
-                                }
-                            }));
-
-                        };
-
-                        reader.readAsArrayBuffer(fileList); // 파일을 바이너리로 읽기
-                    }else{
-                        // 일반 메시지
-                        stompClient.send(`/pub/chat-room/send`, {}, JSON.stringify({
-                            sendChatRoomId: productChatRoomBoxMid.getAttribute('id'),
-                            sendChatSender: sessionStorage.getItem('id'),
-                            sendChatMsg: productChatRoomBoxBotSendText.value,
-                            sendChatFile: null
-                        }));
+                    chatDataObject = {
+                        sendChatRoomId: productChatRoomBoxMid.getAttribute('id'),
+                        sendChatSender: sessionStorage.getItem('id'),
+                        sendChatMsg: productChatRoomBoxBotSendText.value,
+                        sendChatFile: null
                     }
 
-                    //초기화
-                    setTimeout(function () {
-                        productChatRoomBoxBotSendText.value = '';
-                        if(chatFileBox != null){
-                            chatFileBox.style = "display:none";
-                            productChatRoomBoxBotSendText.style = '';
-                            ChatRoomBoxBotSendAttachFile.value ='';
-                        }
-                    },100);
+                    if (productChatRoomBoxBotSendAttachFile.getAttribute('id') !== null) {
 
+                        const chatFileType = productChatRoomBoxBotSendAttachFile.getAttribute('name').split('.')
+                        chatDataObject.sendChatFile = {
+                            chatFileName: productChatRoomBoxBotSendAttachFile.getAttribute('name'),
+                            chatFileData: productChatRoomBoxBotSendAttachFile.getAttribute('id'),
+                            chatFileType: chatFileType[chatFileType.length - 1]
+                        }
+                    }
+
+                    stompClient.send(`/pub/chat-room/send`, {}, JSON.stringify(chatDataObject))
+                    productChatRoomBoxBotSendText.value = ''
                 }
             })
 

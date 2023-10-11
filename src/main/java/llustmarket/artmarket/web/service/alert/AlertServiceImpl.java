@@ -119,6 +119,7 @@ public class AlertServiceImpl implements AlertService {
             return AlramDTO.builder()
                     .alramSender(item.getAlertWriter())
                     .alramType(item.getAlertType())
+                    .alertPath(item.getAlertPath())
                     .alertDate(dateTimeService.DateToString(item.getAlertDate()))
                     .build();
         }).collect(Collectors.toList());

@@ -15,6 +15,7 @@ public class AlramDTO {
         private String alramSender;
         private String alramType;
         private String alertDate;
+        private long alertPath;
 
 
 }

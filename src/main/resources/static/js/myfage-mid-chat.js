@@ -14,15 +14,18 @@ function myfageChatMidAddTag() {
     let resStatusCode
 
     myfageMid.insertAdjacentHTML('afterbegin', `<div class="myfage-chat-box">
-        <div class="myfage-chat-not-check">안 읽은 메세지만 보기</div>
+        <div class="myfage-chat-not-check chatNotBtn" onclick="chatNotCheck()">안 읽은 메세지만 보기</div>
+        <div class="myfage-chat-not-check chatAllBtn" onclick="chatAll()" style="display:none;">전체 메세지 보기</div>
         <div class="myfage-chat-box-default-title">현재 대화중인 채팅방이 없습니다.</div>
         <div class="myfage-chat-box-default-intro">다양한 작품을 구경하고 작가에게 문의해보세요!</div>
     </div>`)
 
     function myfageChatListBring(chatRoomId, chatRoomMsg, chatRoomLastDate, chatSender, chatSenderIdtity, chatSenderProfile) {
-        const myfageChatBox = document.querySelector('.myfage-chat-box')
+        const myfageChatBox = document.querySelector('.myfage-chat-box');
 
-        myfageChatBox.insertAdjacentHTML('beforeend', `<div class="myfage-chat-list" id="${chatRoomId}" name="${chatSender}">
+
+        myfageChatBox.insertAdjacentHTML('beforeend',
+            `<div class="myfage-chat-list" id="${chatRoomId}" name="${chatSender}">
           <div class="myfage-chat-content">
               <div class="myfage-chat-profile">
                   <div class="myfage-chat-profile-identity">${chatSenderIdtity}</div>
@@ -41,8 +44,7 @@ function myfageChatMidAddTag() {
           <div class="myfage-chat-delete">
               <img class="myfage-chat-delete-img" src="./css/icon/chat-exit.png" />
           </div>
-      </div>`)
-
+      </div>`);
     }
 
 
@@ -359,4 +361,45 @@ function myfageChatListDelete(chatRoomId,item){
     })
 
 
+}
+
+
+
+
+function chatNotCheck(){
+    let myfageChatLists = document.querySelectorAll('.myfage-chat-list');
+    let myfageChatNot = document.querySelector('.chatNotBtn');
+    let myfageChatAll = document.querySelector('.chatAllBtn');
+
+    if (alramMsgList.size != 0){
+    // console.log("안읽은 메시지 ");
+        myfageChatLists.forEach((item,index) => {
+            item.style = "display:none";
+            if(alramMsgList.get(index) == item.getAttribute('id')){
+                item.style = "display:flex";
+            }
+        });
+
+        myfageChatNot.style = "display:none";
+        myfageChatAll.style = "display:block";
+    }else {
+        modal.style = "display:block";
+        modalTitle.innerHTML = "채팅 알림";
+        modalContent.innerHTML = "<p>안 읽은 메시지가 존재하지 않습니다.</p>";
+        setTimeout(function () {
+            modal.style = "display:none";
+        },1000)
+    }
+}
+
+function chatAll(){
+    let myfageChatLists = document.querySelectorAll('.myfage-chat-list');
+    let myfageChatNot = document.querySelector('.chatNotBtn');
+    let myfageChatAll = document.querySelector('.chatAllBtn');
+
+    myfageChatLists.forEach((item,index)=> {
+        item.style = "display:flex";
+    });
+    myfageChatNot.style = "display:block";
+    myfageChatAll.style = "display:none";
 }
