@@ -71,7 +71,7 @@ public class ChatRoomController {
     }
 
 
-    @DeleteMapping(value = "/myfage")
+    @DeleteMapping(value = "/mypage")
     public ResponseEntity<Object> chatRoomDelete(@RequestBody ChatRoomRequestDTO roomRequestDTO) {
         log.info("# 채팅룸 삭제");
         boolean result = false;

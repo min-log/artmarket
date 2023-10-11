@@ -49,9 +49,15 @@ function myfageChatMidAddTag() {
     function myfageChatListClickEventFun(){
         const myfageChatLists = document.querySelectorAll('.myfage-chat-list');
         myfageChatLists.forEach((item,index)=>{
-            item.addEventListener('click', function () {
-                myfageChatListClick(this.getAttribute('id'), this.getAttribute('name'));
+            // 상세 내용
+            item.querySelector(".myfage-chat-content").addEventListener('click', function () {
+                myfageChatListClick(item.getAttribute('id'), item.getAttribute('name'));
             });
+            // 삭제
+            item.querySelector(".myfage-chat-delete").addEventListener('click', function () {
+                myfageChatListDelete(item.getAttribute('id'),item);
+            });
+
         });
     }
 
@@ -298,4 +304,59 @@ function myfageChatListClick(chatRoomId, chatSender) {
         function () {
             alert('연결에 실패했습니다.')
         });
+}
+
+
+function myfageChatListDelete(chatRoomId,item){
+    console.log("삭제로직 ");
+    modal.style = "display:block";
+    modalTitle.innerHTML = "채팅방 삭제";
+    let modalMsg = '<p><b>채팅방의 모든 내용이 사라집니다</b></p>'
+        modalMsg += '<p><b>삭제를 원하시면 버튼을 눌러주세요^_^</b></p>'
+        modalMsg += '<p style="margin-top: 1rem">제거된 파일은 되돌릴 수 없습니다 </p>'
+        modalMsg += '<div class="btn-wrap" style="margin-top: 1rem"><button id="chatDeleteResult" class="btn-type01">삭제하기</button></div>'
+    modalContent.innerHTML = modalMsg;
+
+
+    let chatDeleteResult = document.getElementById("chatDeleteResult");
+
+    chatDeleteResult.addEventListener("click",function () {
+        modal.style ="display:none";
+
+        fetch('/mypage',{
+            method:"DELETE",
+            body:JSON.stringify({
+                remChatMember: sessionStorage.getItem('id'),
+                remChatRoomId: chatRoomId
+            }),
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(response =>{
+            if(response.status == 400){
+                modal.style = "display:block";
+                modalTitle.innerHTML = "채팅 방 삭제 실패";
+                modalContent.innerHTML = '<p>주문 진행 중인 상품이 있습니다. </p>' +
+                                        '<p>마감기한이 완료되어야 삭제 가능합니다.</p>';
+
+                setTimeout(function () {
+                    modal.style = "display:none";
+                },5000);
+
+            }
+            if(response.status == 200){
+                modal.style = "display:block";
+                modalTitle.innerHTML = "채팅 방 삭제 성공";
+                modalContent.innerHTML = "채팅 방 삭제가 성공했습니다.";
+                item.style = "display:none";
+                setTimeout(function () {
+                    modal.style = "display:none";
+                },5000);
+
+            }
+
+        })
+    })
+
+
 }

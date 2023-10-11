@@ -92,20 +92,19 @@ input[readonly] {
 
 
 /*modal*/
-
-/*modal*/
 .modal {
 	position: fixed;
 	top:50%;
 	left:50%;
-	width: 400px;
+	width: 450px;
 	height:auto;
 	min-height:100px;
 	transform:translate(-50%,-50%);
 	background:#fff;
 	/* border:1px solid #000; */
 	border-radius: 1rem;
-	box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.15);
+	box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
+	z-index: 999999;
 }
 
 .modal-top {
@@ -131,4 +130,4 @@ input[readonly] {
 }
 
 .modal-content {padding:0 1rem 2rem;text-align: center;margin:0;word-break:keep-all;}
-.modal-content * {margin:0;}
+.modal-content * {margin:0;line-height: 1.5;font-size: 0.8rem;word-break: keep-all;}

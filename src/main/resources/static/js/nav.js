@@ -121,9 +121,12 @@ alramDeleteAllBtn.addEventListener('click', function () {
 			} else if (response.status == 200) {
 				alert("모두 읽기가 성공했습니다.");
 				alramSet(sessionStorage.getItem("id"));
+				alramContent.style = "display:none";
 			}
 		})
 });
+
+
 
 
 const illust = document.querySelector('.illust')

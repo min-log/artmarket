@@ -112,7 +112,8 @@ nav {
 	box-sizing: border-box;
 	border: 1px solid #000;
 	border-radius: 5px;
-	background: #fff
+	background: #fff;
+	cursor: inherit;
 }
 
 .alram-con .title {
@@ -139,6 +140,7 @@ nav {
 	letter-spacing: -0.01125rem;
 	border: 0;
 	box-sizing: border-box;
+	cursor: pointer;
 }
 
 .alram-con ul {
