@@ -258,7 +258,7 @@ detailMidRightPaymentBtn.addEventListener('click', function () {
         memberId: sessionStorage.getItem('id'),
         productId: sessionStorage.getItem('detailproduct'),
         nickname: sessionStorage.getItem('nickname'),
-        productName: sessionStorage.getItem('detailproduct'),
+        productName: sessionStorage.getItem('nickname') + "의 " + sessionStorage.getItem('detailproduct') + "번 상품",
         quantity: parseInt("1"),
         totalAmount: amountValue,
         deadline: deadlineDate.toISOString(),
@@ -278,6 +278,19 @@ detailMidRightPaymentBtn.addEventListener('click', function () {
 
             const popupUrl = data.next_redirect_pc_url;
             const popupWindow = window.open(popupUrl, '_blank', 'width=600,height=600');
+
+            if (popupWindow) {
+                // 이벤트 리스너 등록
+                window.addEventListener('message', (event) => {
+                    const currentPopupUrl = popupWindow.location.href;
+                    if (currentPopupUrl && currentPopupUrl.includes('/success-order')) {
+                        popupWindow.close();
+                    }
+                });
+            }
+            if (popupWindow.closed) {
+                alert('결제가 완료되었습니다.');
+            }
         })
         .catch(error => console.error('에러:', error));
 });
