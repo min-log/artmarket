@@ -2,13 +2,12 @@ const myfageMid = document.querySelector('.myfage-mid');
 const myfageRight = document.querySelector('.myfage-right');
 const memberId = sessionStorage.getItem("id");
 let orderMamberNavList;
-
-
 const orderMap = new Map();
 
 function myfageOrderMidAddTag() {
 
-    // 
+    myfageRight.innerHTML = "";
+
     sessionStorage.setItem("orderNav","orderSends"); // orderSends(내가 주문 받은 내역),orderGetters(내가 주문한 내역)
 
 
