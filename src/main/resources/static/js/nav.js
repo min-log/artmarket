@@ -127,12 +127,19 @@ alramDeleteAllBtn.addEventListener('click', function () {
 				alert("모두 읽기가 성공했습니다.");
 				alramSet(sessionStorage.getItem("id"));
 				alramContent.style = "display:none";
+				alram.classList.remove("active");
 				alramMsgList.clear();
 			}
 		})
 });
 
-
+// 알람 닫기 -- 다른 영역 클릭시 닫힘
+document.addEventListener("mouseup", function (e){
+	if(alram.classList.contains("active")){
+		alram.classList.remove("active");
+		alramContent.style = "display:none";
+	}
+});
 
 
 const illust = document.querySelector('.illust')
