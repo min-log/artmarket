@@ -8,6 +8,7 @@
     <script async src="./js/footer.js"></script>
     <script async src="./js/all.js"></script>
     <script async src="./js/category.js"></script>
+    <script async src="./js/category-select.js"></script>
     <link rel="stylesheet" href="./css/default/nav.css" />
     <link rel="stylesheet" href="./css/default/footer.css" />
     <link rel="stylesheet" href="./css/default/all.css" />
@@ -25,13 +26,19 @@
         </div>
         <div class="category-body">
           <div class="category-filter">
-            <select class="category-filter-pop-cur">
+            <span class="category-filter-title">
+              통합검색
+            </span>
+            <select class="category-filter-pop-cur" onchange="categorySelectChange()">
               <option value="popular">인기순</option>
               <option value="current">최신순</option>
             </select>
-            <div class="cateogry-keyword-search">
-              <input type="text" class="cateogry-keyword-search-box" />
-              <img class="cateogry-keyword-search-icon" src="" />
+            <div style="display: flex">
+              <div class="cateogry-keyword-search">
+                <input type="text" placeholder="검색어를 입력해주세요" class="cateogry-keyword-search-box" />
+                <img class="cateogry-keyword-search-icon" src="" />
+              </div>
+              <button class="cateogry-search-btn">검색</button>
             </div>
           </div>
           <div class="category-content"></div>
