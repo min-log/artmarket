@@ -254,6 +254,13 @@ detailMidRightPaymentBtn.addEventListener('click', function () {
 
     const deadlineDate = new Date(deadline);
     const amountValue = parseInt(amount);
+    const currentDate = new Date();
+    const minDeadlineDate = new Date(currentDate.getTime() + (3 * 24 * 60 * 60 * 1000)); // 최소 3일 후
+
+    if (deadlineDate < minDeadlineDate) {
+        alert('마감일은 최소 3일 이후로 설정해야 합니다.');
+        return;
+    }
     const requestData = {
         memberId: sessionStorage.getItem('id'),
         productId: sessionStorage.getItem('detailproduct'),
