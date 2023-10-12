@@ -174,6 +174,7 @@ loginBtn.addEventListener("click", function () {
                 }
                 sessionStorage.setItem('login-profile-intro', `${data.loginTrueName}님, 어서오세요`)
                 sessionStorage.setItem('name', `${data.loginTrueName}`)
+                sessionStorage.setItem('nickname', `${data.loginTrueNickname}`)
                 location.href = 'index.html'
 
             } else if (resStatus === 401) {

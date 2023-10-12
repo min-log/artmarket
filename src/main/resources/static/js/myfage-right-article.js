@@ -104,7 +104,7 @@ function myfageArticleRightAddTag() {
       </div>
     </div>
     <div class="myfage-right-article-manage-btn-box">
-      <div class="myfage-right-article-manage-btn-box-show">미리보기</div>
+<!--      <div class="myfage-right-article-manage-btn-box-show">미리보기</div>-->
       <div class="myfage-right-article-manage-btn-box-add">등록하기</div>
       <div class="myfage-right-article-manage-btn-box-modify" style="display:none">수정하기</div>
     </div>
