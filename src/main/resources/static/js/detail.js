@@ -258,7 +258,7 @@ detailMidRightPaymentBtn.addEventListener('click', function () {
         memberId: sessionStorage.getItem('id'),
         productId: sessionStorage.getItem('detailproduct'),
         nickname: sessionStorage.getItem('nickname'),
-        productName: sessionStorage.getItem('nickname') + "의 " + sessionStorage.getItem('detailproduct') + "번 상품",
+        productName: detailMidLeftProfileInfoNickname.getAttribute('value') + "의 " + sessionStorage.getItem('detailproduct') + "번 상품",
         quantity: parseInt("1"),
         totalAmount: amountValue,
         deadline: deadlineDate.toISOString(),
@@ -281,15 +281,24 @@ detailMidRightPaymentBtn.addEventListener('click', function () {
 
             if (popupWindow) {
                 // 이벤트 리스너 등록
-                window.addEventListener('message', (event) => {
+                function handleMessage(event) {
                     const currentPopupUrl = popupWindow.location.href;
                     if (currentPopupUrl && currentPopupUrl.includes('/success-order')) {
+                        window.removeEventListener('message', handleMessage); // 리스너 제거
                         popupWindow.close();
                     }
-                });
-            }
-            if (popupWindow.closed) {
-                alert('결제가 완료되었습니다.');
+                }
+
+                window.addEventListener('message', handleMessage);
+
+                // 팝업이 닫힌 경우를 체크
+                const checkPopupInterval = setInterval(() => {
+                    if (popupWindow.closed) {
+                        clearInterval(checkPopupInterval);
+                        window.removeEventListener('message', handleMessage); // 리스너 제거
+                        alert('결제가 완료되었습니다.');
+                    }
+                }, 1000);
             }
         })
         .catch(error => console.error('에러:', error));
