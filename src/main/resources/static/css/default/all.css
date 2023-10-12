@@ -131,6 +131,9 @@ input[readonly] {
 	font-weight: 600;
 	cursor: pointer;
 	float: right;
+	position: absolute;
+	right: 0.4rem;
+	top: 0.4rem;
 }
 
 .modal-content {padding:0 1rem 2rem;text-align: center;margin:0;word-break:keep-all;}

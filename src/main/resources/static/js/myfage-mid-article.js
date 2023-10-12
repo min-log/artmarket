@@ -23,12 +23,12 @@ function myfageArticleMidAddTag() {
           <input type="date" date-placeholder="시작일" class="myfage-mid-article-box-top-start-date" />
           <input type="date" date-placeholder="종료일" class="myfage-mid-article-box-top-end-date" />
         </div>-->
-        <div class="myfage-mid-article-box-top-manage">
-          <div class="myfage-mid-article-box-top-manage-onOff">
-            <div class="myfage-mid-article-box-top-manage-onOff-label">의뢰</div>
-            <img class="myfage-mid-article-box-top-manage-onOff-icon" src="./css/icon/article-on.png">
-          </div>
-        </div>
+<!--        <div class="myfage-mid-article-box-top-manage">-->
+<!--          <div class="myfage-mid-article-box-top-manage-onOff">-->
+<!--            <div class="myfage-mid-article-box-top-manage-onOff-label">의뢰</div>-->
+<!--            <img class="myfage-mid-article-box-top-manage-onOff-icon" src="./css/icon/article-on.png">-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
       <div class="myfage-mid-article-box-top-manage-onOff-label"><strong>등록 작품</strong></div>
       
@@ -71,9 +71,9 @@ function myfageArticleMidAddTag() {
               <div class="myfage-mid-article-box-bot-list-right-top-art-label">작품번호</div>
               <div class="myfage-mid-article-box-bot-list-right-top-art-value">${data[i].articleId}</div>
             </div>
-            <div class="myfage-mid-article-box-bot-list-right-top-onOff">
-              <img class="myfage-mid-article-box-bot-list-right-top-onOff-icon" src="./css/icon/article-off.png">
-            </div>
+<!--            <div class="myfage-mid-article-box-bot-list-right-top-onOff">-->
+<!--              <img class="myfage-mid-article-box-bot-list-right-top-onOff-icon" src="./css/icon/article-off.png">-->
+<!--            </div>-->
           </div>
           <div class="myfage-mid-article-box-bot-list-category">
             <div class="myfage-mid-article-box-bot-list-category-label">카테고리</div>

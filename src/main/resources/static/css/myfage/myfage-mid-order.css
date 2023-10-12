@@ -1,5 +1,5 @@
 .myfage-mid-order-content {
-  padding: 8rem 1.5rem;
+  padding: 5rem 1.5rem;
 }
 
 .myfage-mid-order-content > *:not(:first-child) {
@@ -31,6 +31,11 @@
   color: white;
   transition-duration: 0.2s;
 }
+.myfage-mid-order-content-nav > *.active{
+  background-color: rgba(41, 45, 50, 1);
+  color: white;
+  transition-duration: 0.2s;
+}
 
 .myfage-mid-order-content-status > * {
   width: 12rem;
@@ -52,11 +57,12 @@
   float: right;
   margin-top: 2rem;
 }
-
+.myfage-mid-order-content-list-content {width:100%;}
 .myfage-mid-order-content-list-box {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top:2rem
 }
 
 .myfage-mid-order-content-list-title {
@@ -66,6 +72,8 @@
   border-radius: 3rem;
   padding: 0.6rem 0.8rem;
   margin-bottom: 0.5rem;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .myfage-mid-order-content-list-title > * {
@@ -85,12 +93,16 @@
 }
 
 .myfage-mid-order-content-list-value {
+  background: #fff;
   display: flex;
   box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
   border-radius: 2rem;
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
   padding-left: -3.5rem;
+  margin-top:0.6rem;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .myfage-mid-order-content-list-value:hover {
@@ -106,3 +118,26 @@
 .myfage-mid-order-content-filter-current {
   padding: 0.32rem 1rem;
 }
+
+
+.myfage-mid-order-content-list-value button {    border: solid 0.01rem rgba(41, 45, 50, 0.1);
+  border-radius: 1rem;
+  box-shadow: 2px 2px 0.2rem rgba(88, 88, 88, 0.1);
+  padding: 0.1rem 1rem;
+  color: rgba(41, 45, 50, 1);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  height:1.5rem;box-sizing:border-box;
+  margin-left: 0.4rem;background:#fff;width:auto;}
+
+.myfage-mid-order-content-info {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  font-size: 0.85rem;
+  opacity: 0.5;
+}
+
+.myfage-mid-order-content-info img {width: 1.4rem;margin-top: 1rem;margin-right: 0.5rem;}

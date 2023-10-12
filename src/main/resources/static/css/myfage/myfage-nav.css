@@ -12,7 +12,14 @@ container {
 }
 
 .myfage-nav-content {
-    position: absolute;
+    box-sizing: border-box;
+    height: 53.5rem;
+    width: 15rem;
+    margin: 5rem 0.5rem;
+    border-radius: 12px;
+    overflow: hidden;
+    background:linear-gradient(rgb(59 63 67), rgba(41, 45, 50, 1));
+    box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
 }
 
 .myfage-nav-profile-menu,

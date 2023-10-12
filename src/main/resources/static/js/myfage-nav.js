@@ -36,9 +36,7 @@ myfageNav.insertAdjacentHTML('afterend', `<div class="myfage-nav-content">
   </div>
 </div>
 </div>
-<div>
-<img class="myfage-nav-img" src="./css/img/myfage-nav-img.png" />
-</div>`)
+`)
 
 const myfageNavProfileIdentity = document.querySelector('.myfage-nav-profile-identity')
 myfageNavProfileIdentity.textContent = sessionStorage.getItem('identity') === 'GENERAL' ? '일반 회원' : '작가 회원'
