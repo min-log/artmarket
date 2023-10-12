@@ -124,7 +124,6 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
     let chatTxtFrom = document.querySelector(".product-chat-room-box-bot-send-text")
 
 
-
     // chat send btn
     const productChatRoomBoxBotSendBtn = document.querySelector('.product-chat-room-box-bot-send-btn')
 
@@ -145,24 +144,22 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
             //파일 업로드 구현
             ChatRoomBoxBotSendAttachFile.addEventListener('click', function () {
                 console.log("클릭");
-                ChatRoomBoxBotSendAttachFile.addEventListener('change',function(){
-                    var fileList = ChatRoomBoxBotSendAttachFile.files ;
+                ChatRoomBoxBotSendAttachFile.addEventListener('change', function () {
+                    var fileList = ChatRoomBoxBotSendAttachFile.files;
                     // 읽기
                     var reader = new FileReader();
                     reader.readAsDataURL(fileList[0]);
                     //로드 한 후
-                    reader.onload = function  () {
+                    reader.onload = function () {
                         let fileType = fileList.type;
-                        if(fileList[0].type == "image/png" || fileList[0].type == "image/jpeg"){
+                        if (fileList[0].type == "image/png" || fileList[0].type == "image/jpeg") {
                             chatFileBox.style.display = 'block';
                             chatTxtFrom.style = 'padding-left:3rem';
-                            chatFileBox.src=  reader.result;
+                            chatFileBox.src = reader.result;
                         }
                     };
                 });
             });
-
-
 
 
             productChatRoomBoxBotSendBtn.addEventListener('click', function () {
@@ -186,7 +183,7 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
                                 sendChatMsg: productChatRoomBoxBotSendText.value,
                                 sendChatFile: {
                                     chatFileName: fileList.name,
-                                    chatFileData:  Array.from(new Uint8Array(fileContent)),
+                                    chatFileData: Array.from(new Uint8Array(fileContent)),
                                     chatFileType: fileList.type
                                 }
                             }));
@@ -194,7 +191,7 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
                         };
 
                         reader.readAsArrayBuffer(fileList); // 파일을 바이너리로 읽기
-                    }else{
+                    } else {
                         // 일반 메시지
                         stompClient.send(`/pub/chat-room/send`, {}, JSON.stringify({
                             sendChatRoomId: productChatRoomBoxMid.getAttribute('id'),
@@ -207,12 +204,12 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
                     //초기화
                     setTimeout(function () {
                         productChatRoomBoxBotSendText.value = '';
-                        if(chatFileBox != null){
+                        if (chatFileBox != null) {
                             chatFileBox.style = "display:none";
                             productChatRoomBoxBotSendText.style = '';
-                            ChatRoomBoxBotSendAttachFile.value ='';
+                            ChatRoomBoxBotSendAttachFile.value = '';
                         }
-                    },100);
+                    }, 100);
 
                 }
             })
@@ -236,6 +233,25 @@ const detailMidRightPaymentBtn = document.querySelector('.detail-mid-right-payme
 detailMidRightPaymentBtn.addEventListener('click', function () {
     const deadline = document.querySelector('.detail-mid-right-deadline-btn').value;
     const amount = document.querySelector('.detail-mid-right-payment-cost').value;
+    // 본인 작품인지 확인
+    if (sessionStorage.getItem('nickname') === detailMidLeftProfileInfoNickname.getAttribute('value')) {
+        alert('본인 작품에는 결제할 수 없습니다.');
+        return;
+    }
+    // 마감일 입력 체크
+    if (!deadline) {
+        alert('마감일을 선택해주세요.');
+        return;
+    }
+    // amount에 숫자만 입력되었는지 검증
+    const amountRegex = /^[0-9]+$/;
+
+    // 가격 입력 체크
+    if (!amount || !amountRegex.test(amount)) {
+        alert('가격을 입력해주세요. (숫자만 허용)');
+        return;
+    }
+
     const deadlineDate = new Date(deadline);
     const amountValue = parseInt(amount);
     const requestData = {
