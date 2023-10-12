@@ -17,7 +17,7 @@ nav.insertAdjacentHTML('beforeend', `
     <div class="login">LOGIN</div>
     <div class="myfage">MYPAGE</div>
     <div class="alram">
-      ALRAM 
+      ALARM 
       <!-- <span class="alram-num num" style="display:none;"></span>-->
       <div class="alram-con" style="display:none;" >
           <p class="title">
@@ -27,7 +27,7 @@ nav.insertAdjacentHTML('beforeend', `
           <ul></ul>
       </div>
     </div>
-    <div class="center">CENTER</div>
+<!--    <div class="center">CENTER</div>-->
     <div class="home">HOME</div>
     <div class="login-profile">
         <img class="login-profile-img" />
@@ -175,6 +175,40 @@ video.addEventListener('click', function () {
 
 /*------------------------이동------------------------- */
 
+// 여기서 변경된 부분입니다.
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+const loginType = getCookie('loginType'); // 쿠키에서 loginType 값을 가져오는 함수
+
+if (loginType === 'SOCIAL') {
+    const loginTrueId = getCookie('loginTrueId');
+    const loginTrueName = getCookie('loginTrueName');
+    const loginTrueIdentity = getCookie('loginTrueIdentity');
+    const loginId = getCookie('loginId');
+
+    if (loginTrueId && loginTrueName && loginTrueIdentity && loginId) {
+        sessionStorage.setItem('id', loginTrueId);
+        sessionStorage.setItem('identity', loginTrueIdentity);
+        sessionStorage.setItem('loginId', loginId);
+
+        if (loginTrueIdentity == 'GENERAL') {
+            sessionStorage.setItem('login-profile-img', './css/icon/login-general.png')
+        } else {
+            sessionStorage.setItem('login-profile-img', './css/icon/login-author.png')
+        }
+        sessionStorage.setItem('login-profile-intro', `${loginTrueName}님, 어서오세요`)
+        sessionStorage.setItem('name', loginTrueName)
+// 쿠키 삭제
+        document.cookie = 'loginTrueId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'loginTrueName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'loginTrueIdentity=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'loginId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    }
+}
 const navLogo = document.querySelector('.nav-logo')
 navLogo.addEventListener("click", function () {
 	location.href = "index.html"
