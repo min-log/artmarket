@@ -196,11 +196,13 @@ if (loginType === 'SOCIAL') {
     const loginTrueName = getCookie('loginTrueName');
     const loginTrueIdentity = getCookie('loginTrueIdentity');
     const loginId = getCookie('loginId');
+    const nickname = getCookie('nickname');
 
-    if (loginTrueId && loginTrueName && loginTrueIdentity && loginId) {
+    if (loginTrueId && loginTrueName && loginTrueIdentity && loginId && nickname) {
         sessionStorage.setItem('id', loginTrueId);
         sessionStorage.setItem('identity', loginTrueIdentity);
         sessionStorage.setItem('loginId', loginId);
+        sessionStorage.setItem('nickname', nickname);
 
         if (loginTrueIdentity == 'GENERAL') {
             sessionStorage.setItem('login-profile-img', './css/icon/login-general.png')
@@ -214,13 +216,17 @@ if (loginType === 'SOCIAL') {
         document.cookie = 'loginTrueName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.cookie = 'loginTrueIdentity=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.cookie = 'loginId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'nickname=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+        sessionStorage.removeItem('name');
+        sessionStorage.removeItem('loginId');
+        location.reload();
     }
 }
 const navLogo = document.querySelector('.nav-logo')
 navLogo.addEventListener("click", function () {
 	location.href = "index.html"
 })
-
 
 
 const myfage = document.querySelector('.myfage')
@@ -260,17 +266,31 @@ home.addEventListener("click", function () {
 
 const logout = document.querySelector('.logout')
 if (logout) {
-	logout.addEventListener("click", function () {
-		if (sessionStorage.getItem("id") !== null) {
-			sessionStorage.removeItem("id")
-			sessionStorage.removeItem("identity")
-			sessionStorage.removeItem('login-profile-img')
-			sessionStorage.removeItem('login-profile-intro')
-			login.textContent = 'LOGIN'
-			alert('로그아웃 되었습니다.')
-			location.href = 'index.html'
-		} else {
-			location.href = "login.html"
-		}
-	})
+    logout.addEventListener("click", function () {
+        if (sessionStorage.getItem("id") !== null) {
+            sessionStorage.removeItem("id")
+            sessionStorage.removeItem("identity")
+            sessionStorage.removeItem('login-profile-img')
+            sessionStorage.removeItem('login-profile-intro')
+            sessionStorage.removeItem('intro');
+            sessionStorage.removeItem('nickname');
+            sessionStorage.removeItem('alramList');
+            sessionStorage.removeItem('name');
+            sessionStorage.removeItem('loginId');
+            sessionStorage.removeItem('detailproduct');
+            sessionStorage.removeItem('selectcategory');
+            sessionStorage.removeItem('chatcurrenttag');
+
+            document.cookie = 'loginType=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            document.cookie = 'joinType=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            document.cookie = 'email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            document.cookie = 'jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+            login.textContent = 'LOGIN'
+            alert('로그아웃 되었습니다.')
+            location.href = 'index.html'
+        } else {
+            location.href = "login.html"
+        }
+    })
 }

@@ -153,6 +153,7 @@ public class GoogleUserService {
                 Cookie loginTrueName = new Cookie("loginTrueName", member.get().getName());
                 Cookie loginType = new Cookie("loginType", "SOCIAL");
                 Cookie loginId = new Cookie("loginId", member.get().getLoginId());
+                Cookie nickname = new Cookie("nickname", member.get().getNickname());
 
                 // 쿠키의 유효 시간 설정 (초 단위)
                 int maxAge = 1 * 60 * 60; // 예시로 1시간 유지
@@ -166,6 +167,8 @@ public class GoogleUserService {
                 response.addCookie(loginTrueName);
                 response.addCookie(loginType);
                 response.addCookie(loginId);
+                response.addCookie(nickname);
+
                 return "redirect:/index.html";
             } else {
                 // 세션 대신 쿠키에 정보 저장
@@ -174,7 +177,7 @@ public class GoogleUserService {
                 Cookie jwtToken = new Cookie("jwtToken", token);
 
                 // 쿠키의 유효 시간 설정 (초 단위)
-                int maxAge = 1 * 60 * 60; // 예시로 1시간 유지
+                int maxAge = 1 * 60 * 60; // 예시로 1시간 유지in
 
                 joinType.setMaxAge(maxAge);
                 email.setMaxAge(maxAge);
