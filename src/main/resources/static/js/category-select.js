@@ -61,6 +61,9 @@ categorySearchBtn.addEventListener('click',function (){
                     + "<p>올바른 내용을 검색해주세요</p>"
                     + "</div>");
             }
+
+
+            categoryOneClick();
         });
     }
 
@@ -115,6 +118,8 @@ function categorySelectChange(){
         </div>
       </div>`)
         }
+
+        categoryOneClick();
     });
 
 }

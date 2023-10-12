@@ -57,6 +57,10 @@ fetch(`/category/list/${categorySelectKeyword}`, {
   }
 
 
+  categoryOneClick();
+});
+
+function categoryOneClick(){
   const categoryGoDetailBtn = document.querySelectorAll('.category-list-box-go-detail')
 
   for (const categoryGoDetail of categoryGoDetailBtn) {
@@ -66,5 +70,4 @@ fetch(`/category/list/${categorySelectKeyword}`, {
     })
   }
 
-})
-
+}
