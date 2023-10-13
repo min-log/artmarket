@@ -30,16 +30,17 @@
     <!--판매자 주문관리-->
     <select id="selectAuthor" resultType="llustmarket.artmarket.web.dto.order.OrderPayDTO">
         SELECT o.order_id,
-        m.member_id,
         m.nickname,
         o.total_amount,
         o.order_date,
         o.deadline,
         o.order_status
         FROM art_market_db.order o
+        INNER JOIN product p
+        ON p.product_id = o.product_id
         INNER JOIN member m
         ON m.member_id = o.member_id
-        where o.member_id = #{memberId} and o.order_status &lt;&gt; '결제 대기'
+        where p.member_id = #{memberId} and o.order_status &lt;&gt; '결제 대기'
     </select>
     <!--판매자의 검색 기능 -->
     <select id="orderSearchAuthor" parameterType="llustmarket.artmarket.web.dto.order.SearchOrderDTO"
@@ -55,7 +56,7 @@
         ON p.product_id = o.product_id
         INNER JOIN member m
         ON m.member_id = o.member_id
-        where o.member_id = #{memberId} and o.order_status &lt;&gt; '결제 대기'
+        where p.member_id = #{memberId} and o.order_status &lt;&gt; '결제 대기'
         <if test="category !=null and !category.equals('')">
             and p.category = #{category}
         </if>
@@ -87,7 +88,7 @@
         ON p.product_id = o.product_id
         INNER JOIN member m
         ON m.member_id = p.member_id
-        where m.member_id = #{memberId} and o.order_status &lt;&gt; '결제 대기'
+        where o.member_id = #{memberId} and o.order_status &lt;&gt; '결제 대기'
     </select>
 
     <!--구매자의 검색 기능 -->
@@ -104,7 +105,7 @@
         ON p.product_id = o.product_id
         INNER JOIN member m
         ON m.member_id = p.member_id
-        where m.member_id = #{memberId} and o.order_status &lt;&gt; '결제 대기'
+        where o.member_id = #{memberId} and o.order_status &lt;&gt; '결제 대기'
         <if test="category !=null and !category.equals('')">
             and p.category = #{category}
         </if>

@@ -27,6 +27,7 @@
         INNER JOIN art_market_db.order o
         ON o.order_id = s.partner_order_id
         where o.order_id = #{orderId}
+        <!--여기다가 마감기한 비교한거 넣으면됨-->
     </select>
 
 </mapper>
