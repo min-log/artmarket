@@ -139,7 +139,6 @@ function orderListContent(){
 
     }else {
         orderMamberNavList ="/mypage-orderMember/";
-
         myfageOrderInfoTxt.innerHTML = '<img src="./css/icon/mypage-caution.png"> ' +
             '<p>의뢰 신청을 수락해야 작업이 진행됩니다.</br>'
             + '의뢰 수락 전에는 의뢰자가 취소할 수 있습니다.</p>'
@@ -338,24 +337,53 @@ function orderStatusChange(orderStatus,orderId){
     let orderStatusResultBtn = document.querySelector(".order-status-result-btn");
 
     orderStatusResultBtn.addEventListener('click',function () {
-        fetch('/order-status',{
-            method:'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                orderStatus: orderStatus,
-                orderId: orderId
-            })
-        }).then(response=>{
-            if (response.status == 200){
-                alert("상태가 변경되었습니다.");
-                location.reload();
-            }
-        }).then(data=>{
-           console.log(data);
-        });
+
+        if(orderStatus == "cancel"){
+            // 취소일 경우 = 환불 절차
+            fetch('/refund',{
+                method:'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    orderId: orderId
+                })
+            }).then(response=>{
+                if (response.status == 200){
+                    orderStatuseRe();
+                }else {
+                    alert("취소가 실패했습니다.");
+                }
+
+            });
+        }else{
+            // 이외 상태 변경
+            orderStatuseRe();
+        }
+        function orderStatuseRe(){
+            // 주문상태 변경
+            fetch('/order-status',{
+                method:'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    orderStatus: orderStatus,
+                    orderId: orderId
+                })
+            }).then(response=>{
+                if (response.status == 200){
+                    alert("상태가 변경되었습니다.");
+                    location.reload();
+                }else{
+                    alert("변경이 실패했습니다.");
+                }
+            }).then(data=>{
+               console.log(data);
+            });
+        }
     });
+
 }
 
 
