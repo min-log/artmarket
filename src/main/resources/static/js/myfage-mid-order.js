@@ -28,39 +28,42 @@ function myfageOrderMidAddTag() {
                     </div>
                     <div class="myfage-mid-order-content-status">
                         <div class="status-1">
-                            <div class="status-1-label">의뢰 신청</div>
+                            <div class="status-1-labl status-name-1">의뢰 신청</div>
                             <div class="status-1-value">0건</div>
                         </div>
                         <div class="status-2">
-                            <div class="status-2-label">의뢰 진행중</div>
+                            <div class="status-2-label status-name-2">의뢰 진행중</div>
                             <div class="status-2-value">0건</div>
                         </div>
                         <div class="status-3">
-                            <div class="status-3-label">처리 완료</div>
+                            <div class="status-3-label status-name-3">처리 완료</div>
                             <div class="status-3-value">0건</div>
                         </div>
                         <div class="status-4">
-                            <div class="status-4-label">작품 수령</div>
+                            <div class="status-4-label status-name-4">작품 수령</div>
                             <div class="status-4-value">0건</div>
                         </div>
-                        <div class="status-5">
-                            <div class="status-5-label">의뢰 취소</div>
+                        <div class=" status-5">
+                            <div class="status-5-label  status-name-5">의뢰 취소</div>
                             <div class="status-5-value">0건</div>
                         </div>
                     </div>
-<!--                    <div class="myfage-mid-order-content-filter">-->
-<!--                        <select class="myfage-mid-order-content-filter-current">-->
-<!--                            <option>전체 상태</option>-->
-<!--                            <option id="status-1"></option>-->
-<!--                            <option id="status-2"></option>-->
-<!--                            <option id="status-3"></option>-->
-<!--                            <option id="status-4"></option>-->
-<!--                            <option id="status-5"></option>-->
-<!--                        </select>-->
-<!--                        <input type="date" class="myfage-mid-order-content-filter-start" />-->
-<!--                        <input type="date" class="myfage-mid-order-content-filter-end" />-->
-<!--                    </div>-->
                     <div class="myfage-mid-order-content-info"></div>
+                    <div class="myfage-mid-order-content-filter">
+                        <select class="myfage-mid-order-content-filter-current">
+                            <option value="">전체 상태</option>
+                            <option id="status-1" class="status-name-1" value="order">의뢰 신청</option>
+                            <option id="status-2" class="status-name-2" value="ongoing">의뢰 진행중</option>
+                            <option id="status-3" class="status-name-3" value="finish">처리 완료</option>
+                            <option id="status-4" class="status-name-4" value="delivery">작품 수령</option>
+                            <option id="status-5" class="status-name-5" value="cancel">의뢰 취소</option>
+                        </select>
+                        <input type="date" class="myfage-mid-order-content-filter-start" />
+                        <input type="date" class="myfage-mid-order-content-filter-end" />
+                        <input type="text" class="myfage-mid-order-content-filter-nickname" placeholder="닉네임을 입력해주세요." />
+                        <button id="OrderSearchBtn">검색</button>
+                    </div>
+                   
                     <div class="myfage-mid-order-content-list-box">
                         <div class="myfage-mid-order-content-list-title">
                             <div class="myfage-mid-order-content-list-title-order-num">
@@ -101,24 +104,13 @@ function myfageOrderMidAddTag() {
     }
     myfageOrderNav.innerHTML = myfageOrderNavContent;
 
-
-
-
-
-
-
-
-    orderListContent();
+    orderSetListContent();
+    orderSearch();
     myOrderNavClick();
-
-
-    
-
-
 }
 
 
-function orderListContent(){
+function orderSetListContent(){
 
     orderMap.set("statusOrder",0);
     orderMap.set("statusOngoing",0);
@@ -126,19 +118,62 @@ function orderListContent(){
     orderMap.set("statusDelivery",0);
     orderMap.set("statusCancel",0);
 
-
+    
 
     const myfageOrderInfoTxt = document.querySelector(".myfage-mid-order-content-info");
-    // 리스트 출력
+    // 상태 명 변경 출력
+    let orderTableName = document.querySelector(".myfage-mid-order-content-list-title-order-nickname");
+    let nevName1 = document.querySelectorAll(".status-name-1");
+    let nevName2 = document.querySelectorAll(".status-name-2");
+    let nevName3 = document.querySelectorAll(".status-name-3");
+    let nevName4 = document.querySelectorAll(".status-name-4");
+    let nevName5 = document.querySelectorAll(".status-name-5");
+
     if(sessionStorage.getItem("orderNav") == "orderSends"){
-        orderMamberNavList =   "/mypage-orderAuthor/";
+        orderMamberNavList ="/mypage-orderMember/";
+
+        orderTableName.innerHTML = "작가명";
+        nevName1.forEach(item=>{
+            item.innerHTML = "의뢰 신청";
+        });
+        nevName2.forEach(item=>{
+            item.innerHTML = "의뢰 진행중";
+        })
+        nevName3.forEach(item=>{
+            item.innerHTML = "처리 완료";
+        })
+        nevName4.forEach(item=>{
+            item.innerHTML = "작품 수령";
+        })
+        nevName5.forEach(item=>{
+            item.innerHTML = "의뢰 취소";
+        });
+
 
         myfageOrderInfoTxt.innerHTML = '<img src="./css/icon/mypage-caution.png"> ' +
             '<p>의뢰 신청을 작가가 수락해야 작업이 진행됩니다.</br>'
             + '작업시작 전에는 의뢰 취소가 가능합니다.</p>'
 
     }else {
-        orderMamberNavList ="/mypage-orderMember/";
+        orderMamberNavList =   "/mypage-orderAuthor/";
+
+        orderTableName.innerHTML = "의뢰자명";
+        nevName1.forEach(item=>{
+            item.innerHTML = "주문 신청";
+        });
+        nevName2.forEach(item=>{
+            item.innerHTML = "주문 진행중";
+        })
+        nevName3.forEach(item=>{
+            item.innerHTML = "작업 완료";
+        })
+        nevName4.forEach(item=>{
+            item.innerHTML = "작품 전달";
+        })
+        nevName5.forEach(item=>{
+            item.innerHTML = "주문 취소";
+        });
+
         myfageOrderInfoTxt.innerHTML = '<img src="./css/icon/mypage-caution.png"> ' +
             '<p>의뢰 신청을 수락해야 작업이 진행됩니다.</br>'
             + '의뢰 수락 전에는 의뢰자가 취소할 수 있습니다.</p>'
@@ -147,9 +182,8 @@ function orderListContent(){
 
 
 
-    const myfageOrderList = document.querySelector(".myfage-mid-order-content-list-content");
+    let myfageOrderList = document.querySelector(".myfage-mid-order-content-list-content");
     myfageOrderList.innerHTML = "";
-    let myfageOrderListContet = "";
 
     fetch(orderMamberNavList + memberId ,{
         method:'GET'
@@ -159,44 +193,10 @@ function orderListContent(){
         console.log(data);
         let listData = [];
         listData = data;
-
-        for(let i = 0;i<listData.length;i++){
-            myfageOrderListContet += '<div class="myfage-mid-order-content-list-value">' +
-                '              <div class="myfage-mid-order-content-list-value-order-num">' + listData[i].orderId + '</div>' +
-                '              <div class="myfage-mid-order-content-list-value-order-nickname">' +
-                listData[i].nickname +
-                '              </div>' +
-                '              <div class="myfage-mid-order-content-list-value-order-cost">' +
-                listData[i].totalAmount +
-                '              </div>' +
-                '              <div class="myfage-mid-order-content-list-value-order-date">' +
-                listData[i].orderDate +
-                '              </div>' +
-                '              <div class="myfage-mid-order-content-list-value-order-deadline">' +
-                listData[i].deadline +
-                '              </div>' +
-                '              <div class="myfage-mid-order-content-list-value-order-status">\n' +
-                orderStatusList(listData[i].orderStatus,listData[i].orderId)
-                +
-                '              </div>' +
-                '            </div>';
-
-
-
-        }
-
-
-        myfageOrderList.innerHTML = myfageOrderListContet;
-
+        
+        myfageOrderList.innerHTML = orderList(listData);
 
         // count 추가
-
-        //
-        // orderMap.set("statusOrder",0);
-        // orderMap.set("statusOngoing",0);
-        // orderMap.set("statusFinish",0);
-        // orderMap.set("statusDelivery",0);
-        // orderMap.set("statusCancel",0);
         let orderStatusCount1 = document.querySelector(".status-1-value");
         let orderStatusCount2 = document.querySelector(".status-2-value");
         let orderStatusCount3 = document.querySelector(".status-3-value");
@@ -211,17 +211,91 @@ function orderListContent(){
 
 
 
-
     });
-
-
-
-
 
 
 }
 
 
+
+function orderList(listData){
+    let myfageOrderListContet = "";
+    for(let i = 0;i<listData.length;i++){
+        myfageOrderListContet += '<div class="myfage-mid-order-content-list-value">' +
+            '              <div class="myfage-mid-order-content-list-value-order-num">' + listData[i].orderId + '</div>' +
+            '              <div class="myfage-mid-order-content-list-value-order-nickname">' +
+            listData[i].nickname +
+            '              </div>' +
+            '              <div class="myfage-mid-order-content-list-value-order-cost">' +
+            listData[i].totalAmount +
+            '              </div>' +
+            '              <div class="myfage-mid-order-content-list-value-order-date">' +
+            listData[i].orderDate +
+            '              </div>' +
+            '              <div class="myfage-mid-order-content-list-value-order-deadline">' +
+            listData[i].deadline +
+            '              </div>' +
+            '              <div class="myfage-mid-order-content-list-value-order-status">\n' +
+            orderStatusList(listData[i].orderStatus,listData[i].orderId)
+            +
+            '              </div>' +
+            '            </div>';
+
+    }
+
+    return myfageOrderListContet;
+
+}
+
+function orderSearch(){
+    //검색기능
+
+    let orderSearchSelect = document.querySelector(".myfage-mid-order-content-filter-current");
+    let orderSearchStartDate = document.querySelector(".myfage-mid-order-content-filter-start");
+    let orderSearchEndDate = document.querySelector(".myfage-mid-order-content-filter-end");
+    let orderSearchNickName = document.querySelector(".myfage-mid-order-content-filter-nickname");
+    let searchBtn = document.getElementById("OrderSearchBtn");
+
+    searchBtn.addEventListener('click',function () {
+        let orderSearchUrl = "/mypage-searchMember";
+        if(sessionStorage.getItem("orderNav") == "orderSends"){
+            orderSearchUrl = "/mypage-searchMember";
+        }else {
+            orderSearchUrl = "/mypage-searchAuthor";
+
+        }
+
+
+        let orderSearchUrlPram = "";
+        let  orderSelectValue = orderSearchSelect.options[orderSearchSelect.selectedIndex].value;
+
+        if(orderSelectValue != "") orderSearchUrlPram  += "&orderStatus=" + orderSelectValue;
+        if(orderSearchStartDate.value != "") orderSearchUrlPram  += "&startDate=" + orderSearchStartDate.value;
+        if(orderSearchEndDate.value != "") orderSearchUrlPram  += "&endDate=" + orderSearchEndDate.value;
+        if(orderSearchNickName.value != "")orderSearchUrlPram  += "&nickname=" + orderSearchNickName.value;
+
+        console.log(orderSearchUrl + "?memberId=" + sessionStorage.getItem("id") + orderSearchUrlPram);
+
+        let myfageOrderList = document.querySelector(".myfage-mid-order-content-list-content");
+        myfageOrderList.innerHTML = "";
+
+
+
+        fetch(orderSearchUrl +
+            "?memberId=" + sessionStorage.getItem("id")
+            + orderSearchUrlPram
+        ,{
+            method : 'GET'
+        }).then(response=>{
+            return response.json();
+        }).then(data=>{
+            let dataList = [];
+            dataList= data;
+
+            myfageOrderList.innerHTML = orderList(dataList);
+        });
+    })
+}
 
 
 
@@ -232,7 +306,7 @@ function myOrderNavClick(){
 
     myWorkBtn.addEventListener("click",function (){
         sessionStorage.setItem("orderNav","orderGetters");
-        orderListContent();
+        orderSetListContent();
 
         myWorkBtn.classList.add("active");
         myOrderBtn.classList.remove("active");
@@ -241,7 +315,7 @@ function myOrderNavClick(){
 
     myOrderBtn.addEventListener("click",function (){
         sessionStorage.setItem("orderNav","orderSends");
-        orderListContent();
+        orderSetListContent();
         myOrderBtn.classList.add("active");
         myWorkBtn.classList.remove("active");
     })

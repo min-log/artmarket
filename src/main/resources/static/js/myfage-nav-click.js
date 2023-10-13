@@ -1,6 +1,8 @@
+
 //처음 시작할 페이지
-myfageChatMidAddTag()
 myfageChatRightAddTag()
+myfageChatMidAddTag()
+
 
 myfageNavChat.addEventListener('click', function () {
     myfageChatMidAddTag()

@@ -118,8 +118,26 @@
 .myfage-mid-order-content-filter-current {
   padding: 0.32rem 1rem;
 }
-
-
+.myfage-mid-order-content-filter-nickname { width: 12rem;
+  border: solid 0.1rem rgba(41, 45, 50, 0.3);
+  border-radius: 1rem;
+  padding: 0.2rem 0.5rem;
+  color: rgba(41, 45, 50, 0.8);
+  font-family: "Noto Sans KR", sans-serif;
+  box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.1);font-weight: normal;
+}
+.myfage-mid-order-content-filter-nickname::placeholder{
+  font-weight: normal;color: rgb(143 143 143 / 80%);
+}
+#OrderSearchBtn{
+  width: 6.2rem;
+  border: solid 0.1rem rgba(41, 45, 50, 0.3);
+  border-radius: 1rem;
+  padding: 0.2rem 0.5rem;
+  color: rgba(41, 45, 50, 0.8);
+  font-family: "Noto Sans KR", sans-serif;
+  box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.1);background:#fff;cursor: pointer;
+}
 .myfage-mid-order-content-list-value button {    border: solid 0.01rem rgba(41, 45, 50, 0.1);
   border-radius: 1rem;
   box-shadow: 2px 2px 0.2rem rgba(88, 88, 88, 0.1);

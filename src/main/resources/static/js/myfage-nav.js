@@ -64,7 +64,8 @@ function myfageNavSet() {
                 myfageNavProfileImgTag.setAttribute('src', `data:image/jpeg;base64,${data.profileImg2}`)
             }
         }
-    })
+    });
+
 }
 
 myfageNavSet()
