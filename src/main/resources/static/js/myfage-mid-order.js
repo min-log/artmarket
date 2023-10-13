@@ -134,15 +134,15 @@ function orderListContent(){
         orderMamberNavList =   "/mypage-orderAuthor/";
 
         myfageOrderInfoTxt.innerHTML = '<img src="./css/icon/mypage-caution.png"> ' +
-            '<p>의뢰 신청을 수락해야 작업이 진행됩니다.</br>'
-            + '의뢰 수락 전에는 의뢰자가 취소할 수 있습니다.</p>'
+            '<p>의뢰 신청을 작가가 수락해야 작업이 진행됩니다.</br>'
+            + '작업시작 전에는 의뢰 취소가 가능합니다.</p>'
 
     }else {
         orderMamberNavList ="/mypage-orderMember/";
 
         myfageOrderInfoTxt.innerHTML = '<img src="./css/icon/mypage-caution.png"> ' +
-            '<p>의뢰 신청을 작가가 수락해야 작업이 진행됩니다.</br>'
-            + '작업시작 전에는 의뢰 취소가 가능합니다.</p>'
+            '<p>의뢰 신청을 수락해야 작업이 진행됩니다.</br>'
+            + '의뢰 수락 전에는 의뢰자가 취소할 수 있습니다.</p>'
 
     }
 
@@ -250,6 +250,7 @@ function myOrderNavClick(){
 }
 
 
+// 의뢰인지 작업인지 구분되어야해서 전달 받는 값 추가 필요, (중단) => 스크립트로 카운트 처리 완료
 // function orderCount(){
 //     // private String orderStatus;
 //     // private int count;
@@ -265,29 +266,27 @@ function myOrderNavClick(){
 
 
 function orderStatusList(orderStatus,orderid){
-
-
     //order,ongoing,finish,delivery,cancel
     if(orderStatus == "order"){
         orderMap.set("statusOrder",orderMap.get("statusOrder") + 1);
         if(sessionStorage.getItem("orderNav") == "orderSends"){
-            return '의뢰 신청 <button type="button" onclick="orderStatusCange(\'cancel\',\''+orderid+'\')" > 취소 </button>'
+            return '의뢰 신청 <button type="button" onclick="orderStatusChange(\'cancel\',\''+orderid+'\')" > 취소 </button>'
         }else{
-            return '작업 신청 <button type="button" onclick="orderStatusCange(\'ongoing\',\''+orderid+'\')" > 수락 </button>'
+            return '작업 신청 <button type="button" onclick="orderStatusChange(\'ongoing\',\''+orderid+'\')" > 수락 </button><button type="button" onclick="orderStatusChange(\'cancel\',\''+orderid+'\')" > 취소 </button>'
         }
     }else if(orderStatus == "ongoing"){
         orderMap.set("statusOngoing",orderMap.get("statusOngoing") + 1);
         if(sessionStorage.getItem("orderNav") == "orderSends"){
             return '의뢰 진행중'
         }else{
-            return '진행 중 <button type="button" onclick="orderStatusCange(\'finish\',\''+orderid+'\')" > 완료 </button>'
+            return '진행 중 <button type="button" onclick="orderStatusChange(\'finish\',\''+orderid+'\')" > 완료 </button>'
         }
     }else if(orderStatus == "finish"){
         orderMap.set("statusFinish",orderMap.get("statusFinish") + 1);
         if(sessionStorage.getItem("orderNav") == "orderSends"){
             return '처리 완료'
         }else{
-            return '처리 완료 <button type="button" onclick="orderStatusCange(\'delivery\',\''+orderid+'\')"  > 전달 </button>'
+            return '처리 완료 <button type="button" onclick="orderStatusChange(\'delivery\',\''+orderid+'\')"  > 전달 </button>'
         }
     }else if(orderStatus == "delivery"){
         orderMap.set("statusDelivery",orderMap.get("statusDelivery") + 1);
@@ -308,7 +307,7 @@ function orderStatusList(orderStatus,orderid){
 }
 
 
-function orderStatusCange(orderStatus,orderId){
+function orderStatusChange(orderStatus,orderId){
     modal.style = "display:block";
     modalTitle.innerHTML = "주문상태 변경"
 
