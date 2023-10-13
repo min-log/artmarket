@@ -159,10 +159,10 @@ function orderSetListContent(){
 
         orderTableName.innerHTML = "의뢰자명";
         nevName1.forEach(item=>{
-            item.innerHTML = "주문 신청";
+            item.innerHTML = "작업 신청";
         });
         nevName2.forEach(item=>{
-            item.innerHTML = "주문 진행중";
+            item.innerHTML = "작업 진행중";
         })
         nevName3.forEach(item=>{
             item.innerHTML = "작업 완료";
@@ -171,7 +171,7 @@ function orderSetListContent(){
             item.innerHTML = "작품 전달";
         })
         nevName5.forEach(item=>{
-            item.innerHTML = "주문 취소";
+            item.innerHTML = "작업 취소";
         });
 
         myfageOrderInfoTxt.innerHTML = '<img src="./css/icon/mypage-caution.png"> ' +
@@ -373,7 +373,7 @@ function orderStatusList(orderStatus,orderid){
         if(sessionStorage.getItem("orderNav") == "orderSends"){
             return '의뢰 취소'
         }else{
-            return '주문 취소'
+            return '작업 취소'
         }
     }
 
