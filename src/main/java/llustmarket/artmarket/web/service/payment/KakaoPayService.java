@@ -100,7 +100,7 @@ public class KakaoPayService {
 
         OrderPayDTO orderPayDTO = new OrderPayDTO();
         orderPayDTO.setOrderId(paymentDTO.getPartnerOrderId());
-        orderPayDTO.setOrderStatus("결제 완료");
+        orderPayDTO.setOrderStatus("order");
         orderMapper.updateOrderStatus(orderPayDTO);
 
         return approveResponse;
@@ -131,7 +131,7 @@ public class KakaoPayService {
 
         OrderPayDTO orderPayDTO = new OrderPayDTO();
         orderPayDTO.setOrderId(pay.getPartnerOrderId());
-        orderPayDTO.setOrderStatus("환불 완료");
+        orderPayDTO.setOrderStatus("cancel");
         orderMapper.updateOrderStatus(orderPayDTO);
 
         return cancelResponse;
