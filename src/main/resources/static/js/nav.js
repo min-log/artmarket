@@ -45,138 +45,138 @@ const alramContent = document.querySelector('.alram-con');
 let alramSize = 0;
 
 if (sessionStorage.getItem("id") !== null) {
-	login.textContent = 'LOGOUT'
-	login.setAttribute("class", "logout");
-	alramSet(sessionStorage.getItem("id"));
+    login.textContent = 'LOGOUT'
+    login.setAttribute("class", "logout");
+    alramSet(sessionStorage.getItem("id"));
 } else {
-	login.textContent = 'LOGIN'
-	login.setAttribute("class", "login");
+    login.textContent = 'LOGIN'
+    login.setAttribute("class", "login");
 }
 
 if (login) {
-	login.addEventListener('click', function () {
-		location.href = 'login.html'
-	})
+    login.addEventListener('click', function () {
+        location.href = 'login.html'
+    })
 }
 
 const alramMsgList = new Map();
 
 function alramSet(id) {
-	let resStatus = 0;
-	fetch("/index/alram", {
-		method: 'POST',
-		headers: {
-			'content-type': 'application/json'
-		},
-		body: JSON.stringify({
-			alramId: id
-		})
-	}).then(response => {
-		resStatus = response.status
-		return response.json()
-	}).then(data => {
-		let alramListCont = '';
+    let resStatus = 0;
+    fetch("/index/alram", {
+        method: 'POST',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            alramId: id
+        })
+    }).then(response => {
+        resStatus = response.status
+        return response.json()
+    }).then(data => {
+        let alramListCont = '';
 
-		alramMsgList.clear();
-		for (let i = 0; i < data.alrams.length; i++) {
-			alramListCont += '<li>';
-			alramListCont += '<span class="alram-type">' + data.alrams[i].alramType + '</span>';
-			alramListCont += '<span class="alram-sender">' + data.alrams[i].alramSender + '</span>';
-			alramListCont += '<span class="alram-date">' + data.alrams[i].alertDate + '</span>';
-			alramListCont += '</li>';
-			if(data.alrams[i].alramType == "MESSAGE") alramMsgList.set(i,data.alrams[i].alertPath);
+        alramMsgList.clear();
+        for (let i = 0; i < data.alrams.length; i++) {
+            alramListCont += '<li>';
+            alramListCont += '<span class="alram-type">' + data.alrams[i].alramType + '</span>';
+            alramListCont += '<span class="alram-sender">' + data.alrams[i].alramSender + '</span>';
+            alramListCont += '<span class="alram-date">' + data.alrams[i].alertDate + '</span>';
+            alramListCont += '</li>';
+            if (data.alrams[i].alramType == "MESSAGE") alramMsgList.set(i, data.alrams[i].alertPath);
 
-		}
-		alramSize = `${data.alrams.length}`
-		sessionStorage.setItem('alramList', alramListCont);
+        }
+        alramSize = `${data.alrams.length}`
+        sessionStorage.setItem('alramList', alramListCont);
 
-		alramNumber.forEach((item, index) => {
-			item.textContent = alramSize;
-			item.style = "display:inline-block";
-		});
+        alramNumber.forEach((item, index) => {
+            item.textContent = alramSize;
+            item.style = "display:inline-block";
+        });
 
-	});
+    });
 }
 
 
 alram.addEventListener('click', function () {
-	const alramList = sessionStorage.getItem("alramList");
-	if (alramSize != 0) {
-		alramContent.querySelector("ul").innerHTML = alramList;
-	} else {
-		alramContent.querySelector("ul").innerHTML = '<li style="text-align: center">알림이 내역이 없습니다.</li>';
-	}
-	alram.classList.add("active");
-	alramContent.style = "display:block;";
+    const alramList = sessionStorage.getItem("alramList");
+    if (alramSize != 0) {
+        alramContent.querySelector("ul").innerHTML = alramList;
+    } else {
+        alramContent.querySelector("ul").innerHTML = '<li style="text-align: center">알림이 내역이 없습니다.</li>';
+    }
+    alram.classList.add("active");
+    alramContent.style = "display:block;";
 });
 
 alramDeleteAllBtn.addEventListener('click', function () {
-	fetch('/index/alram', {
-		method: 'PATCH',
-		headers: {
-			'content-type': 'application/json'
-		},
-		body: JSON.stringify({
-			alramAllInId: sessionStorage.getItem("id")
-		})
-	})
-		.then(response => {
-			if (response.status == 204) {
-				alert("모두 읽기가 실패했습니다.");
-			} else if (response.status == 200) {
-				alert("모두 읽기가 성공했습니다.");
-				alramSet(sessionStorage.getItem("id"));
-				alramContent.style = "display:none";
-				alram.classList.remove("active");
-				alramMsgList.clear();
-			}
-		})
+    fetch('/index/alram', {
+        method: 'PATCH',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            alramAllInId: sessionStorage.getItem("id")
+        })
+    })
+        .then(response => {
+            if (response.status == 204) {
+                alert("모두 읽기가 실패했습니다.");
+            } else if (response.status == 200) {
+                alert("모두 읽기가 성공했습니다.");
+                alramSet(sessionStorage.getItem("id"));
+                alramContent.style = "display:none";
+                alram.classList.remove("active");
+                alramMsgList.clear();
+            }
+        })
 });
 
 // 알람 닫기 -- 다른 영역 클릭시 닫힘
-document.addEventListener("mouseup", function (e){
-	if(alram.classList.contains("active")){
-		alram.classList.remove("active");
-		alramContent.style = "display:none";
-	}
+document.addEventListener("mouseup", function (e) {
+    if (alram.classList.contains("active")) {
+        alram.classList.remove("active");
+        alramContent.style = "display:none";
+    }
 });
 
 
 const illust = document.querySelector('.illust')
 
 illust.addEventListener('click', function () {
-	location.href = 'category.html'
-	sessionStorage.setItem('selectcategory', 'illust')
+    location.href = 'category.html'
+    sessionStorage.setItem('selectcategory', 'illust')
 })
 
 
 const live = document.querySelector('.live')
 live.addEventListener('click', function () {
-	location.href = 'category.html'
-	sessionStorage.setItem('selectcategory', 'live')
+    location.href = 'category.html'
+    sessionStorage.setItem('selectcategory', 'live')
 })
 
 
 const character = document.querySelector('.character')
 
 character.addEventListener('click', function () {
-	location.href = 'category.html'
-	sessionStorage.setItem('selectcategory', 'character')
+    location.href = 'category.html'
+    sessionStorage.setItem('selectcategory', 'character')
 })
 
 
 const design = document.querySelector('.design')
 
 design.addEventListener('click', function () {
-	location.href = 'category.html'
-	sessionStorage.setItem('selectcategory', 'design')
+    location.href = 'category.html'
+    sessionStorage.setItem('selectcategory', 'design')
 })
 
 
 const video = document.querySelector('.video')
 video.addEventListener('click', function () {
-	location.href = 'category.html'
-	sessionStorage.setItem('selectcategory', 'video')
+    location.href = 'category.html'
+    sessionStorage.setItem('selectcategory', 'video')
 })
 
 
@@ -218,26 +218,24 @@ if (loginType === 'SOCIAL') {
         document.cookie = 'loginId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.cookie = 'nickname=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 
-        sessionStorage.removeItem('name');
-        sessionStorage.removeItem('loginId');
         location.reload();
     }
 }
 const navLogo = document.querySelector('.nav-logo')
 navLogo.addEventListener("click", function () {
-	location.href = "index.html"
+    location.href = "index.html"
 })
 
 
 const myfage = document.querySelector('.myfage')
 
 if (sessionStorage.getItem('id') === null) {
-	myfage.style.display = 'none'
-	alram.style.display = 'none'
+    myfage.style.display = 'none'
+    alram.style.display = 'none'
 } else {
-	myfage.addEventListener('click', function () {
-		location.href = 'myfage.html'
-	})
+    myfage.addEventListener('click', function () {
+        location.href = 'myfage.html'
+    })
 }
 
 const loginProfile = document.querySelector('.login-profile')
@@ -246,22 +244,22 @@ const loginProfileIntro = document.querySelector('.login-profile-intro')
 const navCategory = document.querySelector('.nav-category')
 
 if (sessionStorage.getItem('id') === null) {
-	loginProfile.style.display = 'none'
-	nav.style.padding = '0.4rem 1rem'
-	nav.style.margin = '0.5rem'
-	navCategory.style.paddingRight = '10rem'
+    loginProfile.style.display = 'none'
+    nav.style.padding = '0.4rem 1rem'
+    nav.style.margin = '0.5rem'
+    navCategory.style.paddingRight = '10rem'
 } else {
-	nav.style.padding = '0.4rem 1rem'
-	nav.style.marginBottom = '0.3rem'
-	loginProfile.style.display = 'flex'
-	navCategory.style.paddingLeft = '7.5rem'
-	loginProfileImg.setAttribute('src', sessionStorage.getItem('login-profile-img'))
-	loginProfileIntro.textContent = sessionStorage.getItem('login-profile-intro')
+    nav.style.padding = '0.4rem 1rem'
+    nav.style.marginBottom = '0.3rem'
+    loginProfile.style.display = 'flex'
+    navCategory.style.paddingLeft = '7.5rem'
+    loginProfileImg.setAttribute('src', sessionStorage.getItem('login-profile-img'))
+    loginProfileIntro.textContent = sessionStorage.getItem('login-profile-intro')
 }
 
 const home = document.querySelector('.home')
 home.addEventListener("click", function () {
-	location.href = "index.html"
+    location.href = "index.html"
 })
 
 const logout = document.querySelector('.logout')
