@@ -189,10 +189,12 @@ public class ChatServiceImpl implements ChatService {
             LocalDateTime deadline = order.getDeadline();
             // deadline 이 현제보다 과거일 경우 true
             boolean dateBefore = deadline.isBefore(LocalDateTime.now());
+
             if(dateBefore == false) { // 삭제 불가능
-                log.info("주문진행 중인 상품 존재 삭제 불가능");
-                return false;
+                //log.info("주문진행 중인 상품 존재 삭제 불가능");
+                if(! order.getOrderStatus().equals("cancel")) return false;
             }
+
         }
 
         // 2-1. 나의 목록 상태 변경
