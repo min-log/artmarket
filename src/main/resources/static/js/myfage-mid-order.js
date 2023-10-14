@@ -190,7 +190,7 @@ function orderSetListContent(){
     }).then(response=>{
         return response.json();
     }).then(data=>{
-        console.log(data);
+        //console.log(data);
         let listData = [];
         listData = data;
         
@@ -274,7 +274,7 @@ function orderSearch(){
         if(orderSearchEndDate.value != "") orderSearchUrlPram  += "&endDate=" + orderSearchEndDate.value;
         if(orderSearchNickName.value != "")orderSearchUrlPram  += "&nickname=" + orderSearchNickName.value;
 
-        console.log(orderSearchUrl + "?memberId=" + sessionStorage.getItem("id") + orderSearchUrlPram);
+        // console.log(orderSearchUrl + "?memberId=" + sessionStorage.getItem("id") + orderSearchUrlPram);
 
         let myfageOrderList = document.querySelector(".myfage-mid-order-content-list-content");
         myfageOrderList.innerHTML = "";
@@ -453,7 +453,7 @@ function orderStatusChange(orderStatus,orderId){
                     alert("변경이 실패했습니다.");
                 }
             }).then(data=>{
-               console.log(data);
+              // console.log(data);
             });
         }
     });
