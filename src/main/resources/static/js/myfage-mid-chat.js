@@ -300,7 +300,9 @@ function myfageChatListClick(chatRoomId, chatSender) {
                 myfageRightChatBox.style.display = 'none'
                 myfageChatRightAddTag()
                 stompClient.disconnect()
-            })
+            });
+
+            stompClient.debug = null;
 
         },
         function () {

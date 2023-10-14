@@ -219,6 +219,7 @@ function chatRoomClick(productChatRoomBoxMid, chatRoomId, chatList) {
                 productChatRoom.style.display = 'none'
                 stompClient.disconnect()
             })
+            stompClient.debug = null;
 
         },
         function () {
