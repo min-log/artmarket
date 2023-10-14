@@ -34,7 +34,7 @@
         FROM art_market_db.product p , art_market_db.member m, art_market_db.order o
         WHERE p.member_id = m.member_id AND p.product_id = o.product_id
         GROUP BY product_id
-        ORDER BY count(o.product_id) DESC
+        ORDER BY count(o.product_id) DESC, p.product_title ASC
     </select>
 
     <select id="getCurrent" resultType="llustmarket.artmarket.web.dto.board.BoardDTO">
