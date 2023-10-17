@@ -155,7 +155,7 @@ introModButton.addEventListener('click', function () {
                 return;
             }
             const id = sessionStorage.getItem('id');
-            const url = 'http://localhost:8070/mypage-update-intro';
+            const url = 'http://61.97.189.178:8070/mypage-update-intro';
             const data = {
                 id: id,
                 memberIntro: newIntro
@@ -206,7 +206,7 @@ myfageNavIdentityMod.addEventListener('click', function () {
     const confirmation = confirm('작가 회원으로 전환하시겠습니까?');
     if (!confirmation) return; // 사용자가 취소를 누르면 함수 종료
 
-    fetch('http://localhost:8070/mypage-update-identity', {
+    fetch('http://61.97.189.178:8070/mypage-update-identity', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -240,7 +240,7 @@ myfageNavExit.addEventListener("click", function () {
 
     if (!confirmation) return; // 사용자가 취소를 누르면 함수 종료
 
-    fetch('http://localhost:8070/mypage-withdrawl', {
+    fetch('http://61.97.189.178:8070/mypage-withdrawl', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -252,7 +252,7 @@ myfageNavExit.addEventListener("click", function () {
         }
         sessionStorage.clear();
         alert('회원 탈퇴되었습니다.');
-        location.href = 'http://localhost:8070/index.html';
+        location.href = 'http://61.97.189.178:8070/index.html';
     })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);

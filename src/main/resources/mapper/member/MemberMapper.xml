@@ -3,32 +3,32 @@
 
 <mapper namespace="llustmarket.artmarket.web.mapper.member.MemberMapper">
     <insert id="insertMember" useGeneratedKeys="true" keyProperty="memberId">
-        INSERT INTO Member (name, nickname, login_id, password, phone, email, identity)
+        INSERT INTO member (name, nickname, login_id, password, phone, email, identity)
         VALUES (#{name}, #{nickname}, #{loginId}, #{password}, #{phone}, #{email}, #{identity})
     </insert>
 
     <update id="updateIdentity">
-        UPDATE Member
+        UPDATE member
         SET identity = 'AUTHOR'
         WHERE member_id = #{memberId}
     </update>
     <update id="updateIntro">
-        UPDATE Member
+        UPDATE member
         SET member_intro=#{memberIntro}
         WHERE member_id = #{memberId}
     </update>
     <update id="updateAccount">
-        UPDATE Member
+        UPDATE member
         SET account_bank = #{accountBank}, account=#{account}
         WHERE member_id = #{memberId}
     </update>
     <update id="updatePasswordByMemberId">
-        UPDATE Member
+        UPDATE member
         SET password = #{password}
         WHERE member_id = #{memberId}
     </update>
     <update id="updatePasswordByEmail">
-        UPDATE Member
+        UPDATE member
         SET password = #{password}
         WHERE email = #{email}
     </update>
@@ -44,42 +44,42 @@
     </update>
     <select id="isLoginIdDuplicate" resultType="int">
         SELECT COUNT(*)
-        FROM Member
+        FROM member
         WHERE login_id = #{loginId}
     </select>
 
     <select id="isNicknameDuplicate" resultType="int">
         SELECT COUNT(*)
-        FROM Member
+        FROM member
         WHERE nickname = #{nickname}
     </select>
 
     <select id="isEmailDuplicate" resultType="int">
         SELECT COUNT(*)
-        FROM Member
+        FROM member
         WHERE email = #{email}
     </select>
 
     <select id="isPhoneDuplicate" resultType="int">
         SELECT COUNT(*)
-        FROM Member
+        FROM member
         WHERE phone = #{phone}
     </select>
 
     <select id="selectMemberByLoginId" resultType="llustmarket.artmarket.domain.member.Member">
         SELECT *
-        FROM Member
+        FROM member
         WHERE login_id = #{loginId}
     </select>
 
     <select id="selectMemberByPhone" resultType="llustmarket.artmarket.domain.member.Member">
         SELECT *
-        FROM Member
+        FROM member
         WHERE phone = #{phone}
     </select>
     <select id="selectMemberByMemberId" resultType="llustmarket.artmarket.domain.member.Member">
         SELECT *
-        FROM Member
+        FROM member
         WHERE member_id = #{memberId}
     </select>
     <select id="findByUserEmail" resultType="llustmarket.artmarket.domain.member.Member">

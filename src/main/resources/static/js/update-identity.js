@@ -2,7 +2,7 @@ document.getElementById('myfage-nav-profile-identity-mod').addEventListener('cli
     console.log('Clicked');
     const id = sessionStorage.getItem('id');
 
-    fetch('http://localhost:8070/mypage-update-identity', {
+    fetch('http://61.97.189.178:8070/mypage-update-identity', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

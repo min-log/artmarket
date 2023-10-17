@@ -62,7 +62,7 @@ public class GoogleUserService {
         body.add("client_secret", client_secret);
         body.add("code", code);
         body.add("grant_type", "authorization_code");
-        body.add("redirect_uri", "http://localhost:8070/google-login");
+        body.add("redirect_uri", "http://61.97.189.178:8070/google-login");
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> googleTokenRequest = new HttpEntity<>(body, headers);
         RestTemplate rt = new RestTemplate();

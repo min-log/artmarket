@@ -49,7 +49,7 @@ public class BoardController {
                 List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("C:\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                    fileList.add("\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
                 }
 
                 List<byte[]> imageDataList = new ArrayList<>();
@@ -91,7 +91,7 @@ public class BoardController {
                 List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("C:\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                    fileList.add("\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
                 }
 
                 List<byte[]> imageDataList = new ArrayList<>();
@@ -133,7 +133,7 @@ public class BoardController {
                 List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("C:\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                    fileList.add("\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
                 }
 
                 List<byte[]> imageDataList = new ArrayList<>();
@@ -174,7 +174,7 @@ public class BoardController {
                 List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("C:\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                    fileList.add("\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
                 }
 
                 List<byte[]> imageDataList = new ArrayList<>();

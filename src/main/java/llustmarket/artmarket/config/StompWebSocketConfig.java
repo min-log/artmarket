@@ -23,7 +23,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/stomp/chat")
-                .setAllowedOriginPatterns("http://localhost:8070")
+                .setAllowedOriginPatterns("http://61.97.189.178:8070")
                 .addInterceptors(new WebSocketConnectHandler(httpSession))
                 .withSockJS()
                 .setClientLibraryUrl("https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"); //sock-client.js 의 위치
@@ -33,9 +33,9 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // 메시지 받기 : sub 1:1 · topic 1:n
-        registry.enableSimpleBroker("/sub","/topic")
+        registry.enableSimpleBroker("/sub", "/topic")
                 .setTaskScheduler(taskScheduler())
-                .setHeartbeatValue(new long[] {3000L, 3000L});
+                .setHeartbeatValue(new long[]{3000L, 3000L});
         // 메시지 전송
         registry.setApplicationDestinationPrefixes("/pub");
 
@@ -52,7 +52,6 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
         registration.setMessageSizeLimit(20000000); //20MB   // Set the maximum message size (in bytes)
     }
-
 
 
 }

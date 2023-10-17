@@ -54,9 +54,9 @@ public class KakaoPayService {
         parameters.add("total_amount", orderPayDTO.getTotalAmount()); //결제금액
         parameters.add("tax_free_amount", 0); //비과세
 
-        parameters.add("approval_url", "http://localhost:8070/success-order"); // 성공 시 redirect url
-        parameters.add("cancel_url", "http://localhost:8070/product/fail/{product_id}"); // 취소 시 redirect url
-        parameters.add("fail_url", "http://localhost:8070/product/fail/{product_id}"); // 실패 시 redirect url
+        parameters.add("approval_url", "http://61.97.189.178:8070/success-order"); // 성공 시 redirect url
+        parameters.add("cancel_url", "http://61.97.189.178:8070/product/fail/{product_id}"); // 취소 시 redirect url
+        parameters.add("fail_url", "http://61.97.189.178:8070/product/fail/{product_id}"); // 실패 시 redirect url
 
         // 파라미터, http 헤더
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());

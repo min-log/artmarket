@@ -273,7 +273,7 @@ detailMidRightPaymentBtn.addEventListener('click', function () {
         orderStatus: '결제 대기'
     };
 
-    fetch('http://localhost:8070/ready', {
+    fetch('http://61.97.189.178:8070/ready', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

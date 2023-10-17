@@ -6,7 +6,7 @@ const commonPhoneReg = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/
 const commonEmailReg = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
 const commonTokenReg = /\d\d\d\d\d\d/i
 
-const baseUrl = 'http://localhost:8070'
+const baseUrl = 'http://61.97.189.178:8070'
 
 function fadeIn(fadeTag) {
 	let fadeOpacity = 0;
@@ -76,13 +76,11 @@ if (modal != null) {
 		modalContent.innerHTML = msgCont;
 	}
 
-	modalCloseBtn.addEventListener('click',function (){
+	modalCloseBtn.addEventListener('click', function () {
 		modal.style = "display:none";
 		modalContent.innerHTML = "";
 	});
 }
-
-
 
 
 function getExtensionOfFilename(filename) {

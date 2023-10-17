@@ -112,7 +112,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         // 2-1. 회원 프로필
         FileVO memberProfile = fileMapper.selectOnePathAndId(FileVO.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(memberMe.getMemberId()).build());
         if (memberProfile != null)
-            myPageDTO.setProfileImg("C:" + File.separator + "upload" + File.separator + memberProfile.getFilePath() + File.separator + memberProfile.getFileName());
+            myPageDTO.setProfileImg("" + File.separator + "upload" + File.separator + memberProfile.getFilePath() + File.separator + memberProfile.getFileName());
         myPageDTO.setMyChatRooms(roomListDTO); // 룸 리스트 추가
         return myPageDTO;
     }

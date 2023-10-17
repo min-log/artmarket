@@ -190,12 +190,12 @@ AgreeBtn.addEventListener('click', function () {
 
 // 백에서 아직 소셜 구현 x
 socialGoogleBox.addEventListener('click', function () {
-    window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=242939801101-svnsms546a27mk3i9mhfisb7fd0ge7l9.apps.googleusercontent.com&redirect_uri=http://localhost:8070/google-login&response_type=code&scope=email profile'
+    window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=242939801101-svnsms546a27mk3i9mhfisb7fd0ge7l9.apps.googleusercontent.com&redirect_uri=http://61.97.189.178:8070/google-login&response_type=code&scope=email profile'
 })
 
 // 카카오 가입
 const kakaoCode = 'b78977a50a13ce81576485688bc20490'
-const kakaoRedirect = 'http://localhost:8070/kakao-login'
+const kakaoRedirect = 'http://61.97.189.178:8070/kakao-login'
 
 let kakaoRequestUrl = `https://kauth.kakao.com/oauth/authorize
 ?client_id=${kakaoCode}

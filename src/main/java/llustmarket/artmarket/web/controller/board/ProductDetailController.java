@@ -61,7 +61,7 @@ public class ProductDetailController {
 
             FileVO memberProfile = fileMapper.selectOnePathAndId(FileVO.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(product.getMemberId()).build());
             if (memberProfile != null) {
-                String profileFile = ("C:\\upload\\" + memberProfile.getFilePath() + "\\" + memberProfile.getFileName());
+                String profileFile = ("\\upload\\" + memberProfile.getFilePath() + "\\" + memberProfile.getFileName());
                 byte[] profileImage = getAttachmentImage(profileFile);
                 profileDataList.add(profileImage);
             }
@@ -70,7 +70,7 @@ public class ProductDetailController {
             List<String> productFiles = new ArrayList<>();
 
             for (int i = 0; i < files.size(); i++) {
-                productFiles.add("C:\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                productFiles.add("\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
             }
 
             List<byte[]> imageDataList = new ArrayList<>();
