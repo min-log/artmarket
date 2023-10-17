@@ -46,7 +46,7 @@ public class ProfileImageController {
 
         for (FileVO file : profileImgs) {
             fileNames.add(file.getFileName());
-            filePaths.add("" + File.separator + "upload" + File.separator + file.getFilePath() + File.separator + file.getFileName());
+            filePaths.add("upload" + File.separator + file.getFilePath() + File.separator + file.getFileName());
         }
 
         List<byte[]> imageDataList = new ArrayList<>();

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -61,7 +62,7 @@ public class ProductDetailController {
 
             FileVO memberProfile = fileMapper.selectOnePathAndId(FileVO.builder().filePath(String.valueOf(FileType.PROFILE)).fileTypeId(product.getMemberId()).build());
             if (memberProfile != null) {
-                String profileFile = ("\\upload\\" + memberProfile.getFilePath() + "\\" + memberProfile.getFileName());
+                String profileFile = ("upload" + File.separator + memberProfile.getFilePath() + File.separator + memberProfile.getFileName());
                 byte[] profileImage = getAttachmentImage(profileFile);
                 profileDataList.add(profileImage);
             }
@@ -70,7 +71,7 @@ public class ProductDetailController {
             List<String> productFiles = new ArrayList<>();
 
             for (int i = 0; i < files.size(); i++) {
-                productFiles.add("\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                productFiles.add("upload" + File.separator + files.get(i).get("filePath").toString() + File.separator + files.get(i).get("fileName").toString());
             }
 
             List<byte[]> imageDataList = new ArrayList<>();

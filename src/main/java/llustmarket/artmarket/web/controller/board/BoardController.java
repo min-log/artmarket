@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -49,7 +50,7 @@ public class BoardController {
                 List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                    fileList.add("upload" + File.separator + files.get(i).get("filePath").toString() + File.separator + files.get(i).get("fileName").toString());
                 }
 
                 List<byte[]> imageDataList = new ArrayList<>();
@@ -91,7 +92,7 @@ public class BoardController {
                 List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                    fileList.add("upload" + File.separator + files.get(i).get("filePath").toString() + File.separator + files.get(i).get("fileName").toString());
                 }
 
                 List<byte[]> imageDataList = new ArrayList<>();
@@ -133,7 +134,7 @@ public class BoardController {
                 List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                    fileList.add("upload" + File.separator + files.get(i).get("filePath").toString() + File.separator + files.get(i).get("fileName").toString());
                 }
 
                 List<byte[]> imageDataList = new ArrayList<>();
@@ -174,7 +175,7 @@ public class BoardController {
                 List<String> fileList = new ArrayList<>();
 
                 for (int i = 0; i < files.size(); i++) {
-                    fileList.add("\\upload\\" + files.get(i).get("filePath").toString() + "\\" + files.get(i).get("fileName").toString());
+                    fileList.add("upload" + File.separator + files.get(i).get("filePath").toString() + File.separator + files.get(i).get("fileName").toString());
                 }
 
                 List<byte[]> imageDataList = new ArrayList<>();
