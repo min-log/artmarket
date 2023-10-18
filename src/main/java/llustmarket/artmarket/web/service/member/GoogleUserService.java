@@ -114,7 +114,7 @@ public class GoogleUserService {
         String id = jsonNode.get("id").asText();
         String email = jsonNode.get("email").asText();
 
-        return new GoogleLoginResponse(id, id);
+        return new GoogleLoginResponse(id, email);
 
     }
 

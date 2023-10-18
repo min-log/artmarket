@@ -106,9 +106,9 @@ public class KakaoUserService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
         Long id = jsonNode.get("id").asLong();
-        // String email = jsonNode.get("kakao_account").get("email").asText();
+        String email = jsonNode.get("kakao_account").get("email").asText();
 
-        return new KakaoUserInfoDto(id, String.valueOf(id));
+        return new KakaoUserInfoDto(id, email);
     }
 
     // 3. 카카오ID로 회원가입 처리
