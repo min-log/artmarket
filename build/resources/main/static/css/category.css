@@ -1,0 +1,189 @@
+* {
+  color: rgba(41, 45, 50, 0.9);
+}
+
+.category-title {
+  font-size: 3rem;
+  font-weight: 700;
+  padding: 1rem 0rem;
+  color: rgba(88, 88, 88, 1);
+}
+
+.category-intro {
+  margin-top: 0.5rem;
+  color: rgba(88, 88, 88, 0.8);
+}
+
+.category-top {
+  border-bottom: solid 0.1rem rgba(88, 88, 88, 0.1);
+  padding: 2rem 0rem;
+}
+.category-top > * {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.category-body {
+  width: 1140px;
+  margin: 0 auto;
+}
+
+.category-filter {
+  display: flex;
+  margin: 2rem 0.5rem 0.7rem 0.5rem;
+  /*justify-content: space-between;*/
+  align-items: center;
+}
+.category-filter-title {font-weight: bold;margin: 0 1rem;}
+.category-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.category-list-box {
+  background-color: white;
+  border: solid 0.01rem rgba(41, 45, 50, 0.1);
+  border-radius: 1rem;
+  box-shadow: 2px 2px 0.2rem rgba(88, 88, 88, 0.1);
+  padding: 1rem 1rem 0.3rem 1rem;
+  margin: 0.5rem;
+}
+
+.category-list-box-img-list {
+  display: flex;
+  margin-right: 0.5rem;
+}
+
+.category-list-box-img-value {
+  width: 10rem;
+  height: 7.2rem;
+  object-fit: cover;
+  border-radius: 0.7rem;
+  border: solid 0.1rem rgba(41, 45, 50, 0.1);
+}
+
+.category-list-box-img-lists {
+  display: flex;
+  margin: 0.2rem;
+}
+
+.category-list-box:hover {
+  transform: translateY(-0.2rem);
+  transition-duration: 0.3s;
+}
+
+.category-list-box-title {
+  display: inline-flex;
+  font-weight: 700;
+  border-bottom: solid 0.1rem rgba(41, 45, 50, 0.3);
+  margin-top: 0.5rem;
+  margin-left: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+
+.category-list-box-etc {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+  margin-left: 0.4rem;
+}
+
+.category-list-box-nickname {
+  display: inline-flex;
+  color: rgba(41, 45, 50, 1);
+  font-size: 0.8rem;
+  margin-top: -0.8rem;
+}
+
+.category-list-box-go-detail {
+  outline: none;
+  border: none;
+  background-color: white;
+  border: solid 0.01rem rgba(41, 45, 50, 0.1);
+  border-radius: 1rem;
+  box-shadow: 2px 2px 0.2rem rgba(88, 88, 88, 0.1);
+  padding: 0.3rem 1.5rem;
+  color: rgba(41, 45, 50, 1);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 0 0.2rem;
+  margin-top: 0.5rem;
+}
+
+.category-list-box-go-detail:hover {
+  scale: 103%;
+  transition-duration: 0.1s;
+}
+
+input,
+select,
+option,
+.category-list-box-go-detail {
+  outline: none;
+  font-family: "Noto Sans KR", sans-serif;
+  border: solid 0.01rem rgba(41, 45, 50, 0.1);
+  border-radius: 1rem;
+  box-shadow: 2px 2px 0.2rem rgba(88, 88, 88, 0.1);
+  padding: 0.1rem 0.7rem;
+  color: rgba(41, 45, 50, 1);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 0 0.2rem;
+}
+.category-filter-pop-cur {height: 1.9rem}
+.cateogry-keyword-search-box {
+  cursor: auto;
+  box-sizing: border-box;
+  height: 1.9rem;
+}
+
+input.cateogry-keyword-search-box::placeholder {
+  color: rgba(41, 45, 50, 1);
+  font-weight: normal;
+}
+
+.category-list-box-go-detail {
+  padding: 0.4rem 0.7rem;
+}
+
+.cateogry-search-btn {
+  border: rgba(41, 45, 50, 1) 2px solid;
+  color: rgba(41, 45, 50, 1);
+  border-radius: 1rem;
+  padding: 0.1rem 1.5rem;
+  /* color: white; */
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: right;
+  cursor: pointer;
+  background: #fff;
+  outline: none;
+  font-family: "Noto Sans KR", sans-serif;
+  border: solid 0.01rem rgba(41, 45, 50, 0.1);
+  border-radius: 1rem;
+  box-shadow: 2px 2px 0.2rem rgba(88, 88, 88, 0.1);
+  padding: 0.1rem 0.7rem;
+  color: rgba(41, 45, 50, 1);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 0 0.2rem;}
+
+
+
+.category-list-none {text-align: center;width: 100%;color: #555;min-height: 30vh;padding:4rem 0;display: flex;justify-content: center;align-items: center;flex-direction: column;line-height:2}
+.category-list-none img {width:40px;margin-bottom:0.2rem;
+  animation-name: chat-not-select-icon-action;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  filter: invert(34%) sepia(0%) saturate(25%) hue-rotate(164deg) brightness(94%) contrast(93%);}
+.category-list-none * {margin:0;color: #555;}
+.category-list-none-title {font-size: 1.8rem;font-weight: bold;margin-bottom:1rem;color: #555;}

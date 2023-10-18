@@ -1,0 +1,140 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600;700;800;900&display=swap");
+
+body {
+	display: flex;
+	flex-direction: column;
+	font-family: "Noto Sans KR", sans-serif;
+	letter-spacing: 0;
+	line-height: 1.6rem;
+	width:100%;
+	max-width: 1850px;
+	min-width: 1400px;
+	padding-left: 1.2rem;
+	box-sizing:border-box;
+	margin:0;
+}
+
+input[readonly] {
+	background: #eee;
+	cursor: inherit;
+}
+
+.btn-wrap {
+	display: flex;
+	justify-content: center;
+	margin-top: 2rem;
+}
+
+.btn-type01.none {
+	color: rgb(41, 45, 50);
+	background-color: white;
+	cursor: not-allowed;
+}
+
+.btn-type01 {
+	min-width: 8rem;
+	font-size: 1rem;
+	padding: 0.5rem 0.5rem;
+	border: none;
+	border: solid 0.1rem rgba(41, 45, 50, 1);
+	border-radius: 0.5rem;
+	color: white;
+	font-weight: 700;
+	background-color: rgb(41, 45, 50);
+	cursor: pointer;
+	text-align: center;
+	display: inline-block;
+	text-decoration: inherit;
+}
+
+.btn-wrap [class*="btn-type"]+[class*="btn-type"] {
+	margin-left: 1rem
+}
+
+
+/*tab style*/
+.tab-btn {
+	border: solid 0.13rem rgba(41, 45, 50, 1);
+	border-radius: 3rem;
+	padding: 0.3rem 1.8rem;
+	font-size: 1.2rem;
+	font-weight: 700;
+	margin-right: 0.3rem;
+	background: white;
+	cursor: pointer;
+}
+
+.tab-btn:hover {
+	background-color: rgba(41, 45, 50, 1);
+	color: white;
+	transition-duration: 0.2s;
+}
+
+.tab-btn.tab-active {
+	background-color: rgb(41, 45, 50);
+	color: white;
+	cursor: inherit;
+}
+
+.tab-content {
+	display: none
+}
+
+.tab-content.tab-active {
+	display: block
+}
+
+.con-title {
+	font-weight: bold;
+	margin-bottom: 0.3rem;
+	text-align: center;
+	margin-top: 1rem;
+	font-size: 1.7rem;
+	color: rgba(41, 45, 50, 1);
+	font-weight: bold;
+}
+
+
+/*modal*/
+.modal {
+	position: fixed;
+	top:50%;
+	left:50%;
+	width: 450px;
+	height:auto;
+	min-height:100px;
+	transform:translate(-50%,-50%);
+	background:#fff;
+	/* border:1px solid #000; */
+	border-radius: 1rem;
+	box-shadow: 2px 2px 0.5rem rgba(88, 88, 88, 0.3);
+	z-index: 999999;
+}
+
+.modal-top {
+	padding:1rem;
+	margin:0;
+	text-align: center;
+	font-size: 1.2rem;
+	color: rgba(41, 45, 50, 1);
+	font-weight: bold;
+}
+.modal-top .modal-close {
+	scale: 83%;
+	border: none;
+	background-color: rgba(41, 45, 50, 1);
+	color: #fff;
+	border-radius: 10rem;
+	width: 1.7rem;
+	height: 1.7rem;
+	line-height: 1.7rem;
+	font-weight: 600;
+	cursor: pointer;
+	float: right;
+	position: absolute;
+	right: 0.4rem;
+	top: 0.4rem;
+}
+
+.modal-content {padding:0 1rem 2rem;text-align: center;margin:0;word-break:keep-all;}
+.modal-content * {margin:0;line-height: 1.5;font-size: 0.8rem;word-break: keep-all;}

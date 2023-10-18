@@ -145,6 +145,7 @@ nav {
 
 .alram-con ul {
 	margin: 0;
+	padding: 0;
 	padding: 0.5rem 0.8rem;
 }
 
@@ -167,7 +168,7 @@ nav {
 	height: 2rem;
 	margin-right: 0.5rem;
 	box-sizing: border-box;
-	font-size: 0.6rem;
+	font-size: 0.1rem;
 	/*font-weight: bold;*/
 	background: rgba(41, 45, 50, 1);
 	color:#fff;

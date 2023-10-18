@@ -1,0 +1,136 @@
+.myfage-right-article-manage-box {
+  position: absolute;
+  padding: 8.5rem 1rem 8.5rem 2.5rem;
+}
+
+.myfage-right-article-manage-box > * {
+  color: white;
+}
+
+.myfage-right-article-back-img {
+  margin-top: 5.5rem;
+}
+
+.myfage-right-article-manage-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2.2rem;
+}
+
+.myfage-right-article-manage-category,
+.myfage-right-article-manage-title-box,
+.myfage-right-article-manage-intro-box,
+.myfage-right-article-manage-file-box {
+  margin-bottom: 1.5rem;
+}
+.myfage-right-article-manage-category-select-title,
+.myfage-right-article-manage-title-box-label,
+.myfage-right-article-manage-intro-box-label,
+.myfage-right-article-manage-intro-file-label {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.myfage-right-article-manage-title-box-label,
+.myfage-right-article-manage-intro-box-label,
+.myfage-right-article-manage-intro-file-label {
+  margin: 0.4rem 0;
+}
+
+.myfage-right-article-manage-category-select-box {
+  display: flex;
+  flex-wrap: wrap;
+  width: 30rem;
+  margin-top: 0.4rem;
+}
+
+.myfage-right-article-manage-category-select-box > * {
+  font-size: 0.85rem;
+  padding: 0.09rem 2rem;
+  border: solid 0.1rem white;
+  border-radius: 1rem;
+  margin: 0.2rem;
+}
+
+.myfage-right-article-manage-btn-box > *:hover {
+  background-color: white;
+  color: rgba(41, 45, 50, 1);
+  font-weight: 600;
+}
+
+.myfage-right-article-manage-category-select-box-caution,
+.myfage-right-article-manage-intro-file-caution {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.myfage-right-article-manage-title-box-value,
+.myfage-right-article-manage-intro-box-value {
+  padding: 0.3rem;
+  outline: none;
+  resize: none;
+  border-radius: 0.5rem;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.myfage-right-article-manage-intro-file-img > img {
+  width: 5rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  scale: 90%;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.myfage-right-article-manage-intro-file-img > div {
+  display: flex;
+  position: relative;
+}
+
+.myfage-right-article-manage-intro-file-img > div > :nth-child(1) {
+  width: 5rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  scale: 90%;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.myfage-right-article-manage-intro-file-img > div > :nth-child(2) {
+  position: absolute;
+  scale: 80%;
+  margin-left: 3.8rem;
+  margin-top: -0.3rem;
+  cursor: pointer;
+}
+
+.myfage-right-article-manage-intro-file-img > input {
+  display: none;
+}
+
+.myfage-right-article-manage-intro-file-img {
+  display: flex;
+}
+
+.myfage-right-article-manage-caution-img {
+  margin: 0 0.2rem 0 0.5rem;
+}
+
+.myfage-right-article-manage-btn-box {
+  display: flex;
+  justify-content: center;
+  margin-right: 3.3rem;
+}
+
+.myfage-right-article-manage-btn-box > * {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.2rem 2.3rem;
+  border: solid 0.1rem white;
+  border-radius: 1rem;
+  margin: 0.5rem 0.3rem;
+  cursor: pointer;
+}

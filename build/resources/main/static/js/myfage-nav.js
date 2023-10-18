@@ -1,0 +1,262 @@
+const myfageNav = document.querySelector('.myfage-nav')
+
+myfageNav.insertAdjacentHTML('afterend', `<div class="myfage-nav-content">
+<div class="myfage-nav-profile">
+  <div class="myfage-nav-profile-img">
+    <img class="myfage-nav-profile-img-tag" src="" />
+  </div>
+  <div class="myfage-nav-profile-identity"></div>
+  <div class="myfage-nav-profile-greeting"></div>
+</div>
+<div class="myfage-nav-profile-menu">
+  <div id="myfage-nav-profile-img-mod">프로필이미지 수정하기</div>
+  <div id="myfage-nav-profile-intro-mod">소개글 수정하기</div>
+  <div id="myfage-nav-profile-identity-mod">작가로 전환하기</div>
+</div>
+<div class="myfage-nav-menu">
+  <div class="myfage-nave-menu-list" id="myfage-chat">
+    <img src="./css/icon/nav-chat.png" />
+    <div>채팅 목록</div>
+  </div>
+  <div class="myfage-nave-menu-list" id="myfage-info">
+    <img src="./css/icon/nav-info.png" />
+    <div>회원 정보</div>
+  </div>
+  <div class="myfage-nave-menu-list" id="myfage-order">
+    <img src="./css/icon/nav-order.png" />
+    <div>주문 관리</div>
+  </div>
+  <div class="myfage-nave-menu-list" id="myfage-article">
+    <img src="./css/icon/nav-article.png" />
+    <div>작품 관리</div>
+  </div>
+  <div class="myfage-nave-menu-list" id="myfage-exit">
+    <img src="./css/icon/nav-exit.png" />
+    <div>회원 탈퇴</div>
+  </div>
+</div>
+</div>
+`)
+
+const myfageNavProfileIdentity = document.querySelector('.myfage-nav-profile-identity')
+myfageNavProfileIdentity.textContent = sessionStorage.getItem('identity') === 'GENERAL' ? '일반 회원' : '작가 회원'
+
+function myfageNavSet() {
+    const myfageNavProfileGreeting = document.querySelector('.myfage-nav-profile-greeting')
+    const myfageNavProfileImgTag = document.querySelector('.myfage-nav-profile-img-tag')
+
+    fetch(`/myfage/${sessionStorage.getItem('id')}`, {
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json'
+        }
+    }).then(response => {
+        resStatusCode = response.status
+        return response.json()
+    }).then(data => {
+        if (resStatusCode === 200) {
+            myfageNavProfileGreeting.textContent = `안녕하세요. ${data.nickname}님`
+            sessionStorage.setItem('nickname', `${data.nickname}`)
+            sessionStorage.setItem('intro', `${data.intro}`)
+            if (data.profileImg === null) {
+                myfageNavProfileImgTag.setAttribute('src', `./css/icon/default-profile-img.png`)
+            } else {
+                myfageNavProfileImgTag.setAttribute('src', `data:image/jpeg;base64,${data.profileImg2}`)
+            }
+        }
+    });
+
+}
+
+myfageNavSet()
+
+const myfageNavChat = document.querySelector('#myfage-chat')
+const myfageNavInfo = document.querySelector('#myfage-info')
+const myfageNavOrder = document.querySelector('#myfage-order')
+const myfageNavArticle = document.querySelector('#myfage-article')
+const myfageNavExit = document.querySelector('#myfage-exit')
+
+if (sessionStorage.getItem('identity') === 'GENERAL') {
+    myfageNavArticle.style.display = 'none'
+}
+
+// 쿠키에서 값을 가져오는 함수
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null; // 해당 쿠키가 존재하지 않을 경우
+}
+
+if (getCookie('loginType') === 'SOCIAL') {
+    myfageNavExit.style.display = 'none';
+}
+//프로필 사진 변경하기
+const myfageNavProfileImgMod = document.querySelector('#myfage-nav-profile-img-mod');
+myfageNavProfileImgMod.addEventListener('click', function () {
+    // 사용자에게 파일 선택 다이얼로그 표시
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('profileImage', file);
+            formData.append('profileFileType', 'PROFILE');
+            formData.append('profileFileTypeId', sessionStorage.getItem('id'));
+
+            // 서버에 요청을 보내기
+            fetch('/mypage-profile', {
+                method: 'PUT',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.status === 201) {
+                        alert('프로필 사진 업데이트에 실패했습니다.');
+                        throw new Error('Network response was not ok');
+                    }
+                    alert('프로필 사진이 업데이트되었습니다.');
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('에러 발생:', error);
+                });
+        }
+    });
+    input.click();
+});
+
+// 소개글 수정하기
+const introModButton = document.querySelector('#myfage-nav-profile-intro-mod');
+
+introModButton.addEventListener('click', function () {
+    const introPopup = document.createElement('div');
+    introPopup.classList.add('intro-popup');
+
+    const inputField = document.createElement('textarea'); // textarea로 변경
+    inputField.classList.add('intro-input');
+    inputField.placeholder = '새로운 소개글을 입력하세요 (최대 20자)'; // 최대 길이 추가
+
+// 텍스트 입력 필드 스타일을 적용합니다.
+    inputField.style.width = '100%';
+    inputField.style.height = '120px'; // 20px * 6줄 = 120px
+    inputField.style.borderRadius = '5px';
+
+    const saveButton = document.createElement('button');
+    saveButton.textContent = '변경';
+    saveButton.classList.add('save-button');
+
+    saveButton.addEventListener('click', function () {
+        const newIntro = inputField.value;
+        if (newIntro.trim() !== '') {
+            if (newIntro.length > 20) {
+                alert('소개글은 최대 20자까지 입력 가능합니다.');
+                return;
+            }
+            const id = sessionStorage.getItem('id');
+            const url = 'http://localhost:8070/mypage-update-intro';
+            const data = {
+                id: id,
+                memberIntro: newIntro
+            };
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Success:', response);
+                        alert('소개글이 업데이트 되었습니다.');
+                        introPopup.remove();
+                    } else {
+                        console.error('Error:', response);
+                        alert('소개글 업데이트에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('소개글 업데이트에 실패했습니다.');
+                });
+        }
+    });
+
+    introPopup.appendChild(inputField);
+    introPopup.appendChild(saveButton);
+
+    // 버튼의 위치 정보를 가져와서 팝업 위치를 조정합니다.
+    const buttonRect = introModButton.getBoundingClientRect();
+    introPopup.style.position = 'absolute';
+    introPopup.style.top = `${buttonRect.top}px`;
+    introPopup.style.left = `${buttonRect.right + 5}px`;
+
+    document.body.appendChild(introPopup);
+});
+//
+
+//작가 회원으로 전환 및 작가회원일 때 숨기기
+const myfageNavIdentityMod = document.querySelector('#myfage-nav-profile-identity-mod')
+
+myfageNavIdentityMod.addEventListener('click', function () {
+    const id = sessionStorage.getItem('id');
+
+    const confirmation = confirm('작가 회원으로 전환하시겠습니까?');
+    if (!confirmation) return; // 사용자가 취소를 누르면 함수 종료
+
+    fetch('http://localhost:8070/mypage-update-identity', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({id: id})
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            sessionStorage.setItem('identity', 'AUTHOR');
+            sessionStorage.setItem('login-profile-img', './css/icon/login-author.png');
+            alert('작가 회원으로 전환되었습니다.');
+            location.reload(); // 페이지 새로고침
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            alert('작가 회원 전환에 실패했습니다.');
+        });
+});
+const myfageNavProfileIdentityMod = document.querySelector('#myfage-nav-profile-identity-mod');
+if (sessionStorage.getItem('identity') === 'AUTHOR') {
+    myfageNavProfileIdentityMod.style.display = 'none';
+}
+//
+
+//회원탈퇴 및 로그아웃
+myfageNavExit.addEventListener("click", function () {
+    const id = sessionStorage.getItem('id');
+    const confirmation = confirm('정말 회원 탈퇴하시겠습니까?');
+
+    if (!confirmation) return; // 사용자가 취소를 누르면 함수 종료
+
+    fetch('http://localhost:8070/mypage-withdrawl', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({id: id})
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        sessionStorage.clear();
+        alert('회원 탈퇴되었습니다.');
+        location.href = 'http://localhost:8070/index.html';
+    })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            alert('회원 탈퇴에 실패했습니다.');
+        });
+})
+//

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Member</title>
+</head>
+<body>
+<h1>Edit ACCOUNT</h1>
+<form action="/editMember" method="post" th:object="${member}">
+    <div>
+        <label for="memberId">Member ID</label>
+        <input type="text" id="memberId" th:field="*{memberId}">
+    </div>
+    <div>
+        <label for="accountBank">은행</label>
+        <input type="text" id="accountBank" th:field="*{accountBank}">
+    </div>
+    <div>
+        <label for="account">계좌번호</label>
+        <input type="text" id="account" th:field="*{account}">
+    </div>
+    <div>
+        <input type="submit" value="변경">
+    </div>
+    <div th:if="${successMessage}" class="success-message">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <!-- 실패 메시지 표시 -->
+    <div th:if="${errorMessage}" class="error-message">
+        <p th:text="${errorMessage}"></p>
+    </div>
+</form>
+</body>
+</html>
