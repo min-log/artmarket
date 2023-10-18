@@ -147,6 +147,8 @@ loginBtn.addEventListener("click", function () {
 
     if (btnModCheckList[0] && btnModCheckList[1]) {
 
+        sessionStorage.setItem('loginId', `${loginId.value}`)
+
         fetch(`${baseUrl}/login`, {
             method: 'POST',
             headers: {
@@ -162,11 +164,21 @@ loginBtn.addEventListener("click", function () {
             return response.json()
         }).then(data => {
             if (resStatus === 200) {
-                localStorage.setItem('id', data.loginTrueId)
-                localStorage.setItem('identity', data.loginTrueIdentity)
+                sessionStorage.setItem('id', data.loginTrueId)
+                sessionStorage.setItem('identity', data.loginTrueIdentity)
+
+                if (data.loginTrueIdentity == 'GENERAL') {
+                    sessionStorage.setItem('login-profile-img', './css/icon/login-general.png')
+                } else {
+                    sessionStorage.setItem('login-profile-img', './css/icon/login-author.png')
+                }
+                sessionStorage.setItem('login-profile-intro', `${data.loginTrueName}님, 어서오세요`)
+                sessionStorage.setItem('name', `${data.loginTrueName}`)
+                sessionStorage.setItem('nickname', `${data.loginTrueNickname}`)
                 location.href = 'index.html'
 
             } else if (resStatus === 401) {
+                sessionStorage.removeItem('loginId')
                 const parentTag = document.querySelector('.login-content')
                 noticeAlert(parentTag, data.loginNoMatchMsg)
             }
@@ -176,4 +188,20 @@ loginBtn.addEventListener("click", function () {
     loginId.value = null
     loginPassword.value = null
 
+})
+//구글 로그인
+const googleLogin = document.querySelector('.google-login');
+googleLogin.addEventListener("click", function () {
+    location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=242939801101-svnsms546a27mk3i9mhfisb7fd0ge7l9.apps.googleusercontent.com&redirect_uri=http://61.97.189.178:8070/google-login&response_type=code&scope=email profile'
+})
+//카카오 로그인
+const kakaoLogin = document.querySelector('.kakao-login');
+kakaoLogin.addEventListener("click", function () {
+    location.href = 'https://kauth.kakao.com/oauth/authorize?client_id=04e607024de70154a6a880a77c57ddad&redirect_uri=http://61.97.189.178:8070/kakao-login&response_type=code'
+
+})
+
+const loginInfoReq = document.querySelector('.login-info-req')
+loginInfoReq.addEventListener('click', function () {
+    location.href = 'find-info.html'
 })

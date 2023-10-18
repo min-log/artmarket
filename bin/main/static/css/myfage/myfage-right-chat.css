@@ -60,14 +60,14 @@
   justify-content: space-between;
 }
 
-.myafge-right-chat-box-top-nickname {
+.myfage-right-chat-box-top-nickname {
   font-weight: bold;
   font-size: 2rem;
   color: white;
   margin-right: 0.8rem;
 }
 
-.myafge-right-chat-box-top-show-article {
+.myfage-right-chat-box-top-show-article {
   border: none;
   color: rgba(41, 45, 50, 1);
   background-color: white;
@@ -83,12 +83,12 @@
   cursor: pointer;
 }
 
-.myafge-right-chat-box-top-show-article:hover {
+.myfage-right-chat-box-top-show-article:hover {
   scale: 103%;
   transition-duration: 0.2s;
 }
 
-.myafge-right-chat-box-top-show-exit {
+.myfage-right-chat-box-top-show-exit {
   scale: 80%;
   border: none;
   color: rgba(41, 45, 50, 1);
@@ -121,28 +121,41 @@
   display: none;
 }
 
-.myfage-right-chat-box-mid-msg-me {
+.myfage-right-chat-box-mid > div {margin-bottom:2rem;overflow: hidden;display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;width:100%}
+
+.myfage-right-chat-box-mid img{max-width:50%;}
+
+.myfage-right-chat-box-mid > div.myfage-right-chat-box-mid-msg-me {
   float: right;
+  clear: both;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
+.myfage-right-chat-box-mid:after {content: '';display: block;clear: both;padding-top:20px}
+
 .myfage-right-chat-box-mid-msg-me-time {
-  float: right;
   color: white;
   font-size: 0.8rem;
   font-weight: 400;
-  margin-right: 0.4rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .myfage-right-chat-box-mid-msg-me-text {
-  clear: both;
   background-color: white;
   font-size: 0.9rem;
   font-weight: 600;
   border-radius: 1rem;
   padding: 0.2rem 1rem;
-  display: flex;
-  justify-content: center;
   margin-bottom: 0.4rem;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .myfage-right-chat-box-mid-msg-other {
@@ -174,26 +187,31 @@
 .myfage-right-chat-box-bot {
   clear: both;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  margin: 0 1rem;
+  position: relative;
 }
 
 .myfage-right-chat-box-bot-send-text {
   border: none;
   outline: none;
-  width: 25rem;
-  height: 1.2rem;
-  padding: 1rem;
+  width: 28rem;
+  line-height: 3rem;
+  height: 3rem;
+  padding: 0 1rem;
   padding-right: 3rem;
   border-radius: 1rem;
+  box-sizing: border-box;
 }
-
-.myfage-right-chat-box-bot-send-attach {
+.myfage-right-chat-box-bot-send-attach-btn {
   margin-left: -3.8rem;
+  display:flex;
+}
+.myfage-right-chat-box-bot-send-attach {
   scale: 90%;
-  cursor: pointer;
 }
 
 .myfage-right-chat-box-bot-send-btn {
@@ -204,3 +222,18 @@
   scale: 107%;
   transition-duration: 0.4s;
 }
+.myfage-right-chat-box-mid-download {
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: rgba(0,0,0,0.5);
+  text-decoration: inherit;
+  border-radius: 0.5rem;
+  padding: 0.2rem 0.8rem;
+  margin-top: 0.2rem;
+}
+.myfage-right-chat-box-mid-download img {width: 1.5rem;height:auto;filter: invert(1);margin-right: 0.5rem;}
+#fileBox {border: 1px solid rgb(204, 204, 204);height: 2.4rem;width: 2.4rem;position: absolute;top: 0;left: 0;border-radius: 0.8rem;overflow: hidden;margin: 0;padding: 0;margin: 1.1rem 0.6rem 0;display: none;}

@@ -4,16 +4,47 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script async src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script async src="./js/nav.js"></script>
     <script async src="./js/footer.js"></script>
-    <link rel="stylesheet" href="./css/nav.css" />
-    <link rel="stylesheet" href="./css/footer.css" />
-    <link rel="stylesheet" href="./css/all.css" />
+    <script async src="./js/all.js"></script>
+    <script async src="./js/category.js"></script>
+    <script async src="./js/category-select.js"></script>
+    <link rel="stylesheet" href="./css/default/nav.css" />
+    <link rel="stylesheet" href="./css/default/footer.css" />
+    <link rel="stylesheet" href="./css/default/all.css" />
+    <link rel="stylesheet" href="./css/category.css" />
   </head>
   <body>
     <nav></nav>
-    <container></container>
+    <container>
+      <div class="category-box">
+        <div class="category-top">
+          <div class="category-title"></div>
+          <div class="category-intro">
+            작가들의 다양한 작품을 한눈에 보세요!
+          </div>
+        </div>
+        <div class="category-body">
+          <div class="category-filter">
+            <span class="category-filter-title">
+              통합검색
+            </span>
+            <select class="category-filter-pop-cur" onchange="categorySelectChange()">
+              <option value="popular">인기순</option>
+              <option value="current">최신순</option>
+            </select>
+            <div style="display: flex">
+              <div class="cateogry-keyword-search">
+                <input type="text" placeholder="검색어를 입력해주세요" class="cateogry-keyword-search-box" />
+                <img class="cateogry-keyword-search-icon" src="" />
+              </div>
+              <button class="cateogry-search-btn">검색</button>
+            </div>
+          </div>
+          <div class="category-content"></div>
+        </div>
+      </div>
+    </container>
     <footer></footer>
   </body>
 </html>

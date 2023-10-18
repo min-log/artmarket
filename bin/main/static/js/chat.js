@@ -1,67 +1,78 @@
 // addEndpoint("/stomp/chat")
 
-function chatMsgGet(currentHtmlTag, chatData, chatOtherType) {
-    let chatWho = chatData.chatSender === localStorage.getItem('id') ? 'me' : 'other'
-    let chatWhoType = chatData.chatSender === localStorage.getItem('id') ? localStorage.getItem('nickname') : chatOtherType
+function chatMsgGet(chatData, chatOtherType) {
+  let chatWho = (chatData.chatSender == sessionStorage.getItem('id') ? 'me' : 'other')
+  let chatWhoType = (chatData.chatSender == sessionStorage.getItem('id') ? sessionStorage.getItem('nickname') : chatOtherType)
 
-    if (chatData.chatType === 'TALK') {
-        myfageRightChatTalk(currentHtmlTag, chatWho, chatList[i].chatMsg, chatList[i].chatDate)
-    } else if (chatData.chatType === 'FILE') {
-        myfageRightChatFile(currentHtmlTag, chatWho, chatList[i].chatFile, chatList[i].chatFileName, chatList[i].chatFileDownload)
-    } else if (chatData.chatType === 'ENTER') {
-        myfageRightChatEnterLeave(currentHtmlTag, chatWho, chatWhoType, '입장')
-    }
-}
+  let curentBoxTag = sessionStorage.getItem('chatcurrenttag')
 
-// 채팅 타입에 따른 함수(TALK)
+  let curChatParentTag = (sessionStorage.getItem('chatcurrenttag') === 'myfage-right-chat-box-mid' ? 'myfage-right-chat-box-mid' : 'product-chat-room-box-mid')
+  const chatParentBoxTag = document.querySelector(`.${curChatParentTag}`)
 
-function myfageRightChatTalk(currentHtmlTag, chatWhoTag, chatMsg, chatDate) {
-    productChatRoomBoxMid.insertAdjacentHTML('beforeend', `
-  <div class="${currentHtmlTag}-msg-${chatWhoTag}">
-    <div class="${currentHtmlTag}-msg-${chatWhoTag}-time">${chatDate}</div>
-    <div class="${currentHtmlTag}-msg-${chatWhoTag}-text">${chatMsg}</div>
-  </div>`)
-}
 
-// 채팅 타입에 따른 함수(FILE)
-function myfageRightChatFile(currentHtmlTag, chatWhoTag, chatFile, chatFileName, chatFileDownload) {
+  if (chatData.chatType === 'TALK') {
+    myfageRightChatTalk(curentBoxTag, chatWho, chatData.chatMsg, chatData.chatDate)
+  } else if (chatData.chatType === 'FILE') {
+    myfageRightChatFile(curentBoxTag, chatWho, chatData.chatFile, chatData.chatFileName, chatData.chatFileDownload,chatData.chatMsg, chatData.chatDate)
+  } else if (chatData.chatType === 'ENTER') {
+    myfageRightChatEnterLeave(curentTag, chatWho, chatWhoType, '입장')
+  }
 
-    let fileExtention = chatFileName.split('.')
+  // 채팅 타입에 따른 함수(TALK)
+  function myfageRightChatTalk(curentBoxTag, chatWhoTag, chatMsg, chatDate) {
 
-    productChatRoomBoxMid.insertAdjacentHTML('beforeend', `
-  <div class="${currentHtmlTag}-msg-${chatWhoTag}"></div>`)
 
-    const productChatRoomBoxMid = document.querySelector(`.${currentHtmlTag}-msg-${chatWhoTag}`)
+    chatParentBoxTag.insertAdjacentHTML('beforeend', `
+    <div class="${curentBoxTag}-msg-${chatWhoTag}">
+      <div class="${curentBoxTag}-msg-${chatWhoTag}-time">${chatDate}</div>
+      <div class="${curentBoxTag}-msg-${chatWhoTag}-text">${chatMsg}</div>
+    </div>`)
+  }
 
-    if (fileExtention[fileExtention.length - 1] === 'txt') {
-        productChatRoomBoxMid.insertAdjacentHTML('beforeend', `
-      <a href="data:image/jpeg;base64,${chatFile}" download="${chatFileDownload}">
-    `)
+  // 채팅 타입에 따른 함수(FILE)
+  function myfageRightChatFile(curentBoxTag, chatWhoTag, chatFile, chatFileName, chatFileDownload,chatMsg,chatDate) {
+    let fileExtention =  getExtensionOfFilename(chatFileName);
+
+    // chatParentBoxTag.insertAdjacentHTML('beforeend', `
+    // <div class="${curentBoxTag}-msg-${chatWhoTag}"></div>`);
+
+    const productChatRoomBoxMid = document.querySelector(`.${curentBoxTag}-msg-${chatWhoTag}`)
+
+    if (fileExtention === '.png' || fileExtention === '.jpg' || fileExtention === '.gif') {
+      chatParentBoxTag.insertAdjacentHTML('beforeend', `
+         <div class="${curentBoxTag}-msg-${chatWhoTag}">
+            <div class="${curentBoxTag}-msg-${chatWhoTag}-time">${chatDate}</div>
+            <div class="${curentBoxTag}-msg-${chatWhoTag}-text">${chatMsg}</div>
+            <img class="myfage-right-chat-box-mid-img" src="${chatFile}">
+            <a class="myfage-right-chat-box-mid-download" href="/file/download/${chatFileDownload}" download="${chatFileName}" target='_blank'><img src="../css/img/icon-downloads.png">${chatFileName}</a>
+         </div>
+      `)
     } else {
-        productChatRoomBoxMid.insertAdjacentHTML('beforeend', `
-      <img src="data:image/jpeg;base64,${chatFile}">
-      <a href="data:image/jpeg;base64,${chatFile}" download="${chatFileDownload}">
-    `)
+      chatParentBoxTag.insertAdjacentHTML('beforeend', `
+          <div class="${curentBoxTag}-msg-${chatWhoTag}">
+            <div class="${curentBoxTag}-msg-${chatWhoTag}-time">${chatDate}</div>
+            <div class="${curentBoxTag}-msg-${chatWhoTag}-text">${chatMsg}</div>
+            <a class="myfage-right-chat-box-mid-download" href="/file/download/${chatFileDownload}" download="${chatFileName}" target='_blank'><img src="../css/img/icon-downloads.png">${chatFileName}</a>
+          </div>
+      `)
     }
+  }
+
+  // 채팅 타입에 따른 함수(ENTER, LEAVE)
+  function myfageRightChatEnterLeave(curentBoxTag, chatWhoTag, chatWhoType, chatEnterLeaveMsg) {
+    chatParentBoxTag.insertAdjacentHTML('beforeend', `
+  <div class="${curentBoxTag}-msg-${chatWhoTag}">${chatWhoType}이 ${chatEnterLeaveMsg}하셨습니다.</div>`)
+  }
+
 }
 
-// 채팅 타입에 따른 함수(ENTER, LEAVE)
-function myfageRightChatEnterLeave(currentHtmlTag, chatWhoTag, chatWhoType, chatEnterLeaveMsg) {
-    productChatRoomBoxMid.insertAdjacentHTML('beforeend', `
-  <div class="${currentHtmlTag}-msg-${chatWhoTag}">${chatWhoType}이 ${chatEnterLeaveMsg}하셨습니다.</div>`)
-}
 
-function connect(stompClient, chatRoomId) {
-    stompClient.connect({}, function () {
-        stompClient.subscribe(`/chat-room/get/${chatRoomId}`, (data) => {
-            chatMsgGet(productChatRoomBoxMid, data, detailMidLeftProfileInfoNickname.textContent)
-        })
-    },
-        function () {
-            alert('연결에 실패했습니다.')
-        })
-}
 
-function send(sendData) {
-    stompClient.send('/chat-room/send', {}, JSON.stringify(sendData))
-}
+
+
+
+
+
+
+
+
